@@ -2,6 +2,7 @@ import "@/styles/global.scss";
 
 import Header from "@/widgets/Header/Header";
 import Footer from "@/widgets/Footer/Footer";
+import Providers from "./providers";
 
 export default function RootLayout({
     children,
@@ -11,14 +12,16 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body>
-                {/* Header */}
-                <Header />
+                <Providers>
+                    {/* Header */}
+                    <Header />
 
-                {/* Main content */}
-                <main>{children}</main>
+                    {/* Main content */}
+                    <main>{children}</main>
 
-                {/* Footer */}
-                <Footer />
+                    {/* Footer */}
+                    <Footer />
+                </Providers>
             </body>
         </html>
     );
