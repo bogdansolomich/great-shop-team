@@ -17,7 +17,7 @@
   flex: 1;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .formWrapper {
@@ -48,16 +48,10 @@
   display: flex;
   flex-direction: column;
   margin-bottom: 5%;
+  position: relative;
 
   label {
     font-size: 12px;
-  }
-
-  input {
-    font-weight: 500;
-    border-radius: 8px;
-    border: 1px solid #000000;
-    padding: 2% 6% 2% 6%;
   }
 }
 
