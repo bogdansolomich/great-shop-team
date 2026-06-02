@@ -1,10 +1,5 @@
-
 const MyReviews = () => {
-    return (
-        <div>
-            MyReviews
-        </div>
-    );
+  return <div>MyReviews</div>;
 };
 
 export default MyReviews;

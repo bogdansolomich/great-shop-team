@@ -1,7 +1,7 @@
 import Image from 'next/image';
-import Link from "next/link";
+import Link from 'next/link';
 
-import styles from "../HeroBanner/HeroBanner.module.scss";
+import styles from '../HeroBanner/HeroBanner.module.scss';
 
 interface HeroBannerProps {
   image: {
@@ -39,7 +39,9 @@ export default function HeroBanner({ image, title, description, link }: HeroBann
           </div>
         </div>
 
-        <Link href={link.href} className={`btn-primary ${styles.button}`}>{link.label}</Link>
+        <Link href={link.href} className={`btn-primary ${styles.button}`}>
+          {link.label}
+        </Link>
       </div>
     </div>
   );

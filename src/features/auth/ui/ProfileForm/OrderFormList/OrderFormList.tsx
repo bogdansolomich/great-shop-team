@@ -1,10 +1,5 @@
-
 const OrderFormList = () => {
-    return (
-        <div>
-            OrderFormList
-        </div>
-    );
+  return <div>OrderFormList</div>;
 };
 
 export default OrderFormList;

@@ -10,7 +10,7 @@ This repository contains the frontend for a shop application. The architecture s
 
 - Next.js App Router
 - React 19 + TypeScript
-- SCSS modules + global styles 
+- SCSS modules + global styles
 - Tailwind CSS (utility-first)
 - Redux Toolkit + RTK Query
 
@@ -64,6 +64,7 @@ Open `http://localhost:3000`.
 - `npm run build` — production build
 - `npm run start` — serve built app
 - `npm run lint` — run ESLint
+- `npm run format` — format code with Prettier
 
 ## 🧠 Redux Toolkit + RTK Query
 
@@ -80,7 +81,7 @@ Redux is configured in this project with an RTK Query API layer. Key files:
 Fetch data with RTK Query:
 
 ```tsx
-import { useGetProductsQuery } from "@/store/api";
+import { useGetProductsQuery } from '@/store/api';
 
 const { data, error, isLoading } = useGetProductsQuery();
 ```
@@ -88,8 +89,8 @@ const { data, error, isLoading } = useGetProductsQuery();
 Read and update global state using typed hooks:
 
 ```tsx
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { setUser, logout } from "@/store/slices/userSlice";
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { setUser, logout } from '@/store/slices/userSlice';
 
 const dispatch = useAppDispatch();
 const user = useAppSelector((state) => state.user.profile);
@@ -198,12 +199,14 @@ git push -u origin feature/my-new-feature
 **Title:** `feature/reviews-page`
 
 **Description:**
+
 - Added Reviews page at `/reviews`
 - Created `src/features/reviews/` for feature logic
 - Added RTK Query endpoint in `src/store/api.ts`
 - Added typed Redux slice `src/store/slices/reviewsSlice.ts`
 
 **Checklist:**
+
 - [ ] Code compiles and passes `npm run lint`
 - [ ] Page works in browser at the correct route
 - [ ] New or updated logic is covered by tests if applicable
@@ -211,11 +214,7 @@ git push -u origin feature/my-new-feature
 - [ ] Shared UI components are placed under `src/widgets/`
 
 **Notes:**
+
 - Leave extra details for reviewers here.
 
 ---
-
-
-
-
-

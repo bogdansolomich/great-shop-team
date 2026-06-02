@@ -13,13 +13,7 @@
   },
   "code": "S-2353173",
   "rating": 4,
-  "size": [
-    "XS",
-    "S",
-    "M",
-    "L",
-    "XL"
-  ],
+  "size": ["XS", "S", "M", "L", "XL"],
   "images": {
     "main": {
       "front": {
@@ -35,7 +29,8 @@
       {
         "src": "/images/backViewhoodieBrownBotton.png",
         "alt": "Hoodie detail"
-      },{
+      },
+      {
         "src": "/images/backViewhoodieBrownBotton.png",
         "alt": "Hoodie detail"
       }
@@ -59,7 +54,7 @@
     "href": "/product/hoodie-brown",
     "label": "Shop now"
   },
-  "botonImages":[
+  "botonImages": [
     {
       "image": {
         "src": "/images/product1.jpg",

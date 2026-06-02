@@ -1,13 +1,13 @@
-@use "@/styles/variables" as *;
+@use '@/styles/variables' as *;
 
 .header {
-    display: grid;
-    grid-template-columns: 176px 1fr 176px;
-    align-items: center;
-    margin: 40px 0 60px;
+  display: grid;
+  grid-template-columns: 176px 1fr 176px;
+  align-items: center;
+  margin: 40px 0 60px;
 }
 
 .actions {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }

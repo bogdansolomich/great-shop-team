@@ -1,10 +1,5 @@
-
 const Correspondence = () => {
-    return (
-        <div>
-            Correspondence
-        </div>
-    );
+  return <div>Correspondence</div>;
 };
 
 export default Correspondence;
