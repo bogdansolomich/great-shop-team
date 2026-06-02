@@ -1,0 +1,68 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label {
+  font-size: 12px;
+  color: #1f2937;
+}
+
+.inputWrapper {
+  position: relative;
+  border: 1px solid #131118;
+  border-radius: 10px;
+  background: #ffffff;
+}
+
+.inputWrapperError {
+  border-color: #dc2626;
+}
+
+.inputField {
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 1rem 3rem 1rem 1rem;
+  border-radius: 10px;
+  font-size: 16px;
+  color: #111827;
+  box-sizing: border-box;
+}
+
+.inputField:focus,
+.inputField:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.inputField::placeholder {
+  color: #9ca3af;
+}
+
+.toggleButton {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: #6b7280;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.errorText {
+  color: #dc2626;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.hint {
+  color: #6b7280;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}

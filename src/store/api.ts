@@ -1,29 +1,15 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-export interface Product {
-  id: string;
-  title: string;
-  price: number;
-  image?: string;
-}
-
-export interface User {
-  id: string;
-  name: string;
-  email?: string;
-}
-
 export const api = createApi({
   reducerPath: 'api',
-  baseQuery: fetchBaseQuery({ baseUrl: '/api/' }),
-  endpoints: (builder) => ({
-    getProducts: builder.query<Product[], void>({
-      query: () => 'products',
-    }),
-    getUser: builder.query<User, string>({
-      query: (id) => `users/${id}`,
-    }),
+  baseQuery: fetchBaseQuery({ 
+    baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
+    prepareHeaders: (headers) => {
+      const token = localStorage.getItem('accessToken'); 
+      if (token) headers.set('authorization', `Bearer ${token}`);
+      return headers;
+    },
   }),
+  // Изначально эндпоинты пустые!
+  endpoints: () => ({}), 
 });
-
-export const { useGetProductsQuery, useGetUserQuery } = api;

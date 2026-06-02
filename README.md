@@ -33,8 +33,14 @@ src/
 │   └── product-card/     # Product card used across catalog and recommendations
 ├── store/                # Redux Toolkit and RTK Query setup
 │   ├── store.ts          # Store configuration
-│   ├── api.ts            # RTK Query endpoints and API service
-│   └── hooks.ts          # Typed hooks: useAppDispatch, useAppSelector
+│   ├── api.ts            # RTK Query API setup, base URL and auth headers
+│   ├── types.ts          # Shared TypeScript interfaces and API models
+│   ├── endpoints/        # RTK Query endpoints organized by feature
+│   │   ├── authEndpoints.ts
+│   │   ├── categoriesEndpoints.ts
+│   │   ├── profilesEndpoints.ts
+│   │   └── productsEndpoints.ts
+│   └── slices/          # Redux slice reducers
 ├── styles/               # Global SCSS, variables and mixins
 └── data/                 # Static JSON data used by UI components
 ```
@@ -58,7 +64,25 @@ npm run dev
 
 Open `http://localhost:3000`.
 
-## 📦 Scripts
+## � Environment variables
+
+Create a local env file in the project root:
+
+```bash
+touch .env.local
+```
+
+Add the backend base URL from the backend docs:
+
+```env
+NEXT_PUBLIC_API_BASE_URL=https://api-shop-p3de.onrender.com
+```
+
+This file is already excluded from Git by `.gitignore`, so your local backend URL stays private.
+
+If the backend address changes, update `.env.local` with the new URL from the backend documentation.
+
+## �📦 Scripts
 
 - `npm run dev` — development server
 - `npm run build` — production build

@@ -1,0 +1,124 @@
+export interface Category {
+  id: number;
+  slug: string;
+  name: string;
+  created_at: string;
+  updated_at: string;
+  is_active: boolean;
+  is_hidden: boolean;
+}
+
+export interface CategoryCreateInput {
+  slug: string;
+  name: string;
+  is_active: boolean;
+  is_hidden: boolean;
+}
+
+export interface CategoryUpdateInput {
+  slug?: string;
+  name?: string;
+  is_active?: boolean;
+  is_hidden?: boolean;
+}
+
+export interface User {
+  id: number;
+  email: string;
+  is_active: boolean;
+}
+
+export interface LoginInput {
+  email_or_phone: string;
+  password: string;
+}
+
+export interface RegisterInput {
+  email: string;
+  password: string;
+  confirm_password: string;
+  accept_terms: boolean;
+}
+
+export interface LoginResponse {
+  access: string;
+  refresh: string;
+}
+
+export interface RegisterResponse {
+  email: string;
+}
+
+export interface TokenRefreshRequest {
+  refresh: string;
+}
+
+export interface TokenRefreshResponse {
+  access: string;
+  refresh: string;
+}
+
+export interface PasswordChangeInput {
+  old_password: string;
+  new_password: string;
+  confirm_password: string;
+}
+
+export interface PasswordResetInput {
+  email: string;
+}
+
+export interface PasswordResetConfirmInput {
+  new_password: string;
+  confirm_password: string;
+}
+
+export interface ProfileUser {
+  id: number;
+  email: string;
+  is_active: boolean;
+}
+
+export interface Profile {
+  id: number;
+  user: ProfileUser;
+  first_name: string;
+  last_name: string;
+  surname: string;
+  gender: number;
+  clothing_size: number;
+  shoe_size: number;
+  birthday: string;
+  phone: string;
+}
+
+export interface ProfileUpdateInput {
+  first_name?: string;
+  last_name?: string;
+  surname?: string;
+  gender?: number;
+  clothing_size?: number;
+  shoe_size?: number;
+  birthday?: string;
+  phone?: string;
+}
+
+// Параметры для активации аккаунта или сброса пароля из URL
+export interface PasswordResetConfirmInput {
+  new_password: string;
+  confirm_password: string;
+}
+
+export interface ActivationParams {
+  uidb64: string;
+  token: string;
+}
+
+export interface CartItem {
+  productId: number;
+  quantity: number;
+}
+
+export interface WishlistItem {
+  productId: number;
+}
