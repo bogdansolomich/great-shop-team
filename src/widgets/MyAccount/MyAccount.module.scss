@@ -1,0 +1,44 @@
+@use '@/styles/variables' as *;
+
+.iconButton {
+  background: transparent;
+  border: 0;
+  padding: 0.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+}
+
+.iconButton :global(svg) {
+  display: block;
+}
+
+.initials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: $color-dark;
+  color: $color-white;
+  font-family: $font-family-heading;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  user-select: none;
+}
+
+.active::after {
+  content: '';
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  height: 2px;
+  bottom: -6px;
+  background: $color-dark;
+  border-radius: 2px;
+}

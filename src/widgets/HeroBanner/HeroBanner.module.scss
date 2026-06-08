@@ -7,7 +7,7 @@
 }
 
 .image {
-  width: 70%;
+  width: 59%;
   position: relative;
   flex-shrink: 0;
 }
@@ -16,8 +16,41 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
+  .contentTop {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .description {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .button {
+    align-self: self-start;
+  }
+  .title {
+    font-family: $font-family-heading;
+    font-size: 30px;
+    font-weight: 700;
+    color: $color-dark;
+    margin: 8px 0;
+  }
+
+  .description {
+    font-size: 16px;
+    font-weight: 400;
+    color: $color-dark;
+    margin: 8px 0 0;
+  }
+  .description p {
+    margin: 0 0 25px;
+  }
+  .button {
+    align-self: self-start;
+  
 }
 
-.button {
-  align-self: self-start;
 }

@@ -6,51 +6,59 @@ import {
   User,
   PasswordChangeInput,
   PasswordResetInput,
-  PasswordResetConfirmInput,
-  ActivationParams,
+  ActivationCodeInput,
+  ResendActivationInput,
 } from '../types';
 
-const authEndpoints = api.injectEndpoints({
+export const authEndpoints = api.injectEndpoints({
+  overrideExisting: true,
   endpoints: (builder) => ({
     // Логін
     login: builder.mutation<TokenRefreshResponse, LoginInput>({
       query: (body) => ({ url: '/api/login/', method: 'POST', body }),
+      // Вказуємо, що після логіну треба скинути кеш юзера, щоб завантажити свіжі дані
+      invalidatesTags: ['User'], 
     }),
+    
     // Реєстрація
     registerUser: builder.mutation<User, RegisterInput>({
       query: (body) => ({ url: '/api/users/register/', method: 'POST', body }),
     }),
+    
     // Оновлення access token по refresh token
     refreshToken: builder.mutation<TokenRefreshResponse, { refresh: string }>({
       query: (body) => ({ url: '/api/token/refresh/', method: 'POST', body }),
     }),
-    // Поточний користувач
-    getCurrentUser: builder.query<void, void>({
+    
+    // Поточний користувач — 💎 ТУТ ВИПРАВЛЕНО ТИП НА <User, void>
+    getCurrentUser: builder.query<User, void>({
       query: () => '/api/users/current-user/',
+      providesTags: ['User'], // Тегуємо цей запит
     }),
-    // Активація користувача по посиланню
-  
-    activateUserPatch: builder.mutation<void, ActivationParams>({
-      query: ({ uidb64, token }) => ({
-        url: `/api/users/activate/${uidb64}/${token}/`,
+    
+    // Активація користувача по коду
+    activateUserPatch: builder.mutation<void, ActivationCodeInput>({
+      query: (body) => ({
+        url: '/api/users/activate/',
         method: 'PATCH',
+        body,
       }),
     }),
+    
     // Зміна пароля
     changePassword: builder.mutation<void, PasswordChangeInput>({
       query: (body) => ({ url: '/api/users/password-change/', method: 'POST', body }),
     }),
+    
     // Скидання пароля
     resetPassword: builder.mutation<PasswordResetInput, PasswordResetInput>({
       query: (body) => ({ url: '/api/users/password-reset/', method: 'POST', body }),
     }),
-    // Підтвердження скидання пароля по посиланню
-    resetPasswordConfirm: builder.mutation<
-      void,
-      { uidb64: string; token: string; body: PasswordResetConfirmInput }
-    >({
-      query: ({ uidb64, token, body }) => ({
-        url: `/api/users/password-reset-confirm/${uidb64}/${token}/`,
+    
+    // Повторне відправлення коду активації
+    resendActivationCode: builder.mutation<void, ResendActivationInput>({
+      query: (body) => ({
+        url: '/api/users/resend_activation_code/',
         method: 'POST',
         body,
       }),
@@ -63,8 +71,9 @@ export const {
   useRegisterUserMutation,
   useRefreshTokenMutation,
   useGetCurrentUserQuery,
+  useLazyGetCurrentUserQuery,
   useActivateUserPatchMutation,
   useChangePasswordMutation,
   useResetPasswordMutation,
-  useResetPasswordConfirmMutation,
+  useResendActivationCodeMutation,
 } = authEndpoints;

@@ -3,8 +3,6 @@ import styles from '../PersonalData/PersonalData.module.scss';
 const PersonalData = () => {
   return (
     <>
-      {/*Personal Data*/}
-
       <p className={styles.nameSetting}>Personal Data</p>
       <div className={styles.form}>
         <div className={styles.formDataUser}>
@@ -28,8 +26,6 @@ const PersonalData = () => {
         </div>
       </div>
 
-      {/*Billing Address*/}
-
       <p className={styles.nameSetting}>Billing Address</p>
       <div className={styles.form}>
         <div className={styles.formDataUser}>
@@ -41,8 +37,6 @@ const PersonalData = () => {
           <input id={'floor'} type={'text'} placeholder={'man'} />
         </div>
       </div>
-
-      {/*Account Details*/}
 
       <p className={styles.nameSetting}>Account Details</p>
       <div className={styles.form}>

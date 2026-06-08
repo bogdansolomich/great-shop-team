@@ -1,19 +1,28 @@
 'use client';
+
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
-import styles from './Register.module.scss';
-import { validateField, validateForm } from '@/features/auth/validation';
+
 import AuthInput from '../AuthInput/AuthInput';
-import poster from '../../../../../public/images/boyRegister.jpg';
+import { validateField, validateRegisterForm } from '@/features/auth/lib/validation';
+import { normalizeEmail } from '@/features/auth/lib/normalizeEmail';
+import { savePendingAuth } from '@/features/auth/lib/pendingAuth';
+import { useRegisterUserMutation } from '@/store/endpoints/authEndpoints';
+
 import googleLogo from '../../../../../public/icons/GoogleLogo.svg';
 import facebookLogo from '../../../../../public/icons/FacebookLogo.svg';
 import appleLogo from '../../../../../public/icons/AppleLogo.svg';
-import { useRegisterUserMutation } from '@/store/endpoints/authEndpoints';
+import styles from './Register.module.scss';
 
-export default function RegisterForm() {
+type RegisterFormProps = {
+  onLogin?: () => void;
+  onRegistered?: (email: string) => void;
+};
+
+export default function RegisterForm({ onLogin, onRegistered }: RegisterFormProps) {
   const router = useRouter();
   const [isChecked, setIsChecked] = useState(false);
 
@@ -26,14 +35,20 @@ export default function RegisterForm() {
   });
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [registerUser, { isSuccess, isLoading }] = useRegisterUserMutation();
 
   useEffect(() => {
-    if (isSuccess) {
-      setIsModalOpen(true);
+    if (!isSuccess) return;
+
+    savePendingAuth(formData.email, formData.password);
+
+    if (onRegistered) {
+      onRegistered(formData.email);
+      return;
     }
-  }, [isSuccess]);
+
+    router.push(`/verify?email=${encodeURIComponent(formData.email)}`);
+  }, [isSuccess, onRegistered, formData.email, formData.password, router]);
 
   const normalizeErrorData = (data: unknown): string[] => {
     if (typeof data === 'string') {
@@ -75,7 +90,7 @@ export default function RegisterForm() {
     e.preventDefault();
     setErrorMessages([]);
 
-    const errors = validateForm(formData, isChecked);
+    const errors = validateRegisterForm(formData, isChecked);
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
       return;
@@ -83,9 +98,11 @@ export default function RegisterForm() {
 
     setFieldErrors({});
 
+    const email = normalizeEmail(formData.email);
+
     try {
       await registerUser({
-        email: formData.email,
+        email,
         password: formData.password,
         confirm_password: formData.confirmPassword,
         accept_terms: isChecked,
@@ -93,11 +110,6 @@ export default function RegisterForm() {
     } catch (error) {
       setErrorMessages(getErrorMessages(error));
     }
-  };
-
-  const handleModalClose = () => {
-    setIsModalOpen(false);
-    router.push('/login');
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -112,40 +124,12 @@ export default function RegisterForm() {
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.left}>
-        <Image src={poster} alt="Shop Photo" layout="fill" objectFit="cover" priority />
-      </div>
-
+    <div className={styles.panel}>
       <div className={styles.right}>
         <h1 className={styles.title}>Create New Account</h1>
         <h2 className={styles.subtitle}>Please enter details</h2>
 
         <form onSubmit={handleSubmit} className={styles.form}>
-          <div className={styles.inputContainer}>
-            <AuthInput
-              id="firstName"
-              name="firstName"
-              label="First Name"
-              type="text"
-              placeholder="First Name"
-              value={formData.firstName}
-              onChange={handleChange}
-              error={fieldErrors.firstName}
-            />
-          </div>
-          <div className={styles.inputContainer}>
-            <AuthInput
-              id="lastName"
-              name="lastName"
-              label="Last Name"
-              type="text"
-              placeholder="Last Name"
-              value={formData.lastName}
-              onChange={handleChange}
-              error={fieldErrors.lastName}
-            />
-          </div>
           <div className={styles.inputContainer}>
             <AuthInput
               id="email"
@@ -225,12 +209,8 @@ export default function RegisterForm() {
 
               <label htmlFor="terms" className="text-sm cursor-pointer select-none">
                 I agree to the{' '}
-                <a href="/terms" className="underline">
+                <a href="/terms" className="font-semibold hover:text-gray-600 transition-colors">
                   Terms & Conditions
-                </a>{' '}
-                and{' '}
-                <a href="/privacy" className="underline">
-                  Privacy Policy
                 </a>
               </label>
             </div>
@@ -246,48 +226,36 @@ export default function RegisterForm() {
               !isChecked || isLoading ? 'opacity-50 cursor-not-allowed' : ''
             }`}
           >
-            {isLoading ? 'Loading...' : 'Register'}
+            {isLoading ? 'Loading...' : 'Signup'}
           </button>
+
+          <div className="flex justify-center items-center gap-[24px]">
+            <button type="button" className="flex items-center justify-center w-10 h-10">
+              <Image src={googleLogo} alt="Google" className="w-6 h-6" />
+            </button>
+
+            <button type="button" className="flex items-center justify-center w-10 h-10">
+              <Image src={facebookLogo} alt="Facebook" className="w-6 h-6" />
+            </button>
+
+            <button type="button" className="flex items-center justify-center w-10 h-10">
+              <Image src={appleLogo} alt="Apple" className="w-6 h-6" />
+            </button>
+          </div>
         </form>
-        <div className="flex justify-center items-center gap-[36px] mt-[30px]">
-          <button className="flex items-center justify-center w-12 h-12">
-            <Image src={googleLogo} alt="Google" className="w-8 h-8" />
-          </button>
-
-          <button className="flex items-center justify-center w-12 h-12">
-            <Image src={facebookLogo} alt="Facebook" className="w-8 h-8" />
-          </button>
-
-          <button className="flex items-center justify-center w-12 h-12">
-            <Image src={appleLogo} alt="Apple" className="w-8 h-8" />
-          </button>
-        </div>
-
         <div className={styles.loginVariant}>
           Already have an account?{' '}
-          <a href="/login" className={styles.loginLink}>
-            Login
-          </a>
+          {onLogin ? (
+            <button type="button" className={styles.loginLink} onClick={onLogin}>
+              Login
+            </button>
+          ) : (
+            <Link href="/login" className={styles.loginLink}>
+              Login
+            </Link>
+          )}
         </div>
       </div>
-
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-          <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl text-center animate-fade-in">
-            {/* Просто SVG-иконка из папки ассетов без круга */}
-            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-3xl">
-              📧
-            </div>
-
-            <h3 className="text-xl font-semibold text-gray-900">Check your email</h3>
-            <p className="mt-2 text-sm text-gray-500">
-              An email has been sent to you at{' '}
-              <span className="font-semibold text-gray-900">{formData.email}</span>. Click on the
-              link to access your account.
-            </p>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
