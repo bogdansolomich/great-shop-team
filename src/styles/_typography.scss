@@ -1,7 +1,12 @@
 @use '@/styles/variables' as *;
 
-body {
-  font-family: $font-family;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: $font-family-heading;
 }
 
 h1 {

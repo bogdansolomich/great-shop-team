@@ -1,26 +1,33 @@
-// Fonts
-$font-family: Arial, sans-serif;
+$font-family: var(--font-poppins), 'Poppins', sans-serif;
+$font-family-heading: var(--font-unbounded), 'Unbounded', sans-serif;
 
-// Main colors
 $color-white: #ffff;
 $color-white-fa: #fafafa;
 $color-black: #000;
 $color-blue: #2563eb;
 $color-gray: #a4a1aa;
 $color-dark: #131118;
+$color-error: #dc2626;
 
-// Font sizes
-$font-size: 16px; /* text-base */
-$font-size-lg: 24px; /* h1 */
+$font-size: 16px;
+$font-size-lg: 24px;
 
-// Line heigh
-$line-height: 30px; /* h1 */
+$line-height: 30px;
 
-// Font Weight
 $font-light: 300;
 $font-regular: 400;
 $font-medium: 500;
 $font-bold: 700;
 
-// Layout
-$layout-desktop: 1440px;
+$layout-mobile: 480px;
+$layout-tablet: 768px;
+$layout-desktop: 1024px;
+$layout-max-width: 1440px;
+$layout-gutter-mobile: 16px;
+$layout-gutter-tablet: 24px;
+$layout-gutter-desktop: 80px;
+
+$site-header-height: 88px;
+$site-footer-height: 400px;
+$auth-backdrop-ratio: 60%;
+$auth-panel-ratio: 40%;

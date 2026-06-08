@@ -114,6 +114,15 @@ export interface ActivationParams {
   token: string;
 }
 
+export interface ActivationCodeInput {
+  code: string;
+  email: string;
+}
+
+export interface ResendActivationInput {
+  email: string;
+}
+
 export interface CartItem {
   productId: number;
   quantity: number;

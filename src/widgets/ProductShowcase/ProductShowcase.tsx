@@ -60,8 +60,6 @@ export default function ProductShowcase({
 
   return (
     <div className={styles.container}>
-      {/*left-part*/}
-
       <div className={styles.left}>
         <div className={styles.images}>
           <div className={styles.image}>
@@ -83,8 +81,6 @@ export default function ProductShowcase({
           ))}
         </div>
       </div>
-
-      {/*right-part-description*/}
 
       <div className={styles.info}>
         <h2>{brand}</h2>

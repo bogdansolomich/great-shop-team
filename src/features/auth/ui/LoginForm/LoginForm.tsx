@@ -5,22 +5,45 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import styles from '../LoginForm/Login.module.scss';
-import { validateField, validateLogin } from '@/features/auth/validation';
-import AuthInput from '../AuthInput/AuthInput';
-import loginGirlImg from '../../../../../public/images/loginGirlImg.png';
-import GoogleLogo from '../LoginForm/icon/GoogleIcon.png';
-import AppleLogo from '../LoginForm/icon/AppleLogo.png';
-import FaceLogo from '../LoginForm/icon/FaceBookLogo.png';
-import { useLoginMutation } from '@/store/endpoints/authEndpoints';
-import { setToken } from '@/store/slices/userSlice';
 
-export default function LoginForm() {
-  const [email, setEmail] = useState('');
+import AuthInput from '@/features/auth/ui/AuthInput/AuthInput';
+import { extractApiError } from '@/features/auth/lib/apiError';
+import { normalizeEmail } from '@/features/auth/lib/normalizeEmail';
+import { saveUserEmail } from '@/features/auth/lib/userInitials';
+import { validateField, validateLogin } from '@/features/auth/lib/validation';
+import {
+  useLazyGetCurrentUserQuery,
+  useLoginMutation,
+} from '@/store/endpoints/authEndpoints';
+import { setAuthEmail, setToken } from '@/store/slices/userSlice';
+
+import googleLogo from '../../../../../public/icons/GoogleLogo.svg';
+import facebookLogo from '../../../../../public/icons/FacebookLogo.svg';
+import appleLogo from '../../../../../public/icons/AppleLogo.svg';
+import styles from '../LoginForm/Login.module.scss';
+
+type LoginFormProps = {
+  initialEmail?: string;
+  hintMessage?: string;
+  onCreateAccount?: () => void;
+  onForgotPassword?: () => void;
+  onSuccess?: () => void;
+};
+
+export default function LoginForm({
+  initialEmail = '',
+  hintMessage = '',
+  onCreateAccount,
+  onForgotPassword,
+  onSuccess,
+}: LoginFormProps) {
+  const [email, setEmail] = useState(initialEmail);
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [isChecked, setIsChecked] = useState(false);
   const [login, { isLoading }] = useLoginMutation();
+  const [fetchCurrentUser] = useLazyGetCurrentUserQuery();
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -28,95 +51,161 @@ export default function LoginForm() {
     e.preventDefault();
     setErrorMessage('');
 
-    // validate client-side first using shared helper
-    const errors = validateLogin({ email, password });
+    const normalizedEmail = normalizeEmail(email);
+    const errors = validateLogin({ email: normalizedEmail, password });
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
       return;
     }
 
     try {
-      const result = await login({ email_or_phone: email, password }).unwrap();
+      const result = await login({
+        email_or_phone: normalizedEmail,
+        password,
+      }).unwrap();
+      saveUserEmail(normalizedEmail);
       localStorage.setItem('accessToken', result.access);
       localStorage.setItem('refreshToken', result.refresh);
       dispatch(setToken(result.access));
+      dispatch(setAuthEmail(normalizedEmail));
+      await fetchCurrentUser();
+      onSuccess?.();
       router.push('/profile');
-    } catch (error) {
-      setErrorMessage('Incorrect email or password. Try again.');
+    } catch (error: unknown) {
+      const detail = extractApiError(error) ?? '';
+
+      if (detail.toLowerCase().includes('no active account')) {
+        setErrorMessage(
+          'Could not sign in. Check email and password, or complete email verification first.',
+        );
+      } else {
+        setErrorMessage(detail || 'Incorrect email or password. Try again.');
+      }
     }
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.left}>
-        <Image src={loginGirlImg} alt="Shop Photo" fill style={{ objectFit: 'cover' }} />
-      </div>
+    <div className={styles.panel}>
+      <div className={styles.formWrapper}>
+        <div className={styles.header}>
+          <p>Welcome! 👋</p>
+          <p>Please login here</p>
+        </div>
 
-      <div className={styles.right}>
-        <div className={styles.formWrapper}>
-          <div className={styles.header}>
-            <p>Welcome! 👋 </p>
-            <p>Please login here</p>
+        {hintMessage && <div className={styles.errorMessage}>{hintMessage}</div>}
+
+        <form onSubmit={handleSubmit}>
+          <div className={styles.filed}>
+            <AuthInput
+              id="email"
+              name="email"
+              label="Email Address/Mobile"
+              type="email"
+              placeholder="email@example.com"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                const msg = validateField('email', e.target.value);
+                setFieldErrors((prev) => ({ ...prev, email: msg }));
+              }}
+              error={fieldErrors.email}
+            />
           </div>
 
-          <form onSubmit={handleSubmit}>
-            <div className={styles.filed}>
-              <AuthInput
-                id="email"
-                name="email"
-                label="Email Address"
-                type="email"
-                placeholder="robertfox@example.com"
-                value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                  const msg = validateField('email', e.target.value);
-                  setFieldErrors((prev) => ({ ...prev, email: msg }));
-                }}
-                error={fieldErrors.email}
+          <div className={styles.filed}>
+            <AuthInput
+              id="password"
+              name="password"
+              label="Password"
+              type="password"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                const msg = validateField('password', e.target.value);
+                setFieldErrors((prev) => ({ ...prev, password: msg }));
+              }}
+              error={fieldErrors.password}
+              togglePassword
+            />
+          </div>
+
+          <div className={styles.optinalRow}>
+            <label className={styles.checkboxWrap}>
+              <input
+                type="checkbox"
+                checked={isChecked}
+                onChange={(e) => setIsChecked(e.target.checked)}
+                className={styles.checkboxInput}
               />
-            </div>
 
-            <div className={styles.filed}>
-              <AuthInput
-                id="password"
-                name="password"
-                label="Password"
-                type="password"
-                placeholder="00000000"
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  const msg = validateField('password', e.target.value);
-                  setFieldErrors((prev) => ({ ...prev, password: msg }));
-                }}
-                error={fieldErrors.password}
-                togglePassword
-              />
-            </div>
+              <span className={styles.checkIcon} aria-hidden>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  stroke="currentColor"
+                  strokeWidth={1}
+                >
+                  <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                  />
+                </svg>
+              </span>
 
-            <div className={styles.optinalRow}>
-              <label className={styles.checkbox}>
-                <input type="checkbox" />
-                <span> Remember me</span>
-              </label>
+              <span className={styles.checkboxLabel}>Remember Me</span>
+            </label>
 
-              <span className={styles.forgBtn}>Forgot Password?</span>
-            </div>
-
-            {errorMessage && <div className={styles.errorMessage}>{errorMessage}</div>}
-
-            <button type="submit" className={styles.loginBtn} disabled={isLoading}>
-              {isLoading ? 'Loading...' : 'Login'}
+            <button
+              type="button"
+              className={styles.forgBtn}
+              onClick={onForgotPassword ?? (() => router.push('/get-code'))}
+            >
+              Forgot Password?
             </button>
-          </form>
+          </div>
 
-          <span className={styles.createAccount}>
-            <Image src={GoogleLogo} alt="Google" className="w-5 h-5" />
-            <Image src={FaceLogo} alt="FaceBook" className="w-4 h-5" />
-            <Image src={AppleLogo} alt="Apple" className="w-4 h-5" />
-            <Link href="/registration">Create new account?</Link>
-          </span>
+          {errorMessage && <div className={styles.errorMessage}>{errorMessage}</div>}
+
+          <button
+            type="submit"
+            disabled={!isChecked || isLoading}
+            className={`${styles.loginBtn} transition-all duration-300 ease-in-out ${
+              !isChecked || isLoading ? 'opacity-50 cursor-not-allowed' : ''
+            }`}
+          >
+            {isLoading ? 'Loading...' : 'Login'}
+          </button>
+
+          <div className="flex justify-center items-center gap-[24px] mt-[8px]">
+            <button type="button" className="flex items-center justify-center w-10 h-10">
+              <Image src={googleLogo} alt="Google" className="w-5 h-5" />
+            </button>
+
+            <button type="button" className="flex items-center justify-center w-10 h-10">
+              <Image src={facebookLogo} alt="Facebook" className="w-5 h-5" />
+            </button>
+
+            <button type="button" className="flex items-center justify-center w-10 h-10">
+              <Image src={appleLogo} alt="Apple" className="w-5 h-5" />
+            </button>
+          </div>
+        </form>
+
+        <div className={styles.registerVariant}>
+          {onCreateAccount ? (
+            <button type="button" className={styles.registerLink} onClick={onCreateAccount}>
+              Create New Account?
+            </button>
+          ) : (
+            <Link href="/registration" className={styles.registerLink}>
+              Create New Account?
+            </Link>
+          )}
         </div>
       </div>
     </div>

@@ -1,12 +1,21 @@
-import React, { FC } from 'react';
+'use client';
+
+import { useRouter } from 'next/navigation';
+
+import AuthShell from '@/features/auth/ui/AuthShell/AuthShell';
 import RegisterForm from '@/features/auth/ui/RegisterForm/RegisterForm';
 
-const Page: FC = () => {
-  return (
-    <div>
-      <RegisterForm />
-    </div>
-  );
-};
+export default function RegistrationPage() {
+  const router = useRouter();
 
-export default Page;
+  return (
+    <AuthShell mode="page" onBackdropClick={() => router.push('/')}>
+      <RegisterForm
+        onLogin={() => router.push('/login')}
+        onRegistered={(email) =>
+          router.push(`/verify?email=${encodeURIComponent(email)}`)
+        }
+      />
+    </AuthShell>
+  );
+}
