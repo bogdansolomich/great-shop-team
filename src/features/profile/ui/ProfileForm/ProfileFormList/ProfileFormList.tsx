@@ -1,10 +1,10 @@
 import { ReactNode, useState } from 'react';
-import MyReviews from '@/features/auth/ui/ProfileForm/ProfileFormList/MyReviews/MyReviews';
-import Settings from '@/features/auth/ui/ProfileForm/ProfileFormList/Settings/Settings';
-import PersonalData from '@/features/auth/ui/ProfileForm/ProfileFormList/PersonalData/PersonalData';
-import Correspondence from '@/features/auth/ui/ProfileForm/ProfileFormList/Correspondence/Correspondence';
-import Support from '@/features/auth/ui/ProfileForm/ProfileFormList/Support/Support';
-import DeleteAccount from '@/features/auth/ui/ProfileForm/ProfileFormList/DeleteAccount/DeleteAccount';
+import MyReviews from '@/features/profile/ui/ProfileForm/ProfileFormList/MyReviews/MyReviews';
+import Settings from '@/features/profile/ui/ProfileForm/ProfileFormList/Settings/Settings';
+import PersonalData from '@/features/profile/ui/ProfileForm/ProfileFormList/PersonalData/PersonalData';
+import Correspondence from '@/features/profile/ui/ProfileForm/ProfileFormList/Correspondence/Correspondence';
+import Support from '@/features/profile/ui/ProfileForm/ProfileFormList/Support/Support';
+import DeleteAccount from '@/features/profile/ui/ProfileForm/ProfileFormList/DeleteAccount/DeleteAccount';
 import styles from '../ProfileFormList/ProfileFormList.module.scss';
 
 type Tab = 'reviews' | 'settings' | 'personalData' | 'correspondence' | 'support' | 'deleteAccount';

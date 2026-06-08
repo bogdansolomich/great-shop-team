@@ -4,7 +4,6 @@ export const validateEmail = (value: string): boolean => {
 
 export const validatePassword = (value: string): boolean => {
   if (typeof value !== 'string') return false;
-  // At least 8 chars, at least one uppercase letter and at least one special character
   const re = /^(?=.*[A-Z])(?=.*[^A-Za-z0-9]).{8,}$/;
   return re.test(value);
 };
@@ -61,6 +60,28 @@ export default {
   validatePassword,
   validateField,
   validateForm,
+};
+
+export const validateRegisterForm = (
+  formData: {
+    email?: string;
+    password?: string;
+    confirmPassword?: string;
+  },
+  acceptTerms = false,
+): Record<string, string> => {
+  const errors: Record<string, string> = {};
+
+  (['email', 'password', 'confirmPassword'] as const).forEach((field) => {
+    const msg = validateField(field, formData[field] ?? '', formData);
+    if (msg) errors[field] = msg;
+  });
+
+  if (!acceptTerms) {
+    errors.acceptTerms = 'You must accept the Terms & Conditions.';
+  }
+
+  return errors;
 };
 
 export const validateLogin = (data: { email?: string; password?: string }) => {

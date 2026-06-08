@@ -1,6 +1,20 @@
 @use '@/styles/variables' as *;
 
+@mixin layout-gutter {
+  padding-inline: $layout-gutter-mobile;
+
+  @media (min-width: $layout-tablet) {
+    padding-inline: $layout-gutter-tablet;
+  }
+
+  @media (min-width: $layout-desktop) {
+    padding-inline: $layout-gutter-desktop;
+  }
+}
+
 .container {
+  box-sizing: border-box;
   margin: 0 auto;
-  max-width: $layout-desktop;
+  width: 100%;
+  @include layout-gutter;
 }

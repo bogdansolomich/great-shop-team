@@ -1,7 +1,7 @@
 import ProductShowcase from '@/widgets/ProductShowcase/ProductShowcase';
 import productCard from '@/data/productCard.json';
 
-import styles from './Product.module.css';
+import styles from './Product.module.scss';
 import Image from 'next/image';
 
 export default function Product() {
@@ -25,7 +25,6 @@ export default function Product() {
             <div key={key} className={styles.catalogProduct}>
               <Image src={item.image.src} alt={item.image.alt} width={413} height={387} />
               <button className={styles.btnAdd}>Like</button>
-              {/*<button className={styles.btnLike}>Cart</button>*/}
               <div className={styles.titleInfoImage}>
                 <ul>{item.title}</ul>
                 <ul>{item.price}</ul>

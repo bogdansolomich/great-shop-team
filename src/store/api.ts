@@ -10,6 +10,7 @@ export const api = createApi({
       return headers;
     },
   }),
+  tagTypes: ['User'],
   // Изначально эндпоинты пустые!
   endpoints: () => ({}),
 });

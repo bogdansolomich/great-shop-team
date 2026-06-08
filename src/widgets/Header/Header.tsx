@@ -1,3 +1,5 @@
+import { Suspense } from 'react';
+
 import LanguageSwitcher from '@/widgets/LanguageSwitcher/LanguageSwitcher';
 import Navigation from '@/widgets/Navigation/Navigation';
 import MyAccount from '@/widgets/MyAccount/MyAccount';
@@ -8,7 +10,7 @@ import styles from '../Header/Header.module.scss';
 
 export default function Header() {
   return (
-    <header className="container">
+    <header className={styles.headerRoot}>
       <div className={styles.header}>
         <div className={styles.language}>
           <LanguageSwitcher />
@@ -19,7 +21,9 @@ export default function Header() {
         </div>
 
         <div className={styles.actions}>
-          <MyAccount />
+          <Suspense fallback={null}>
+            <MyAccount />
+          </Suspense>
           <WishList />
           <ShoppingBag />
         </div>

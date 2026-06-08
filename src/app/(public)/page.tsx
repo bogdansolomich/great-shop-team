@@ -8,7 +8,7 @@ import styles from './page.module.scss';
 
 export default function Home() {
   return (
-    <main className="container">
+    <>
       <HeroBanner
         image={heroData.image}
         title={heroData.title}
@@ -98,6 +98,6 @@ export default function Home() {
           </a>
         </div>
       </div>
-    </main>
+    </>
   );
 }
