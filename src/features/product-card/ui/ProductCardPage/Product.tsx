@@ -1,7 +1,7 @@
 import ProductShowcase from '@/widgets/ProductShowcase/ProductShowcase';
 import productCard from '@/data/productCard.json';
 
-import styles from './Product.module.css';
+import styles from './Product.module.scss';
 import Image from 'next/image';
 
 export default function Product() {
