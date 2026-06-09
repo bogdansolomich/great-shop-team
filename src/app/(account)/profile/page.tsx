@@ -11,13 +11,22 @@ export default function ProfilePage() {
   const { isAuthenticated, token } = useAuth();
 
   useEffect(() => {
-    const hasToken = token || localStorage.getItem('accessToken');
+    const hasToken =
+      typeof window !== 'undefined'
+        ? token || Boolean(localStorage.getItem('accessToken'))
+        : Boolean(token);
+
     if (!isAuthenticated && !hasToken) {
       router.replace('/');
     }
   }, [isAuthenticated, token, router]);
 
-  if (!isAuthenticated && !token && typeof window !== 'undefined' && !localStorage.getItem('accessToken')) {
+  if (
+    !isAuthenticated &&
+    !token &&
+    typeof window !== 'undefined' &&
+    !localStorage.getItem('accessToken')
+  ) {
     return null;
   }
 

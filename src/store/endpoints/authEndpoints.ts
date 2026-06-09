@@ -17,25 +17,20 @@ export const authEndpoints = api.injectEndpoints({
     login: builder.mutation<TokenRefreshResponse, LoginInput>({
       query: (body) => ({ url: '/api/login/', method: 'POST', body }),
       // Вказуємо, що після логіну треба скинути кеш юзера, щоб завантажити свіжі дані
-      invalidatesTags: ['User'], 
+      invalidatesTags: ['User'],
     }),
-    
+
     // Реєстрація
     registerUser: builder.mutation<User, RegisterInput>({
       query: (body) => ({ url: '/api/users/register/', method: 'POST', body }),
     }),
-    
-    // Оновлення access token по refresh token
-    refreshToken: builder.mutation<TokenRefreshResponse, { refresh: string }>({
-      query: (body) => ({ url: '/api/token/refresh/', method: 'POST', body }),
-    }),
-    
+
     // Поточний користувач — 💎 ТУТ ВИПРАВЛЕНО ТИП НА <User, void>
     getCurrentUser: builder.query<User, void>({
       query: () => '/api/users/current-user/',
       providesTags: ['User'], // Тегуємо цей запит
     }),
-    
+
     // Активація користувача по коду
     activateUserPatch: builder.mutation<void, ActivationCodeInput>({
       query: (body) => ({
@@ -44,17 +39,17 @@ export const authEndpoints = api.injectEndpoints({
         body,
       }),
     }),
-    
+
     // Зміна пароля
     changePassword: builder.mutation<void, PasswordChangeInput>({
       query: (body) => ({ url: '/api/users/password-change/', method: 'POST', body }),
     }),
-    
+
     // Скидання пароля
     resetPassword: builder.mutation<PasswordResetInput, PasswordResetInput>({
       query: (body) => ({ url: '/api/users/password-reset/', method: 'POST', body }),
     }),
-    
+
     // Повторне відправлення коду активації
     resendActivationCode: builder.mutation<void, ResendActivationInput>({
       query: (body) => ({
@@ -69,7 +64,6 @@ export const authEndpoints = api.injectEndpoints({
 export const {
   useLoginMutation,
   useRegisterUserMutation,
-  useRefreshTokenMutation,
   useGetCurrentUserQuery,
   useLazyGetCurrentUserQuery,
   useActivateUserPatchMutation,
