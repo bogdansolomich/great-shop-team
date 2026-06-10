@@ -20,12 +20,22 @@
     {
       "id": "2",
       "brand": "Nike",
-      "name": "Red Oversized Hoodie",
+      "name": "Brown Zip Hoodie",
       "code": "Product code: S-2336931",
       "variant": "L",
-      "price": 135,
+      "price": 50,
       "quantity": 1,
-      "image": "/images/product2.jpg"
+      "image": "/images/image34.jpg"
+    },
+    {
+      "id": "3",
+      "brand": "Nike",
+      "name": "Red Oversized Hoodie",
+      "code": "Product code: S-2337124",
+      "variant": "50ml",
+      "price": 120,
+      "quantity": 2,
+      "image": "/images/image-34-parfume.jpg"
     }
   ]
 }
