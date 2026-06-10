@@ -13,3 +13,19 @@
   --site-header-height: #{$site-header-height};
   --site-footer-height: #{$site-footer-height};
 }
+
+@utility html-body-fix {
+  html, 
+  body {
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+    width: 100% !important;
+  }
+
+  body > div,
+  main,
+  section {
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+  }
+}

@@ -3,7 +3,7 @@
 .root {
   width: 100%;
   max-width: 100%;
-  padding: 24px 80px;
+  padding: 16px 80px;
   box-sizing: border-box;
   overflow-x: hidden;
   display: flex;
@@ -19,7 +19,7 @@
   background: transparent;
   border: 0;
   padding: 0;
-  margin-bottom: 40px;
+  margin-bottom: 32px;
   width: 40px;
   height: 40px;
   font-size: 36px;
@@ -61,7 +61,7 @@
 .form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
   width: 100%;
   max-width: 100%;
 }
@@ -100,8 +100,8 @@
   margin-top: auto;
   padding-top: 40px;
   text-align: right;
-  font-size: 16px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 400;
   color: $color-dark;
 }
 
@@ -109,8 +109,8 @@
   background: none;
   border: 0;
   padding: 0;
-  color: $color-dark;
-  font-weight: 700;
+  color: $color-blue;
+  font-weight: 600;
   cursor: pointer;
   text-decoration: underline;
   margin-left: 4px;
