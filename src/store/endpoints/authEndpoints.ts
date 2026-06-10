@@ -8,6 +8,7 @@ import {
   PasswordResetInput,
   ActivationCodeInput,
   ResendActivationInput,
+  PasswordResetConfirmInput,
 } from '../types';
 
 export const authEndpoints = api.injectEndpoints({
@@ -16,7 +17,6 @@ export const authEndpoints = api.injectEndpoints({
     // Логін
     login: builder.mutation<TokenRefreshResponse, LoginInput>({
       query: (body) => ({ url: '/api/login/', method: 'POST', body }),
-      // Вказуємо, що після логіну треба скинути кеш юзера, щоб завантажити свіжі дані
       invalidatesTags: ['User'],
     }),
 
@@ -25,7 +25,7 @@ export const authEndpoints = api.injectEndpoints({
       query: (body) => ({ url: '/api/users/register/', method: 'POST', body }),
     }),
 
-    // Поточний користувач — 💎 ТУТ ВИПРАВЛЕНО ТИП НА <User, void>
+    // Поточний користувач (для отримання даних після логіну або при відкритті сайту, якщо токен вже є) 
     getCurrentUser: builder.query<User, void>({
       query: () => '/api/users/current-user/',
       providesTags: ['User'], // Тегуємо цей запит
@@ -46,8 +46,13 @@ export const authEndpoints = api.injectEndpoints({
     }),
 
     // Скидання пароля
-    resetPassword: builder.mutation<PasswordResetInput, PasswordResetInput>({
+    resetPassword: builder.mutation<void, PasswordResetInput>({
       query: (body) => ({ url: '/api/users/password-reset/', method: 'POST', body }),
+    }),
+
+    // Подтверждение скидання пароля
+    passwordResetConfirm: builder.mutation<void, PasswordResetConfirmInput>({ 
+      query: (body) => ({ url: '/api/users/password-reset-confirm/', method: 'POST', body }),
     }),
 
     // Повторне відправлення коду активації
@@ -69,5 +74,6 @@ export const {
   useActivateUserPatchMutation,
   useChangePasswordMutation,
   useResetPasswordMutation,
+  usePasswordResetConfirmMutation, 
   useResendActivationCodeMutation,
 } = authEndpoints;
