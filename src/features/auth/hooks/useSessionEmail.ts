@@ -12,11 +12,11 @@ export function useSessionEmail() {
 
   useEffect(() => {
     setStoredEmail(getStoredUserEmail());
-    setHasToken(Boolean(localStorage.getItem('accessToken')));
-  }, [authEmail, user?.email]);
+    setHasToken(typeof window !== 'undefined' ? Boolean(localStorage.getItem('accessToken')) : false);
+  }, []); 
 
-  const email = user?.email ?? authEmail ?? storedEmail;
   const hasSession = isAuthenticated || Boolean(token) || hasToken;
+  const email = user?.email || authEmail || storedEmail;
 
   return {
     email,
