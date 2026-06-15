@@ -25,6 +25,7 @@ import styles from '../LoginForm/Login.module.scss';
 type LoginFormProps = {
   initialEmail?: string;
   hintMessage?: string;
+  hintType?: 'success' | 'error';
   onCreateAccount?: () => void;
   onForgotPassword?: () => void;
   onSuccess?: () => void;
@@ -33,6 +34,7 @@ type LoginFormProps = {
 export default function LoginForm({
   initialEmail = '',
   hintMessage = '',
+  hintType = 'error',
   onCreateAccount,
   onForgotPassword,
   onSuccess,
@@ -92,7 +94,11 @@ export default function LoginForm({
           <p>Please login here</p>
         </div>
 
-        {hintMessage && <div className={styles.errorMessage}>{hintMessage}</div>}
+        {hintMessage && (
+          <div className={hintType === 'success' ? styles.successMessage : styles.errorMessage}>
+            {hintMessage}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit}>
           <div className={styles.filed}>
