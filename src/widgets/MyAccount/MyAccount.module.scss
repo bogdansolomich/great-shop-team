@@ -7,12 +7,24 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  position: relative;
+  position: relative; 
   cursor: pointer;
-}
 
-.iconButton :global(svg) {
-  display: block;
+  :global(svg) {
+    display: block;
+  }
+
+  &.active::after {
+    content: '';
+    position: absolute;
+    bottom: -4;
+    left: 0;
+    right: 0;
+    width: 32px; 
+    height: 1px;
+    margin: 0 auto;
+    background: $color-dark;
+  }
 }
 
 .initials {
@@ -30,15 +42,4 @@
   line-height: 1;
   letter-spacing: 0.02em;
   user-select: none;
-}
-
-.active::after {
-  content: '';
-  position: absolute;
-  left: 8px;
-  right: 8px;
-  height: 2px;
-  bottom: -6px;
-  background: $color-dark;
-  border-radius: 2px;
 }
