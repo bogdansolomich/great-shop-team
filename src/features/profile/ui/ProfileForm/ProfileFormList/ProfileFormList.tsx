@@ -13,9 +13,9 @@ const ProfileFormList = () => {
   const tabs: { id: Tab; label: string; active: boolean }[] = [
     { id: 'reviews', label: 'My reviews', active: false },
     { id: 'settings', label: 'Settings', active: false },
-    { id: 'personalData', label: 'Personal Data', active: false },
     { id: 'correspondence', label: 'Correspondence', active: false },
     { id: 'deleteAccount', label: 'Delete Account', active: false },
+    { id: 'personalData', label: 'Personal Data', active: false },
   ];
 
   const tabContent: Record<Tab, ReactNode> = {

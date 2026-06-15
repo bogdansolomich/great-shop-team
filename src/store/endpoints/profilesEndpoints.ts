@@ -5,9 +5,11 @@ const profilesEndpoints = api.injectEndpoints({
   endpoints: (builder) => ({
     getProfiles: builder.query<Profile[], void>({
       query: () => '/api/profiles/',
+      providesTags: ['Profile'],
     }),
     getProfileById: builder.query<Profile, number>({
       query: (profile_id) => `/api/profiles/${profile_id}/`,
+      providesTags: ['Profile'],
     }),
     updateProfile: builder.mutation<Profile, { profile_id: number; body: ProfileUpdateInput }>({
       query: ({ profile_id, body }) => ({
@@ -15,6 +17,7 @@ const profilesEndpoints = api.injectEndpoints({
         method: 'PUT',
         body,
       }),
+      invalidatesTags: ['Profile'],
     }),
     patchProfile: builder.mutation<Profile, { profile_id: number; body: ProfileUpdateInput }>({
       query: ({ profile_id, body }) => ({
@@ -22,6 +25,7 @@ const profilesEndpoints = api.injectEndpoints({
         method: 'PATCH',
         body,
       }),
+      invalidatesTags: ['Profile'],
     }),
   }),
 });

@@ -69,7 +69,7 @@ Open `http://localhost:3000`.
 Create a local env file in the project root:
 
 ```bash
-touch .env.local
+touch ..env.local
 ```
 
 Add the backend base URL from the backend docs:
