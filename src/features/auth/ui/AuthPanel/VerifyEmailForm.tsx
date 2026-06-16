@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import { extractApiError } from '@/features/auth/lib/apiError';
 import { normalizeEmail } from '@/features/auth/lib/normalizeEmail';
+import { formatMessage, useTranslation } from '@/i18n/useTranslation';
 import {
   useActivateUserPatchMutation,
   useResendActivationCodeMutation,
@@ -30,6 +31,7 @@ function formatCooldown(seconds: number) {
 }
 
 export default function VerifyEmailForm({ email, onBack, onVerified }: VerifyEmailFormProps) {
+  const { t } = useTranslation();
   const [digits, setDigits] = useState<string[]>(Array(CODE_LENGTH).fill(''));
   const [errorMessage, setErrorMessage] = useState('');
   const [resendMessage, setResendMessage] = useState('');
@@ -93,9 +95,7 @@ export default function VerifyEmailForm({ email, onBack, onVerified }: VerifyEma
     try {
       await activateUser({ code, email: normalizeEmail(email) }).unwrap();
     } catch (error) {
-      setErrorMessage(
-        extractApiError(error) ?? 'Invalid or expired code. Try again or resend a new one.',
-      );
+      setErrorMessage(extractApiError(error) ?? t.auth.verify.invalidCode);
       return;
     }
 
@@ -108,27 +108,26 @@ export default function VerifyEmailForm({ email, onBack, onVerified }: VerifyEma
 
     try {
       await resendCode({ email: normalizeEmail(email) }).unwrap();
-      setResendMessage('A new code has been sent to your email.');
+      setResendMessage(t.auth.verify.codeResent);
       setResendCooldown(RESEND_COOLDOWN_SEC);
       setDigits(Array(CODE_LENGTH).fill(''));
       inputsRef.current[0]?.focus();
     } catch {
-      setErrorMessage('Could not resend the code. Check your email and try again.');
+      setErrorMessage(t.auth.verify.resendFailed);
     }
   };
 
   return (
     <div className={styles.root}>
       {onBack && (
-        <button type="button" className={styles.back} onClick={onBack} aria-label="Back">
+        <button type="button" className={styles.back} onClick={onBack} aria-label={t.common.back}>
           ‹
         </button>
       )}
 
-      <h1 className={styles.title}>Please verify your email address</h1>
+      <h1 className={styles.title}>{t.auth.verify.title}</h1>
       <p className={styles.subtitleLinkEmail}>
-        We&apos;ve sent an email to{' '}
-        <span className={styles.emailHighlight}>{email}</span>, please enter the code below
+        {formatMessage(t.auth.verify.subtitle, { email })}
       </p>
 
       {VERIFY_ILLUSTRATION_SRC && (
@@ -146,7 +145,7 @@ export default function VerifyEmailForm({ email, onBack, onVerified }: VerifyEma
 
       <form className={styles.form} onSubmit={handleSubmit}>
         <label className={styles.subtitle} style={{ marginBottom: 0 }}>
-          Enter Code
+          {t.auth.labels.enterCode}
         </label>
 
         <div className={styles.codeRow}>
@@ -164,7 +163,7 @@ export default function VerifyEmailForm({ email, onBack, onVerified }: VerifyEma
               onChange={(e) => handleChange(index, e.target.value)}
               onKeyDown={(e) => handleKeyDown(index, e)}
               onPaste={handlePaste}
-              aria-label={`Digit ${index + 1}`}
+              aria-label={formatMessage(t.common.digit, { number: index + 1 })}
             />
           ))}
         </div>
@@ -177,12 +176,12 @@ export default function VerifyEmailForm({ email, onBack, onVerified }: VerifyEma
           className={styles.submitBtn}
           disabled={digits.some((d) => !d) || isLoading}
         >
-          {isLoading ? 'Verifying...' : 'Verify'}
+          {isLoading ? t.common.verifying : t.auth.verify.submit}
         </button>
       </form>
 
       <p className={styles.footerLink}>
-        Didn&apos;t see your email?
+        {t.auth.verify.didntSeeEmail}{' '}
         <button
           type="button"
           className={styles.linkButton}
@@ -190,7 +189,7 @@ export default function VerifyEmailForm({ email, onBack, onVerified }: VerifyEma
           disabled={isResending || resendCooldown > 0}
         >
           {isResending ? (
-            'Sending...'
+            t.common.sending
           ) : resendCooldown > 0 ? (
             <span className={styles.resendTimer}>
               <svg
@@ -210,7 +209,7 @@ export default function VerifyEmailForm({ email, onBack, onVerified }: VerifyEma
               {formatCooldown(resendCooldown)}
             </span>
           ) : (
-            'Resend'
+            t.common.resend
           )}
         </button>
       </p>

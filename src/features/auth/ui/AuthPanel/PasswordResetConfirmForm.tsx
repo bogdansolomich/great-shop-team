@@ -1,29 +1,35 @@
 'use client';
 
 import { useState, useRef } from 'react';
+
 import AuthInput from '@/features/auth/ui/AuthInput/AuthInput';
-import { validateField } from '@/features/auth/lib/validation';
+import { formatMessage, useTranslation } from '@/i18n/useTranslation';
 import { usePasswordResetConfirmMutation } from '@/store/endpoints/authEndpoints';
+
 import styles from './AuthPanel.module.scss';
 
 type PasswordResetConfirmFormProps = {
-  email: string; 
+  email: string;
   onSuccess: () => void;
   onBack?: () => void;
 };
 
-const CODE_LENGTH = 6; 
+const CODE_LENGTH = 6;
 
-export default function PasswordResetConfirmForm({ email, onSuccess, onBack }: PasswordResetConfirmFormProps) {
-
+export default function PasswordResetConfirmForm({
+  email,
+  onSuccess,
+  onBack,
+}: PasswordResetConfirmFormProps) {
+  const { t, validators } = useTranslation();
   const [digits, setDigits] = useState<string[]>(Array(CODE_LENGTH).fill(''));
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  
+
   const [errors, setErrors] = useState({ password: '', confirmPassword: '', global: '' });
   const [codeError, setCodeError] = useState('');
   const [resetConfirm, { isLoading }] = usePasswordResetConfirmMutation();
-  
+
   const inputsRef = useRef<Array<HTMLInputElement | null>>([]);
 
   const handleCodeChange = (index: number, value: string) => {
@@ -33,7 +39,7 @@ export default function PasswordResetConfirmForm({ email, onSuccess, onBack }: P
     next[index] = value;
     setDigits(next);
     setCodeError('');
-    setErrors(prev => ({ ...prev, global: '' }));
+    setErrors((prev) => ({ ...prev, global: '' }));
 
     if (value && index < CODE_LENGTH - 1) {
       inputsRef.current[index + 1]?.focus();
@@ -64,9 +70,11 @@ export default function PasswordResetConfirmForm({ email, onSuccess, onBack }: P
     e.preventDefault();
 
     const currentCode = digits.join('');
-    const currentCodeError = currentCode.length < CODE_LENGTH ? 'Please enter the full code' : '';
-    const passwordError = validateField('password', password);
-    const confirmPasswordError = password !== confirmPassword ? 'Passwords do not match' : '';
+    const currentCodeError =
+      currentCode.length < CODE_LENGTH ? t.validation.enterFullCode : '';
+    const passwordError = validators.validateField('password', password);
+    const confirmPasswordError =
+      password !== confirmPassword ? t.validation.passwordsDoNotMatch : '';
 
     if (currentCodeError || passwordError || confirmPasswordError) {
       setCodeError(currentCodeError);
@@ -86,10 +94,10 @@ export default function PasswordResetConfirmForm({ email, onSuccess, onBack }: P
       }).unwrap();
 
       onSuccess();
-    } catch (err) {
-      setErrors(prev => ({
+    } catch {
+      setErrors((prev) => ({
         ...prev,
-        global: 'Invalid or expired verification code. Please try again.',
+        global: t.auth.resetPassword.invalidCode,
       }));
     }
   };
@@ -97,25 +105,24 @@ export default function PasswordResetConfirmForm({ email, onSuccess, onBack }: P
   return (
     <div className={styles.root}>
       {onBack && (
-        <button type="button" className={styles.back} onClick={onBack} aria-label="Back">
+        <button type="button" className={styles.back} onClick={onBack} aria-label={t.common.back}>
           ‹
         </button>
       )}
 
-      <h1 className={styles.title}>Create New Password</h1>
+      <h1 className={styles.title}>{t.auth.resetPassword.title}</h1>
       <p className={styles.subtitleLinkEmail}>
-        We sent a verification code to <strong>{email}</strong>
+        {formatMessage(t.auth.resetPassword.subtitle, { email })}
       </p>
 
       <form className={styles.form} onSubmit={handleSubmit}>
         {errors.global && <div className={styles.globalError}>{errors.global}</div>}
 
-      
         <div className={styles.formField} style={{ marginBottom: '20px' }}>
           <label className={styles.subtitle} style={{ display: 'block', marginBottom: '8px' }}>
-            Verification Code
+            {t.auth.labels.verificationCode}
           </label>
-          
+
           <div className={styles.codeRow}>
             {digits.map((digit, index) => (
               <input
@@ -131,23 +138,30 @@ export default function PasswordResetConfirmForm({ email, onSuccess, onBack }: P
                 onChange={(e) => handleCodeChange(index, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(index, e)}
                 onPaste={handlePaste}
-                aria-label={`Digit ${index + 1}`}
+                aria-label={formatMessage(t.common.digit, { number: index + 1 })}
               />
             ))}
           </div>
-          {codeError && <p className={styles.errorText} style={{ marginTop: '4px', color: '#ff4d4f', fontSize: '14px' }}>{codeError}</p>}
+          {codeError && (
+            <p
+              className={styles.errorText}
+              style={{ marginTop: '4px', color: '#ff4d4f', fontSize: '14px' }}
+            >
+              {codeError}
+            </p>
+          )}
         </div>
 
         <AuthInput
           id="new-password"
           name="password"
-          label="New Password"
+          label={t.auth.labels.newPassword}
           type="password"
-          placeholder="••••••••"
+          placeholder={t.auth.placeholders.passwordDots}
           value={password}
           onChange={(e) => {
             setPassword(e.target.value);
-            setErrors(prev => ({ ...prev, password: '', global: '' }));
+            setErrors((prev) => ({ ...prev, password: '', global: '' }));
           }}
           error={errors.password}
           togglePassword
@@ -156,20 +170,20 @@ export default function PasswordResetConfirmForm({ email, onSuccess, onBack }: P
         <AuthInput
           id="confirm-password"
           name="confirmPassword"
-          label="Confirm New Password"
+          label={t.auth.labels.confirmNewPassword}
           type="password"
-          placeholder="••••••••"
+          placeholder={t.auth.placeholders.passwordDots}
           value={confirmPassword}
           onChange={(e) => {
             setConfirmPassword(e.target.value);
-            setErrors(prev => ({ ...prev, confirmPassword: '', global: '' }));
+            setErrors((prev) => ({ ...prev, confirmPassword: '', global: '' }));
           }}
           error={errors.confirmPassword}
           togglePassword
         />
 
         <button type="submit" className={styles.submitBtn} disabled={isLoading}>
-          {isLoading ? 'Saving...' : 'Reset Password'}
+          {isLoading ? t.common.saving : t.auth.resetPassword.submit}
         </button>
       </form>
     </div>

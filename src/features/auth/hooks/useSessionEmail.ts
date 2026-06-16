@@ -10,10 +10,10 @@ export function useSessionEmail() {
   const [storedEmail, setStoredEmail] = useState('');
   const [hasToken, setHasToken] = useState(false);
 
-  useEffect(() => {
-    setStoredEmail(getStoredUserEmail());
-    setHasToken(typeof window !== 'undefined' ? Boolean(localStorage.getItem('accessToken')) : false);
-  }, []); 
+useEffect(() => {
+  setStoredEmail(getStoredUserEmail());
+  setHasToken(typeof window !== 'undefined' ? Boolean(localStorage.getItem('accessToken')) : false);
+}, [isAuthenticated, user, authEmail, token]);
 
   const hasSession = isAuthenticated || Boolean(token) || hasToken;
   const email = user?.email || authEmail || storedEmail;

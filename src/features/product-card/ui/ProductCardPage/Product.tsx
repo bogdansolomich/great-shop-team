@@ -1,10 +1,16 @@
-import ProductShowcase from '@/widgets/ProductShowcase/ProductShowcase';
-import productCard from '@/data/productCard.json';
+'use client';
 
-import styles from './Product.module.scss';
 import Image from 'next/image';
 
+import ProductShowcase from '@/widgets/ProductShowcase/ProductShowcase';
+import productCard from '@/data/productCard.json';
+import { useTranslation } from '@/i18n/useTranslation';
+
+import styles from './Product.module.scss';
+
 export default function Product() {
+  const { t } = useTranslation();
+
   return (
     <div>
       <ProductShowcase
@@ -19,12 +25,12 @@ export default function Product() {
         link={productCard.link}
       />
       <div className={styles.catalog}>
-        <h2 className={styles.catalogTitle}> You may also like </h2>
+        <h2 className={styles.catalogTitle}>{t.product.youMayAlsoLike}</h2>
         <div className={styles.catalogList}>
           {productCard.botonImages.map((item, key) => (
             <div key={key} className={styles.catalogProduct}>
               <Image src={item.image.src} alt={item.image.alt} width={413} height={387} />
-              <button className={styles.btnAdd}>Like</button>
+              <button className={styles.btnAdd}>{t.product.like}</button>
               <div className={styles.titleInfoImage}>
                 <ul>{item.title}</ul>
                 <ul>{item.price}</ul>

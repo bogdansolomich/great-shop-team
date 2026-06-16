@@ -1,0 +1,42 @@
+@use '@/styles/variables' as *;
+@use '@/styles/layout' as *;
+
+.promo {
+  position: relative;
+  width: 100%;
+  margin-bottom: $landing-section-gap;
+  aspect-ratio: 1440 / 850;
+  display: flex;
+  align-items: center;
+  color: $color-white;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  @include layout-gutter;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  width: $landing-product-card-width;
+  max-width: 100%;
+}
+
+.title {
+  font-family: $font-family-heading;
+  font-size: 36px;
+  font-weight: $font-bold;
+  line-height: 1.2;
+  margin: 0 0 20px;
+  color: $color-white;
+}
+
+.description {
+  font-family: $font-family;
+  font-size: $font-size;
+  font-weight: $font-light;
+  line-height: 1.5;
+  margin: 0 0 28px;
+  color: rgb(255 255 255 / 80%);
+}

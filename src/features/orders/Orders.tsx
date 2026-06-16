@@ -1,9 +1,11 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
-import { HiOutlineShoppingBag, HiOutlineTruck, HiOutlineMapPin } from 'react-icons/hi2';
+import { useMemo, useState } from 'react';
+import { HiOutlineShoppingBag } from 'react-icons/hi2';
+
 import productCard from '@/data/orderCard.json';
+import { formatMessage, useTranslation } from '@/i18n/useTranslation';
 
 type OrderFilter = 'delivery' | 'arrived' | 'canceled';
 
@@ -17,23 +19,6 @@ type OrderItem = {
   quantity: number;
   image: string;
 };
-
-type Order = {
-  id: string;
-  store: string;
-  estimatedDelivery: string;
-  status: string;
-  fromAddress: string;
-  toAddress: string;
-  productCard: OrderItem[];
-  total: number;
-};
-
-const filters: { id: OrderFilter; label: string; count: number }[] = [
-  { id: 'delivery', label: 'Delivery', count: 4 },
-  { id: 'arrived', label: 'Arrived', count: 3 },
-  { id: 'canceled', label: 'Canceled', count: 1 },
-];
 
 function OrderItemCard({ productCard }: { productCard: OrderItem }) {
   return (
@@ -67,13 +52,22 @@ function OrderItemCard({ productCard }: { productCard: OrderItem }) {
 }
 
 export default function Orders() {
+  const { t } = useTranslation();
   const [activeFilter, setActiveFilter] = useState<OrderFilter>('delivery');
   const order = productCard;
 
+  const filters = useMemo(
+    () => [
+      { id: 'delivery' as OrderFilter, label: t.orders.delivery, count: 4 },
+      { id: 'arrived' as OrderFilter, label: t.orders.arrived, count: 3 },
+      { id: 'canceled' as OrderFilter, label: t.orders.canceled, count: 1 },
+    ],
+    [t],
+  );
+
   return (
     <div className="mx-auto mt-8 max-w-[1440px] w-full px-4 grid min-h-[50vh] grid-cols-[23%_1fr] gap-[32px]">
-      {/* Бокове меню фільтрів */}
-      <nav className="flex flex-col gap-[32px]" aria-label="Order status filters">
+      <nav className="flex flex-col gap-[32px]" aria-label={t.orders.filtersAria}>
         {filters.map((filter) => {
           const isActive = activeFilter === filter.id;
 
@@ -101,14 +95,13 @@ export default function Orders() {
         })}
       </nav>
 
-      {/* Основний контент замовлення */}
       <section className="flex flex-col gap-6">
-        {/* ГОЛОВНИЙ КОНТЕЙНЕР ШАПКИ */}
         <div className="border-b border-gray-100 pb-5">
-          {/* Ряд 1: Order ID + TTH зліва | дата + статус справа */}
           <div className="grid grid-cols-[1fr_auto] items-start gap-x-8 gap-y-2">
             <div className="space-y-2">
-              <h2 className="text-lg font-medium text-black">Order ID: {order.id}</h2>
+              <h2 className="text-lg font-medium text-black">
+                {formatMessage(t.orders.orderId, { id: order.id })}
+              </h2>
               <div className="flex items-center gap-2.5 font-medium text-gray-800">
                 <HiOutlineShoppingBag className="h-5 w-5 shrink-0 text-black" aria-hidden />
                 <span>{order.store}</span>
@@ -117,7 +110,7 @@ export default function Orders() {
 
             <div className="flex items-center gap-4 self-start">
               <span className="whitespace-nowrap text-sm text-gray-500">
-                Estimated delivery date {order.estimatedDelivery}
+                {formatMessage(t.orders.estimatedDelivery, { date: order.estimatedDelivery })}
               </span>
               <span className="inline-flex items-center gap-2 rounded-lg bg-[#FFBF40] p-[10px] w-[123px] h-[39px] px-4 py-1.5 text-sm font-normal text-[#000000]">
                 <span className="h-2 w-2 rounded-full bg-[#FF9933]" aria-hidden />
@@ -126,36 +119,32 @@ export default function Orders() {
             </div>
           </div>
 
-          {/* Ряд 2: Адреси (Харків зліва, Київ справа) */}
-          {/* Прибрали justify-between, залишили звичайний flex та відступи між елементами */}
           <div className="mt-4 flex w-full flex-wrap items-center gap-y-4">
-            {/* Перший блок (Харків) — займає 60% */}
             <div className="flex items-center gap-2.5 text-sm text-gray-600 w-[77%] shrink-0 min-w-0">
               <span>{order.fromAddress}</span>
             </div>
 
-            {/* Другий блок (Київ) — займає 40% */}
             <div className="flex items-center gap-2.5 text-sm text-gray-600 w-[23%] shrink-0 min-w-0">
               <span>{order.toAddress}</span>
             </div>
           </div>
         </div>
 
-        {/* Список товарів */}
         <div className="flex flex-col gap-4">
-          {order.productCard.map((productCard) => (
-            <OrderItemCard key={productCard.id} productCard={productCard} />
+          {order.productCard.map((item) => (
+            <OrderItemCard key={item.id} productCard={item} />
           ))}
         </div>
 
-        {/* Підвал замовлення з тоталом */}
         <div className="mt-2 flex items-center justify-between rounded-lg bg-[rgba(148,148,151,0.08)] px-8 py-5">
-          <p className="text-2xl font-bold text-black">Total: ${order.total}</p>
+          <p className="text-2xl font-bold text-black">
+            {formatMessage(t.orders.total, { amount: order.total })}
+          </p>
           <button
             type="button"
             className="rounded-lg bg-black px-10 py-3 text-base font-medium text-white transition-opacity hover:opacity-90"
           >
-            Details
+            {t.orders.details}
           </button>
         </div>
       </section>

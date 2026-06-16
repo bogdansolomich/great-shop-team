@@ -7,23 +7,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  position: relative; 
   cursor: pointer;
 
   :global(svg) {
     display: block;
-  }
-
-  &.active::after {
-    content: '';
-    position: absolute;
-    bottom: -4;
-    left: 0;
-    right: 0;
-    width: 32px; 
-    height: 1px;
-    margin: 0 auto;
-    background: $color-dark;
   }
 }
 

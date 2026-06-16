@@ -1,6 +1,9 @@
 'use client';
 
 import { ChangeEvent, useState } from 'react';
+
+import { useTranslation } from '@/i18n/useTranslation';
+
 import styles from './AuthInput.module.scss';
 
 type InputType = 'text' | 'email' | 'password' | 'tel' | 'number' | 'search' | 'url';
@@ -30,6 +33,7 @@ export default function AuthInput({
   hint,
   togglePassword = false,
 }: AuthInputProps) {
+  const { t } = useTranslation();
   const [showPassword, setShowPassword] = useState(false);
   const inputType =
     type === 'password' && togglePassword ? (showPassword ? 'text' : 'password') : type;
@@ -56,7 +60,7 @@ export default function AuthInput({
             type="button"
             onClick={() => setShowPassword((current) => !current)}
             className={styles.toggleButton}
-            aria-label={showPassword ? 'Hide password' : 'Show password'}
+            aria-label={showPassword ? t.common.hidePassword : t.common.showPassword}
           >
             {showPassword ? (
               <svg

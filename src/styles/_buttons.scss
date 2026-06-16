@@ -6,7 +6,18 @@
   padding: 12px 16px;
   color: $color-white-fa;
   background: $color-black;
-  text-transform: lowercase;
+  text-transform: capitalize;
+  text-decoration: none;
+  border-radius: 10px;
+  border: 1px solid $color-white-fa;
+  width: 306px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-weight: $font-medium;
+  cursor: pointer;
 }
 
 .bit-primary-thin {
@@ -16,4 +27,35 @@
   padding: 7px 16px;
   color: $color-white;
   background: $color-black;
+  cursor: pointer;
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 200px;
+  height: 48px;
+  font-size: $font-size;
+  line-height: 1;
+  font-weight: $font-light;
+  background: transparent;
+  border: 1px solid;
+  border-radius: 10px;
+  text-transform: capitalize;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn-outline--dark {
+  color: $color-dark;
+  border-color: $color-black;
+  cursor: pointer;
+}
+
+.btn-outline--light {
+  color: $color-white;
+  border-color: $color-white;
+  cursor: pointer;
 }

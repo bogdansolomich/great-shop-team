@@ -40,10 +40,12 @@ export default function RootLayout({
       <body>
         <Providers>
           <Header />
-          <div className="container">
-            <main>{children}</main>
+          <div className="siteContent">
+            <div className="container">
+              <main>{children}</main>
+            </div>
+            <Footer />
           </div>
-          <Footer />
         </Providers>
       </body>
     </html>

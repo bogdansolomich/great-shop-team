@@ -14,10 +14,13 @@
   --site-footer-height: #{$site-footer-height};
 }
 
+.siteContent {
+  padding-top: var(--site-header-height);
+}
+
 html, 
 body {
   max-width: 100% !important;
-  overflow-x: hidden !important;
   width: 100% !important;
   scrollbar-gutter: stable; 
 }
