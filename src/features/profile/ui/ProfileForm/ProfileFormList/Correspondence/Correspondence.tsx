@@ -1,5 +1,10 @@
+'use client';
+
+import { useTranslation } from '@/i18n/useTranslation';
+
 const Correspondence = () => {
-  return <div>Correspondence</div>;
+  const { t } = useTranslation();
+  return <div>{t.profile.correspondence}</div>;
 };
 
 export default Correspondence;

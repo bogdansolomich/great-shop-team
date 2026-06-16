@@ -3,7 +3,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { usePathname, useRouter } from 'next/navigation';
-
+import { useSelector } from 'react-redux';
+import { selectIsAuthenticated } from '@/store/slices/userSlice';
+import { useTranslation } from '@/i18n/useTranslation';
 import AuthFlow, { type AuthView } from '@/features/auth/ui/AuthFlow/AuthFlow';
 import AuthShell from '@/features/auth/ui/AuthShell/AuthShell';
 import { useSessionEmail } from '@/features/auth/hooks/useSessionEmail';
@@ -14,9 +16,12 @@ import styles from './MyAccount.module.scss';
 export type { AuthView };
 
 export default function MyAccount() {
+  const { t } = useTranslation();
   const pathname = usePathname();
   const router = useRouter();
   const { hasSession, initials } = useSessionEmail();
+
+  const isAuthenticated = useSelector(selectIsAuthenticated);
 
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -40,7 +45,7 @@ export default function MyAccount() {
   }, [close]);
 
   const toggle = () => {
-    if (hasSession) {
+    if (hasSession && isAuthenticated) {
       router.push('/profile');
       return;
     }
@@ -62,17 +67,17 @@ export default function MyAccount() {
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [open, close]);
 
-  const showInitials = hasSession && Boolean(initials);
+  const showInitials = hasSession && isAuthenticated && Boolean(initials);
 
   return (
     <>
       <button
         type="button"
-        className={`${styles.iconButton} ${open ? styles.active : ''}`}
+        className={styles.iconButton}
         onClick={toggle}
         aria-expanded={open}
         aria-controls="auth-overlay"
-        aria-label={hasSession ? 'Profile' : 'Account'}
+        aria-label={hasSession && isAuthenticated ? t.account.profile : t.account.account}
       >
         {showInitials ? (
           <span className={styles.initials} aria-hidden>

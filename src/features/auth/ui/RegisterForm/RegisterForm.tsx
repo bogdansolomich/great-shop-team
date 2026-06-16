@@ -7,9 +7,9 @@ import { useRouter } from 'next/navigation';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 
 import AuthInput from '../AuthInput/AuthInput';
-import { validateField, validateRegisterForm } from '@/features/auth/lib/validation';
 import { normalizeEmail } from '@/features/auth/lib/normalizeEmail';
 import { savePendingAuth } from '@/features/auth/lib/pendingAuth';
+import { useTranslation } from '@/i18n/useTranslation';
 import { useRegisterUserMutation } from '@/store/endpoints/authEndpoints';
 
 import googleLogo from '../../../../../public/icons/GoogleLogo.svg';
@@ -23,6 +23,7 @@ type RegisterFormProps = {
 };
 
 export default function RegisterForm({ onLogin, onRegistered }: RegisterFormProps) {
+  const { t, validators } = useTranslation();
   const router = useRouter();
   const [isChecked, setIsChecked] = useState(false);
 
@@ -68,7 +69,7 @@ export default function RegisterForm({ onLogin, onRegistered }: RegisterFormProp
       });
     }
 
-    return ['Registration error. Please check your details and try again..'];
+    return [t.auth.errors.registrationFailed];
   };
 
   const isFetchBaseQueryError = (error: unknown): error is FetchBaseQueryError => {
@@ -80,17 +81,17 @@ export default function RegisterForm({ onLogin, onRegistered }: RegisterFormProp
       if (error.data) {
         return normalizeErrorData(error.data);
       }
-      return ['Request error. Please try again later.'];
+      return [t.auth.errors.requestFailed];
     }
 
-    return ['Registration error. Please check your details and try again.'];
+    return [t.auth.errors.registrationFailed];
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessages([]);
 
-    const errors = validateRegisterForm(formData, isChecked);
+    const errors = validators.validateRegisterForm(formData, isChecked);
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
       return;
@@ -118,7 +119,7 @@ export default function RegisterForm({ onLogin, onRegistered }: RegisterFormProp
       ...formData,
       [name]: value,
     });
-    const msg = validateField(name, value, { ...formData, [name]: value });
+    const msg = validators.validateField(name, value, { ...formData, [name]: value });
     setFieldErrors((prev) => ({ ...prev, [name]: msg }));
     setErrorMessages([]);
   };
@@ -126,17 +127,17 @@ export default function RegisterForm({ onLogin, onRegistered }: RegisterFormProp
   return (
     <div className={styles.panel}>
       <div className={styles.right}>
-        <h1 className={styles.title}>Create New Account</h1>
-        <h2 className={styles.subtitle}>Please enter details</h2>
+        <h1 className={styles.title}>{t.auth.register.title}</h1>
+        <h2 className={styles.subtitle}>{t.auth.register.subtitle}</h2>
 
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.inputContainer}>
             <AuthInput
               id="email"
               name="email"
-              label="Email Address"
+              label={t.auth.labels.email}
               type="email"
-              placeholder="Email"
+              placeholder={t.auth.placeholders.emailShort}
               value={formData.email}
               onChange={handleChange}
               error={fieldErrors.email}
@@ -146,9 +147,9 @@ export default function RegisterForm({ onLogin, onRegistered }: RegisterFormProp
             <AuthInput
               id="password"
               name="password"
-              label="Password"
+              label={t.auth.labels.password}
               type="password"
-              placeholder="Password"
+              placeholder={t.auth.placeholders.password}
               value={formData.password}
               onChange={handleChange}
               error={fieldErrors.password}
@@ -159,9 +160,9 @@ export default function RegisterForm({ onLogin, onRegistered }: RegisterFormProp
             <AuthInput
               id="confirmPassword"
               name="confirmPassword"
-              label="Confirm Password"
+              label={t.auth.labels.confirmPassword}
               type="password"
-              placeholder="Confirm Password"
+              placeholder={t.auth.placeholders.confirmPassword}
               value={formData.confirmPassword}
               onChange={handleChange}
               error={fieldErrors.confirmPassword}
@@ -208,9 +209,9 @@ export default function RegisterForm({ onLogin, onRegistered }: RegisterFormProp
               </label>
 
               <label htmlFor="terms" className="text-sm cursor-pointer select-none">
-                I agree to the{' '}
+                {t.auth.register.agreeTerms}{' '}
                 <a href="/terms" className="font-semibold hover:text-gray-600 transition-colors">
-                  Terms & Conditions
+                  {t.auth.register.termsLink}
                 </a>
               </label>
             </div>
@@ -226,7 +227,7 @@ export default function RegisterForm({ onLogin, onRegistered }: RegisterFormProp
               !isChecked || isLoading ? 'opacity-50 cursor-not-allowed' : ''
             }`}
           >
-            {isLoading ? 'Loading...' : 'Signup'}
+            {isLoading ? t.common.loading : t.auth.register.submit}
           </button>
 
           <div className="flex justify-center items-center gap-[24px]">
@@ -244,14 +245,14 @@ export default function RegisterForm({ onLogin, onRegistered }: RegisterFormProp
           </div>
         </form>
         <div className={styles.loginVariant}>
-          Already have an account?{' '}
+          {t.auth.register.alreadyHaveAccount}{' '}
           {onLogin ? (
             <button type="button" className={styles.loginLink} onClick={onLogin}>
-              Login
+              {t.auth.login.submit}
             </button>
           ) : (
             <Link href="/login" className={styles.loginLink}>
-              Login
+              {t.auth.login.submit}
             </Link>
           )}
         </div>

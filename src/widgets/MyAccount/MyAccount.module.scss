@@ -7,12 +7,11 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  position: relative;
   cursor: pointer;
-}
 
-.iconButton :global(svg) {
-  display: block;
+  :global(svg) {
+    display: block;
+  }
 }
 
 .initials {
@@ -30,15 +29,4 @@
   line-height: 1;
   letter-spacing: 0.02em;
   user-select: none;
-}
-
-.active::after {
-  content: '';
-  position: absolute;
-  left: 8px;
-  right: 8px;
-  height: 2px;
-  bottom: -6px;
-  background: $color-dark;
-  border-radius: 2px;
 }

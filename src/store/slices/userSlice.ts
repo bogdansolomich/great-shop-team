@@ -1,6 +1,5 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { User } from '@/store/types';
-// Імпортуємо наш ендпоінт (перевірив шлях, зазвичай він такий або через аліас)
 import { authEndpoints } from '../endpoints/authEndpoints'; 
 
 interface AuthState {
@@ -60,7 +59,6 @@ export const userSlice = createSlice({
   },
 });
 
-// Селектори
 export const selectCurrentUser = (state: { user: AuthState }) => state.user.user;
 export const selectAuthToken = (state: { user: AuthState }) => state.user.token;
 export const selectAuthEmail = (state: { user: AuthState }) => state.user.authEmail;

@@ -1,29 +1,34 @@
+'use client';
+
 import Link from 'next/link';
 
+import { useTranslation } from '@/i18n/useTranslation';
 import Logo from '../Logo/Logo';
 
 import styles from '../Navigation/Navigation.module.scss';
 
 export default function Navigation() {
+  const { t } = useTranslation();
+
   return (
-    <nav className={styles.nav}>
+    <nav className={styles.nav} aria-label="Main">
       <ul className={styles.navList}>
         <li className={styles.navItem}>
-          <Link href="/new-arrivals" className={styles.navLink}>
-            new arrivals
+          <Link href="/catalog" className={styles.navLink}>
+            {t.nav.newArrivals}
           </Link>
         </li>
         <li className={styles.navItem}>
           <Logo />
         </li>
         <li className={styles.navItem}>
-          <Link href="/women" className={styles.navLink}>
-            women
+          <Link href="/catalog" className={styles.navLink}>
+            {t.nav.women}
           </Link>
         </li>
         <li className={styles.navItem}>
-          <Link href="/men" className={styles.navLink}>
-            men
+          <Link href="/catalog" className={styles.navLink}>
+            {t.nav.men}
           </Link>
         </li>
       </ul>

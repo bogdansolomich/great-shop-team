@@ -1,18 +1,25 @@
 'use client';
 
 import { useCallback, useState } from 'react';
-
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useAutoLogin } from '@/features/auth/hooks/useAutoLogin';
 import { normalizeEmail } from '@/features/auth/lib/normalizeEmail';
 import { peekPendingAuth } from '@/features/auth/lib/pendingAuth';
-import GetVerifiedForm from '@/features/auth/ui/AuthPanel/GetVerifiedForm';
+import { useTranslation } from '@/i18n/useTranslation';
+import ForgotPasswordForm from '@/features/auth/ui/AuthPanel/ForgotPasswordForm';
+import PasswordResetConfirmForm from '@/features/auth/ui/AuthPanel/PasswordResetConfirmForm';
 import VerifyEmailForm from '@/features/auth/ui/AuthPanel/VerifyEmailForm';
 import WelcomeAbroadPanel from '@/features/auth/ui/AuthPanel/WelcomeAbroadPanel';
 import LoginForm from '@/features/auth/ui/LoginForm/LoginForm';
 import RegisterForm from '@/features/auth/ui/RegisterForm/RegisterForm';
 
-export type AuthView = 'login' | 'register' | 'verify' | 'get-code' | 'welcome';
+export type AuthView =
+  | 'login'
+  | 'register'
+  | 'verify'
+  | 'get-code'
+  | 'reset-password-confirm'
+  | 'welcome';
 
 type AuthFlowProps = {
   view: AuthView;
@@ -39,10 +46,15 @@ export default function AuthFlow({
   onForgotPassword,
   onVerifyBack,
 }: AuthFlowProps) {
+  const { t } = useTranslation();
   const { isAuthenticated } = useAuth();
   const autoLogin = useAutoLogin();
   const [loginEmail, setLoginEmail] = useState('');
-  const [loginHint, setLoginHint] = useState('');
+
+  const [loginHint, setLoginHint] = useState<{ text: string; type: 'success' | 'error' }>({
+    text: '',
+    type: 'error',
+  });
 
   const tryAutoLogin = useCallback(async () => {
     const pending = peekPendingAuth();
@@ -60,16 +72,22 @@ export default function AuthFlow({
     const loggedIn = await tryAutoLogin();
 
     if (loggedIn) {
-      setLoginHint('');
+      setLoginHint({
+        text: t.auth.hints.emailVerifiedLogin,
+        type: 'success',
+      });
       onViewChange('welcome');
       return;
     }
 
     const pending = peekPendingAuth();
     setLoginEmail(pending?.email ?? normalizeEmail(verifyEmail));
-    setLoginHint('Email verified. Sign in with the password you used during registration.');
+    setLoginHint({
+      text: t.auth.hints.emailVerifiedLogin,
+      type: 'success',
+    });
     onViewChange('login');
-  }, [tryAutoLogin, onViewChange, verifyEmail]);
+  }, [tryAutoLogin, onViewChange, verifyEmail, t.auth.hints.emailVerifiedLogin]);
 
   const handleGetStarted = useCallback(async () => {
     if (!isAuthenticated) {
@@ -77,19 +95,23 @@ export default function AuthFlow({
       if (!loggedIn) {
         const pending = peekPendingAuth();
         setLoginEmail(pending?.email ?? normalizeEmail(verifyEmail));
-        setLoginHint('Sign in with your email and password to continue.');
+        setLoginHint({
+          text: t.auth.hints.signInToContinue,
+          type: 'error',
+        });
         onViewChange('login');
         return;
       }
     }
     onWelcomeComplete?.();
-  }, [isAuthenticated, tryAutoLogin, onViewChange, onWelcomeComplete, verifyEmail]);
+  }, [isAuthenticated, tryAutoLogin, onViewChange, onWelcomeComplete, verifyEmail, t.auth.hints.signInToContinue]);
 
   if (view === 'login') {
     return (
       <LoginForm
         initialEmail={loginEmail}
-        hintMessage={loginHint}
+        hintMessage={loginHint.text}
+        hintType={loginHint.type}
         onCreateAccount={onCreateAccount ?? (() => onViewChange('register'))}
         onForgotPassword={onForgotPassword ?? (() => onViewChange('get-code'))}
         onSuccess={onLoginSuccess}
@@ -111,13 +133,33 @@ export default function AuthFlow({
 
   if (view === 'get-code') {
     return (
-      <GetVerifiedForm
-        onBack={() => onViewChange('login')}
-        onGetCode={(email) => {
+      <ForgotPasswordForm
+        onBack={() => {
+          setLoginHint({ text: '', type: 'error' });
+          onViewChange('login');
+        }}
+        onCodeSent={(email) => {
           onVerifyEmailChange(email);
-          onViewChange('verify');
+          onViewChange('reset-password-confirm');
         }}
         onLogin={onLogin ?? (() => onViewChange('login'))}
+      />
+    );
+  }
+
+  if (view === 'reset-password-confirm') {
+    return (
+      <PasswordResetConfirmForm
+        email={verifyEmail}
+        onBack={() => onViewChange('get-code')}
+        onSuccess={() => {
+          setLoginEmail(normalizeEmail(verifyEmail));
+          setLoginHint({
+            text: t.auth.hints.passwordResetSuccess,
+            type: 'success',
+          });
+          onViewChange('login');
+        }}
       />
     );
   }
@@ -126,7 +168,7 @@ export default function AuthFlow({
     return (
       <VerifyEmailForm
         email={verifyEmail}
-        onBack={onVerifyBack ?? (() => onViewChange('get-code'))}
+        onBack={onVerifyBack ?? (() => onViewChange('register'))}
         onVerified={handleVerified}
       />
     );

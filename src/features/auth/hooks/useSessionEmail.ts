@@ -10,13 +10,13 @@ export function useSessionEmail() {
   const [storedEmail, setStoredEmail] = useState('');
   const [hasToken, setHasToken] = useState(false);
 
-  useEffect(() => {
-    setStoredEmail(getStoredUserEmail());
-    setHasToken(Boolean(localStorage.getItem('accessToken')));
-  }, [authEmail, user?.email]);
+useEffect(() => {
+  setStoredEmail(getStoredUserEmail());
+  setHasToken(typeof window !== 'undefined' ? Boolean(localStorage.getItem('accessToken')) : false);
+}, [isAuthenticated, user, authEmail, token]);
 
-  const email = user?.email ?? authEmail ?? storedEmail;
   const hasSession = isAuthenticated || Boolean(token) || hasToken;
+  const email = user?.email || authEmail || storedEmail;
 
   return {
     email,

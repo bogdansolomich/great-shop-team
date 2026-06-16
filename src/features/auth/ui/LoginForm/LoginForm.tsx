@@ -10,7 +10,7 @@ import AuthInput from '@/features/auth/ui/AuthInput/AuthInput';
 import { extractApiError } from '@/features/auth/lib/apiError';
 import { normalizeEmail } from '@/features/auth/lib/normalizeEmail';
 import { saveUserEmail } from '@/features/auth/lib/userInitials';
-import { validateField, validateLogin } from '@/features/auth/lib/validation';
+import { useTranslation } from '@/i18n/useTranslation';
 import {
   useLazyGetCurrentUserQuery,
   useLoginMutation,
@@ -25,6 +25,7 @@ import styles from '../LoginForm/Login.module.scss';
 type LoginFormProps = {
   initialEmail?: string;
   hintMessage?: string;
+  hintType?: 'success' | 'error';
   onCreateAccount?: () => void;
   onForgotPassword?: () => void;
   onSuccess?: () => void;
@@ -33,10 +34,12 @@ type LoginFormProps = {
 export default function LoginForm({
   initialEmail = '',
   hintMessage = '',
+  hintType = 'error',
   onCreateAccount,
   onForgotPassword,
   onSuccess,
 }: LoginFormProps) {
+  const { t, validators } = useTranslation();
   const [email, setEmail] = useState(initialEmail);
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -52,7 +55,7 @@ export default function LoginForm({
     setErrorMessage('');
 
     const normalizedEmail = normalizeEmail(email);
-    const errors = validateLogin({ email: normalizedEmail, password });
+    const errors = validators.validateLogin({ email: normalizedEmail, password });
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
       return;
@@ -75,11 +78,9 @@ export default function LoginForm({
       const detail = extractApiError(error) ?? '';
 
       if (detail.toLowerCase().includes('no active account')) {
-        setErrorMessage(
-          'Could not sign in. Check email and password, or complete email verification first.',
-        );
+        setErrorMessage(t.auth.errors.signInFailed);
       } else {
-        setErrorMessage(detail || 'Incorrect email or password. Try again.');
+        setErrorMessage(detail || t.auth.errors.incorrectCredentials);
       }
     }
   };
@@ -88,24 +89,28 @@ export default function LoginForm({
     <div className={styles.panel}>
       <div className={styles.formWrapper}>
         <div className={styles.header}>
-          <p>Welcome! 👋</p>
-          <p>Please login here</p>
+          <p>{t.auth.login.welcome}</p>
+          <p>{t.auth.login.subtitle}</p>
         </div>
 
-        {hintMessage && <div className={styles.errorMessage}>{hintMessage}</div>}
+        {hintMessage && (
+          <div className={hintType === 'success' ? styles.successMessage : styles.errorMessage}>
+            {hintMessage}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit}>
           <div className={styles.filed}>
             <AuthInput
               id="email"
               name="email"
-              label="Email Address/Mobile"
+              label={t.auth.labels.emailOrMobile}
               type="email"
-              placeholder="email@example.com"
+              placeholder={t.auth.placeholders.email}
               value={email}
               onChange={(e) => {
                 setEmail(e.target.value);
-                const msg = validateField('email', e.target.value);
+                const msg = validators.validateField('email', e.target.value);
                 setFieldErrors((prev) => ({ ...prev, email: msg }));
               }}
               error={fieldErrors.email}
@@ -116,13 +121,13 @@ export default function LoginForm({
             <AuthInput
               id="password"
               name="password"
-              label="Password"
+              label={t.auth.labels.password}
               type="password"
-              placeholder="••••••••"
+              placeholder={t.auth.placeholders.passwordDots}
               value={password}
               onChange={(e) => {
                 setPassword(e.target.value);
-                const msg = validateField('password', e.target.value);
+                const msg = validators.validateField('password', e.target.value);
                 setFieldErrors((prev) => ({ ...prev, password: msg }));
               }}
               error={fieldErrors.password}
@@ -157,7 +162,7 @@ export default function LoginForm({
                 </svg>
               </span>
 
-              <span className={styles.checkboxLabel}>Remember Me</span>
+              <span className={styles.checkboxLabel}>{t.auth.login.rememberMe}</span>
             </label>
 
             <button
@@ -165,7 +170,7 @@ export default function LoginForm({
               className={styles.forgBtn}
               onClick={onForgotPassword ?? (() => router.push('/get-code'))}
             >
-              Forgot Password?
+              {t.auth.login.forgotPassword}
             </button>
           </div>
 
@@ -178,7 +183,7 @@ export default function LoginForm({
               !isChecked || isLoading ? 'opacity-50 cursor-not-allowed' : ''
             }`}
           >
-            {isLoading ? 'Loading...' : 'Login'}
+            {isLoading ? t.common.loading : t.auth.login.submit}
           </button>
 
           <div className="flex justify-center items-center gap-[24px] mt-[8px]">
@@ -199,11 +204,11 @@ export default function LoginForm({
         <div className={styles.registerVariant}>
           {onCreateAccount ? (
             <button type="button" className={styles.registerLink} onClick={onCreateAccount}>
-              Create New Account?
+              {t.auth.login.createAccount}
             </button>
           ) : (
             <Link href="/registration" className={styles.registerLink}>
-              Create New Account?
+              {t.auth.login.createAccount}
             </Link>
           )}
         </div>

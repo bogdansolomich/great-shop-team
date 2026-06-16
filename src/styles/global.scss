@@ -13,3 +13,14 @@
   --site-header-height: #{$site-header-height};
   --site-footer-height: #{$site-footer-height};
 }
+
+.siteContent {
+  padding-top: var(--site-header-height);
+}
+
+html, 
+body {
+  max-width: 100% !important;
+  width: 100% !important;
+  scrollbar-gutter: stable; 
+}

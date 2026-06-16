@@ -5,8 +5,10 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 import AuthShell from '@/features/auth/ui/AuthShell/AuthShell';
 import LoginForm from '@/features/auth/ui/LoginForm/LoginForm';
+import { useTranslation } from '@/i18n/useTranslation';
 
 function LoginPageContent() {
+  const { t } = useTranslation();
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialEmail = searchParams.get('email') ?? '';
@@ -16,11 +18,7 @@ function LoginPageContent() {
     <AuthShell mode="page" onBackdropClick={() => router.push('/')}>
       <LoginForm
         initialEmail={initialEmail}
-        hintMessage={
-          verified
-            ? 'Email verified. Sign in with the password you used during registration.'
-            : ''
-        }
+        hintMessage={verified ? t.auth.hints.emailVerifiedLogin : ''}
         onCreateAccount={() => router.push('/registration')}
         onForgotPassword={() => router.push('/get-code')}
         onSuccess={() => router.push('/profile')}

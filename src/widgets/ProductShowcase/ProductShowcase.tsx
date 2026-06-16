@@ -1,4 +1,5 @@
 'use client';
+import { useTranslation } from '@/i18n/useTranslation';
 import styles from '../ProductShowcase/ProductShowcase.module.scss';
 import Image from 'next/image';
 import StarRating from '@/widgets/StarRating/StarRating';
@@ -55,6 +56,7 @@ export default function ProductShowcase({
   size,
   link,
 }: ProductShowcase) {
+  const { t } = useTranslation();
   const [currentSize, setCurrentSize] = useState<number>();
   const [currentColor, setCurrentColor] = useState<number>();
 
@@ -97,7 +99,10 @@ export default function ProductShowcase({
             </ul>
           ))}
         </div>
-        <ul style={{ marginTop: 10 }}>Product-code:{code}</ul>
+        <ul style={{ marginTop: 10 }}>
+          {t.product.productCode}
+          {code}
+        </ul>
         <div className={styles.stars}>
           <StarRating count={rating} />
         </div>
@@ -112,7 +117,7 @@ export default function ProductShowcase({
             </button>
           ))}
         </div>
-        Color
+        {t.product.color}
         <div className={styles.containerColor}>
           {images.colors.map((item, key) => (
             <Image
@@ -127,14 +132,14 @@ export default function ProductShowcase({
           ))}
         </div>
         <div className={styles.actionsButtons}>
-          <button className={styles.actionsButtonsBodyBuy}>Buy now</button>
-          <button className={styles.actionsButtonsBodyAdd}>Add to cart</button>
+          <button className={styles.actionsButtonsBodyBuy}>{t.product.buyNow}</button>
+          <button className={styles.actionsButtonsBodyAdd}>{t.product.addToCart}</button>
         </div>
         <div className={styles.cuurentsLink}>
-          <Link href={'/'}>Materials and design details {'>'}</Link>
-          <Link href={'/'}>Measurements {'>'}</Link>
-          <Link href={'/'}>Packaging{'>'}</Link>
-          <Link href={'/'}>Shipping and returns{'>'}</Link>
+          <Link href={'/'}>{t.product.materials}</Link>
+          <Link href={'/'}>{t.product.measurements}</Link>
+          <Link href={'/'}>{t.product.packaging}</Link>
+          <Link href={'/'}>{t.product.shippingReturns}</Link>
         </div>
       </div>
     </div>

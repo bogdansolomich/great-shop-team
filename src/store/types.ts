@@ -69,6 +69,7 @@ export interface PasswordResetInput {
 }
 
 export interface PasswordResetConfirmInput {
+  code: string;
   new_password: string;
   confirm_password: string;
 }
@@ -101,17 +102,6 @@ export interface ProfileUpdateInput {
   shoe_size?: number;
   birthday?: string;
   phone?: string;
-}
-
-// Параметры для активации аккаунта или сброса пароля из URL
-export interface PasswordResetConfirmInput {
-  new_password: string;
-  confirm_password: string;
-}
-
-export interface ActivationParams {
-  uidb64: string;
-  token: string;
 }
 
 export interface ActivationCodeInput {
