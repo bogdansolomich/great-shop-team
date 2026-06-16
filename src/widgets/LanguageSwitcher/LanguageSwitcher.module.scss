@@ -1,0 +1,43 @@
+@use '@/styles/variables' as *;
+
+.switcher {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.button {
+  padding: 4px 0;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  transition:
+    text-decoration-color 0.3s ease,
+    opacity 0.3s ease;
+
+  &:hover {
+    text-decoration-color: inherit;
+  }
+}
+
+.active {
+  text-decoration-color: inherit;
+}
+
+.divider {
+  opacity: 0.4;
+  user-select: none;
+}

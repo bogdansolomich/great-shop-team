@@ -5,6 +5,7 @@ import { createPortal } from 'react-dom';
 import { usePathname, useRouter } from 'next/navigation';
 import { useSelector } from 'react-redux';
 import { selectIsAuthenticated } from '@/store/slices/userSlice';
+import { useTranslation } from '@/i18n/useTranslation';
 import AuthFlow, { type AuthView } from '@/features/auth/ui/AuthFlow/AuthFlow';
 import AuthShell from '@/features/auth/ui/AuthShell/AuthShell';
 import { useSessionEmail } from '@/features/auth/hooks/useSessionEmail';
@@ -15,6 +16,7 @@ import styles from './MyAccount.module.scss';
 export type { AuthView };
 
 export default function MyAccount() {
+  const { t } = useTranslation();
   const pathname = usePathname();
   const router = useRouter();
   const { hasSession, initials } = useSessionEmail();
@@ -71,11 +73,11 @@ export default function MyAccount() {
     <>
       <button
         type="button"
-        className={`${styles.iconButton} ${open ? styles.active : ''}`}
+        className={styles.iconButton}
         onClick={toggle}
         aria-expanded={open}
         aria-controls="auth-overlay"
-        aria-label={hasSession && isAuthenticated ? 'Profile' : 'Account'}
+        aria-label={hasSession && isAuthenticated ? t.account.profile : t.account.account}
       >
         {showInitials ? (
           <span className={styles.initials} aria-hidden>

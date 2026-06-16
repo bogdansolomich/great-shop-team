@@ -1,244 +1,291 @@
-# Great Shop
+# WEARLY (Great Shop)
 
 A modern e-commerce frontend built with Next.js App Router, TypeScript, SCSS, Tailwind CSS, and Redux Toolkit.
 
-## 🚀 Project Overview
+## Project overview
 
-This repository contains the frontend for a shop application. The architecture separates UI, feature logic, and global state so contributors can quickly understand where code should live.
+The codebase separates **routes**, **features**, **widgets**, and **global state**. Pages in `app/` stay thin; business logic lives in `features/`; reusable layout blocks live in `widgets/`.
 
-## ✅ Stack
+## Stack
 
 - Next.js App Router
 - React 19 + TypeScript
 - SCSS modules + global styles
-- Tailwind CSS (utility-first)
-- Redux Toolkit + RTK Query
+- Tailwind CSS (utilities)
+- Redux Toolkit + RTK Query + redux-persist
 
-## 📂 Project Structure
+## Project structure
 
 ```
 src/
-├── app/                  # Next.js App Router routes and layouts
-│   ├── layout.tsx        # Main shell (Header, Footer, Providers)
-│   ├── page.tsx          # Home page
-│   └── (auth)/           # Auth-related routes
-│   └── (dashboard)/      # User dashboard / admin area
-│   └── (product)/        # Product pages
-│   └── (public)/         # Public pages
-├── features/             # Feature modules with isolated business logic
-│   └── cart/             # Example feature: cart functionality
-│       ├── ui/           # Cart UI components (CartButton, CartModal)
-│       └── model/        # Types, actions and helpers for cart
-├── widgets/              # Reusable UI blocks and components
-│   └── product-card/     # Product card used across catalog and recommendations
-├── store/                # Redux Toolkit and RTK Query setup
-│   ├── store.ts          # Store configuration
-│   ├── api.ts            # RTK Query API setup, base URL and auth headers
-│   ├── types.ts          # Shared TypeScript interfaces and API models
-│   ├── endpoints/        # RTK Query endpoints organized by feature
+├── app/                        # Routes and layouts (Next.js App Router)
+│   ├── layout.tsx              # Root shell: Header, Footer, Providers
+│   ├── providers.tsx           # Redux Provider + AuthBootstrap
+│   ├── (account)/              # Protected user routes (group does not affect URL)
+│   │   └── profile/            # /profile
+│   ├── (auth)/                 # Auth routes (group does not affect URL)
+│   │   ├── login/              # /login
+│   │   ├── registration/       # /registration
+│   │   ├── verify/             # /verify
+│   │   └── get-code/           # /get-code
+│   ├── (public)/               # Public pages
+│   │   └── page.tsx            # Home page /
+│   └── (product)/              # Product pages
+│       └── product-card/       # /product-card
+│
+├── features/                   # Business features (logic + UI)
+│   ├── auth/
+│   │   ├── hooks/              # useAuth, useSessionEmail, useAutoLogin
+│   │   ├── lib/                # validation, normalizeEmail, pendingAuth, …
+│   │   └── ui/
+│   │       ├── LoginForm/      # full login form (pages + overlay)
+│   │       ├── RegisterForm/   # full registration form
+│   │       ├── AuthPanel/      # verify / get-code / welcome steps
+│   │       ├── AuthShell/      # shared 60/40 layout
+│   │       ├── AuthFlow/       # overlay view switcher
+│   │       └── AuthBootstrap.tsx
+│   ├── profile/
+│   │   └── ui/ProfileForm/     # Profile page UI (tabs, personal data, orders)
+│   └── product-card/
+│       └── ui/ProductCardPage/
+│
+├── widgets/                    # Composite UI blocks used across pages
+│   ├── Header/                 # Top bar: nav, account, wishlist, cart
+│   ├── Footer/
+│   ├── MyAccount/              # Account icon + auth overlay
+│   ├── Navigation/
+│   ├── Logo/
+│   ├── HeroBanner/
+│   ├── ProductShowcase/
+│   ├── ShoppingBag/
+│   ├── WishList/
+│   └── …
+│
+├── store/                      # Global state and API
+│   ├── store.ts                # Store config, persist, RootState / AppDispatch types
+│   ├── api.ts                  # RTK Query base API (base URL, auth headers)
+│   ├── types.ts                # Shared API TypeScript types
+│   ├── endpoints/              # RTK Query endpoints by domain
 │   │   ├── authEndpoints.ts
 │   │   ├── categoriesEndpoints.ts
-│   │   ├── profilesEndpoints.ts
-│   │   └── productsEndpoints.ts
-│   └── slices/          # Redux slice reducers
-├── styles/               # Global SCSS, variables and mixins
-└── data/                 # Static JSON data used by UI components
+│   │   └── profilesEndpoints.ts
+│   └── slices/                 # Redux slices
+│       ├── userSlice.ts        # Auth state (user, token, authEmail)
+│       ├── cartSlice.ts        # Cart (persisted)
+│       ├── wishlistSlice.ts    # Wishlist (persisted)
+│       └── filterSlice.ts
+│
+├── styles/                     # Global SCSS, variables, typography
+└── data/                       # Static JSON for UI mocks
 ```
 
-## 📌 Key folders
+## Where to put new code
 
-- `src/app/` — app layouts, routes, and page entry points
-- `src/features/` — feature-specific logic and local UI modules
-- `src/widgets/` — reusable visual components across the app
-- `src/store/` — global state, reducers, and API requests
-- `src/styles/` — shared styles, variables, and SCSS setup
+| Task | Location |
+|------|----------|
+| New page / route | `src/app/<route>/page.tsx` |
+| Feature UI | `src/features/<feature>/ui/` |
+| Feature helpers (no React) | `src/features/<feature>/lib/` |
+| Feature hooks | `src/features/<feature>/hooks/` |
+| Reusable layout block | `src/widgets/<name>/` |
+| Shared global state | `src/store/slices/<name>.ts` |
+| Backend API call | `src/store/endpoints/<name>Endpoints.ts` |
 
-## ⚙️ Setup
+### Feature folder convention
 
-Install dependencies and start the development server:
+Each feature typically follows this layout:
+
+```
+features/<name>/
+├── ui/       # React components
+├── lib/      # Pure functions, validation, constants
+└── hooks/    # Custom React hooks (optional)
+```
+
+Examples in this repo:
+
+- `features/auth/lib/validation.ts` — form validation rules
+- `features/auth/hooks/useAuth.ts` — logout, selectors wrapper
+- `features/profile/ui/ProfileForm/` — profile screen
+
+Cart and wishlist are stored in `store/slices/`, not in `features/`, because they are shared across the whole app.
+
+## Auth UI: `LoginForm/` vs `AuthPanel/`
+
+Auth screens are split by **role**, not by accident.
+
+### Folder roles
+
+| Path | What lives here | Examples |
+|------|-----------------|----------|
+| `ui/LoginForm/`, `ui/RegisterForm/` | Full auth forms (email, password, social buttons). Own layout SCSS. | `LoginForm`, `RegisterForm` |
+| `ui/AuthPanel/` | Short step panels for verification flow. Shared `AuthPanel.module.scss`. | `VerifyEmailForm`, `GetVerifiedForm`, `WelcomeAbroadPanel` |
+| `ui/AuthShell/` | 60/40 layout wrapper (blur + white panel) for pages and overlay | `AuthShell` |
+| `ui/AuthFlow/` | Switches between login → register → verify → welcome inside overlay | `AuthFlow` |
+| `ui/AuthInput/` | Reusable styled input for all auth forms | `AuthInput` |
+| `ui/AuthBootstrap.tsx` | Restores session from `localStorage` on app load | — |
+
+**Rule of thumb:** if it is a full sign-in / sign-up screen → `LoginForm/` or `RegisterForm/`. If it is a small step in email verification → `AuthPanel/`.
+
+### Two entry points, same components
+
+The same forms are reused in two places:
+
+1. **Standalone pages** — `app/(auth)/login`, `/registration`, `/verify`, `/get-code`  
+   Page wraps a form in `<AuthShell mode="page">` and handles navigation with `router.push(...)`.
+
+2. **Header overlay** — `widgets/MyAccount` opens `<AuthShell mode="overlay">` + `<AuthFlow>`.  
+   `AuthFlow` switches views (`login` \| `register` \| `verify` \| `get-code` \| `welcome`) without changing the URL.
+
+```
+MyAccount (click icon)
+  └── AuthShell (overlay)
+        └── AuthFlow
+              ├── LoginForm / RegisterForm     ← full forms
+              └── AuthPanel/*                  ← verify / welcome steps
+```
+
+When adding a new auth step, decide first: full form or short panel — then pick the folder.
+
+### Auth flow (registration → login)
+
+```
+RegisterForm → save pending auth (sessionStorage)
+            → VerifyEmailForm (AuthPanel) → activate API
+            → useAutoLogin (retry login)
+            → WelcomeAbroadPanel → user is logged in
+```
+
+Login outside this flow goes through `LoginForm` directly.
+
+### Token and session (do not duplicate this logic)
+
+Tokens are managed in a few fixed places. **Do not** write `localStorage.setItem('accessToken', …)` elsewhere — extend one of these instead:
+
+| File | Responsibility |
+|------|----------------|
+| `LoginForm.tsx` | On successful login: save `accessToken`, `refreshToken`, `userEmail` → `localStorage`; `setToken` + `setAuthEmail` → Redux |
+| `hooks/useAutoLogin.ts` | Auto-login after email activation (same storage + Redux updates) |
+| `hooks/useAuth.ts` → `logoutUser()` | Clears tokens, `userEmail`, Redux, RTK Query cache |
+| `ui/AuthBootstrap.tsx` | On app load: reads `accessToken` + `userEmail` from `localStorage` into Redux; fetches current user |
+| `store/api.ts` | `prepareHeaders` reads `accessToken` from `localStorage` for API requests |
+| `hooks/useSessionEmail.ts` | UI helper: email + session state for header initials (reads Redux + `localStorage`) |
+
+**Storage keys:** `accessToken`, `refreshToken`, `userEmail` (all in `localStorage`).  
+Pending credentials during register→verify live in `sessionStorage` via `lib/pendingAuth.ts` only.
+
+Redux `user` slice holds `token`, `authEmail`, `user` — kept in sync with `localStorage` by the files above, not by individual form components.
+
+## widgets vs features
+
+- **widgets/** — visual building blocks without owning a full user flow (Header, Footer, MyAccount).
+- **features/** — complete user-facing flows with business logic (login, registration, profile).
+
+A widget may import from a feature (e.g. `MyAccount` opens `AuthFlow`), but features should not import from each other. Shared code goes to `widgets/` or a dedicated `lib/` inside one feature.
+
+## Setup
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open `http://localhost:3000`.
+Open [http://localhost:3000](http://localhost:3000).
 
-## � Environment variables
+## Environment variables
 
-Create a local env file in the project root:
-
-```bash
-touch ..env.local
-```
-
-Add the backend base URL from the backend docs:
+Create `.env.local` in the project root:
 
 ```env
 NEXT_PUBLIC_API_BASE_URL=https://api-shop-p3de.onrender.com
 ```
 
-This file is already excluded from Git by `.gitignore`, so your local backend URL stays private.
+This file is gitignored. Update it when the backend URL changes.
 
-If the backend address changes, update `.env.local` with the new URL from the backend documentation.
-
-## �📦 Scripts
+## Scripts
 
 - `npm run dev` — development server
 - `npm run build` — production build
 - `npm run start` — serve built app
-- `npm run lint` — run ESLint
-- `npm run format` — format code with Prettier
+- `npm run lint` — ESLint
+- `npm run format` — Prettier
 
-## 🧠 Redux Toolkit + RTK Query
+## Redux Toolkit + RTK Query
 
-Redux is configured in this project with an RTK Query API layer. Key files:
+Key files:
 
-- `src/store/store.ts` — store configuration, reducers and middleware
-- `src/store/api.ts` — RTK Query API service and endpoints
-- `src/store/slices/userSlice.ts` — sample slice for user/auth state
-- `src/app/providers.tsx` — wraps the app with `<Provider store={store}>`
-- `src/store/hooks.ts` — typed hooks for `useAppDispatch` and `useAppSelector`
+- `src/store/store.ts` — store, persist config, `RootState` / `AppDispatch` types
+- `src/store/api.ts` — RTK Query base API
+- `src/store/endpoints/authEndpoints.ts` — auth API hooks
+- `src/store/slices/userSlice.ts` — user / auth slice
+- `src/app/providers.tsx` — `<Provider>` + `AuthBootstrap`
 
-### Example usage
-
-Fetch data with RTK Query:
+### Fetch data with RTK Query
 
 ```tsx
-import { useGetProductsQuery } from '@/store/api';
+import { useGetCurrentUserQuery } from '@/store/endpoints/authEndpoints';
 
-const { data, error, isLoading } = useGetProductsQuery();
+const { data, error, isLoading } = useGetCurrentUserQuery();
 ```
 
-Read and update global state using typed hooks:
+### Read and update Redux state
 
 ```tsx
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { setUser, logout } from '@/store/slices/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '@/store/slices/userSlice';
+import { selectCurrentUser } from '@/store/slices/userSlice';
 
-const dispatch = useAppDispatch();
-const user = useAppSelector((state) => state.user.profile);
+const dispatch = useDispatch();
+const user = useSelector(selectCurrentUser);
+
+dispatch(logout());
 ```
 
-> Tip: Always use `useAppDispatch` and `useAppSelector` from `src/store/hooks.ts` instead of the raw `useDispatch`/`useSelector` from `react-redux`.
+Auth-specific logic is wrapped in `useAuth()` — prefer that hook in UI components.
 
-## 🛠 How to extend the app
+## How to extend the app
 
-Use this guide when adding a new feature, page, or shared behavior.
+### 1. Add a route
 
-### Start with the route
+Create `src/app/<route>/page.tsx`. Use route groups like `(auth)` only when you need a shared layout — they do not appear in the URL.
 
-- Add a new page under `src/app/`.
-  - Example: `src/app/about/page.tsx`
-- Create a route layout only when needed.
-  - Example: `src/app/product/[id]/layout.tsx`
+### 2. Add a feature
 
-### Feature structure
+1. Create `src/features/<feature>/ui/`
+2. Add helpers in `lib/` and hooks in `hooks/` if needed
+3. Keep the page in `app/` thin — import the feature component
 
-- Put feature-specific components and logic in `src/features/<feature>/`.
-- Use `src/features/<feature>/ui/` for feature UI components.
-- Use `src/features/<feature>/model/` for types, helpers, and local logic.
-- If a component is reusable across the app, move it to `src/widgets/`.
+### 3. Add API + state
 
-### Shared state and API
+1. Add types to `src/store/types.ts` if needed
+2. Create `src/store/endpoints/<feature>Endpoints.ts` with `api.injectEndpoints`
+3. Add a slice in `src/store/slices/` only when multiple pages need the same client state
 
-- Add shared Redux state to `src/store/slices/<sliceName>.ts` only when multiple pages or features need it.
-- Add backend calls to `src/store/api.ts` as RTK Query endpoints.
+### Example: reviews page
 
-### Naming conventions
-
-- Pages: `src/app/<route>/page.tsx`
-- Layouts: `src/app/<route>/layout.tsx`
-- Features: `src/features/<feature>/`
-- Widgets: `src/widgets/<component>/`
-- Store slices: `src/store/slices/<sliceName>.ts`
-
-### Example extension flow
-
-- Create `src/app/reviews/page.tsx`
-- Add feature UI in `src/features/reviews/ui/`
-- Add types/helpers in `src/features/reviews/model/`
-- Add endpoint in `src/store/api.ts`
-- Add slice in `src/store/slices/reviewsSlice.ts` if needed
-
-## 🧩 widgets vs features (short)
-
-- `widgets/`: self-contained UI building blocks (Header, ProductGrid).
-- `features/`: user-facing functionality with business logic (AddToCartButton, AuthForm).
-
-## ❗ Rules (what NOT to do)
-
-- Do not import components directly from one feature into another. If code is shared, move it to `src/widgets/` or `src/shared/`.
-- Always use typed `useAppDispatch` and `useAppSelector` from `src/store/hooks.ts` instead of raw `useDispatch`/`useSelector` from `react-redux`.
-- Avoid inline styles (`style={{}}`). Use Tailwind for layout and SCSS modules for complex styles/animations.
-
-## 🌿 Git workflow and branch naming (EN)
-
-Follow this simple workflow to keep the repository tidy:
-
-- Protected branches: `main` and `develop` — no direct commits; use Pull Requests.
-- Work in feature branches created from `develop` (or `main` if you use trunk-based flow).
-- Keep commits small and descriptive; open PRs for review.
-
-### Branch name conventions
-
-- `feature/<short-description>` — new feature (e.g. `feature/cart-page`)
-- `fix/<short-description>` — bug fix (e.g. `fix/login-error`)
-- `chore/<short-description>` — maintenance, dependency updates (e.g. `chore/update-deps`)
-- `hotfix/<short-description>` — emergency production fix
-
-### Workflow example
-
-```bash
-# create branch from develop
-git checkout develop
-git pull
-git checkout -b feature/my-new-feature
-
-# work, commit, lint
-npm run lint
-git add .
-git commit -m "feature: add my-new-feature"
-
-# push and open PR to develop
-git push -u origin feature/my-new-feature
+```
+src/app/reviews/page.tsx
+src/features/reviews/ui/ReviewsPage.tsx
+src/features/reviews/lib/formatReview.ts
+src/store/endpoints/reviewsEndpoints.ts
 ```
 
-### PR checklist
+## Rules
 
-- Small and focused commits
-- Linted and formatted code (`npm run lint`)
-- Add or update unit tests if applicable
-- Assign reviewers and add a clear PR description
+- Do not import one feature from another. Extract shared UI to `widgets/` or shared helpers to the feature that owns them.
+- Pages in `app/` should not contain heavy business logic.
+- Prefer SCSS modules for component styles; use Tailwind for small utility classes.
+- Avoid deep relative imports (`../../../../`). Use the `@/` alias (`@/features/auth/...`).
 
-## 📚 Useful links
+## Git workflow
+
+- Work in branches from `main` or `develop`.
+- Branch names: `feature/…`, `fix/…`, `chore/…`, `hotfix/…`
+- Run `npm run lint` before opening a PR.
+
+## Useful links
 
 - [Next.js Documentation](https://nextjs.org/docs)
 - [Redux Toolkit](https://redux-toolkit.js.org/)
 - [RTK Query](https://redux-toolkit.js.org/rtk-query/overview)
 - [Tailwind CSS](https://tailwindcss.com/docs)
-
-## 🧾 Example PR template
-
-**Title:** `feature/reviews-page`
-
-**Description:**
-
-- Added Reviews page at `/reviews`
-- Created `src/features/reviews/` for feature logic
-- Added RTK Query endpoint in `src/store/api.ts`
-- Added typed Redux slice `src/store/slices/reviewsSlice.ts`
-
-**Checklist:**
-
-- [ ] Code compiles and passes `npm run lint`
-- [ ] Page works in browser at the correct route
-- [ ] New or updated logic is covered by tests if applicable
-- [ ] No direct imports between feature folders
-- [ ] Shared UI components are placed under `src/widgets/`
-
-**Notes:**
-
-- Leave extra details for reviewers here.
-
----

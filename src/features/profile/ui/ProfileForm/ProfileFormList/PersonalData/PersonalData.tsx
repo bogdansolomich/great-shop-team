@@ -1,25 +1,24 @@
 'use client';
+
+import { skipToken } from '@reduxjs/toolkit/query';
+import { useEffect, useState } from 'react';
+
+import { useAuth } from '@/features/auth/hooks/useAuth';
+import { useTranslation } from '@/i18n/useTranslation';
 import {
   useGetProfileByIdQuery,
   usePatchProfileMutation,
 } from '@/store/endpoints/profilesEndpoints';
-import { useAuth } from '@/features/auth/hooks/useAuth';
-import { skipToken } from '@reduxjs/toolkit/query';
-import { useEffect, useState } from 'react';
 
 interface ProfileForm {
   first_name: string;
   last_name: string;
-  // surname: string;
-  // gender: number;
-  // clothing_size: number;
-  // shoe_size: number;
   birthday: string;
   phone: string;
-  // email: string;
 }
 
 const PersonalData = () => {
+  const { t } = useTranslation();
   const { user } = useAuth();
 
   const userId = user?.id;
@@ -27,17 +26,11 @@ const PersonalData = () => {
 
   const [patchProfile, { isLoading: isUpdating }] = usePatchProfileMutation();
 
-
   const [form, setForm] = useState<ProfileForm>({
     first_name: '',
     last_name: '',
-    // surname: '',
-    // gender: 1,
-    // clothing_size: 1,
-    // shoe_size: 1,
     birthday: '',
     phone: '',
-    // email: '',
   });
 
   useEffect(() => {
@@ -45,33 +38,27 @@ const PersonalData = () => {
       setForm({
         first_name: profile.first_name ?? '',
         last_name: profile.last_name ?? '',
-        // surname: profile.surname ?? '',
-        // gender: profile.gender ?? 1,
-        // clothing_size: profile.clothing_size ?? 1,
-        // shoe_size: profile.shoe_size ?? 1,
         birthday: profile.birthday ?? '',
         phone: profile.phone ?? '',
-        // email: profile.user.email ?? '',
       });
     }
   }, [profile]);
 
-  const handleSubmit = async (e: React.FormEvent) =>{
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
-      if (!userId){
+      if (!userId) {
         return;
       }
       await patchProfile({
         profile_id: userId,
         body: form,
       }).unwrap();
-      console.log('profile updated');
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -82,19 +69,18 @@ const PersonalData = () => {
     }));
   };
 
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error</div>;
+  if (isLoading) return <div>{t.common.loading}</div>;
+  if (isError) return <div>{t.common.error}</div>;
   if (!profile) return null;
-
 
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <p className="text-[20px] font-normal my-4">Personal Data</p>
+        <p className="text-[20px] font-normal my-4">{t.profile.personalDataTitle}</p>
 
         <div className="flex">
           <div className="flex flex-col mr-2">
-            <label htmlFor="firstName">First name</label>
+            <label htmlFor="firstName">{t.profile.firstName}</label>
             <input
               id="firstName"
               name="first_name"
@@ -106,7 +92,7 @@ const PersonalData = () => {
           </div>
 
           <div className="flex flex-col mr-2">
-            <label htmlFor="lastName">Last name</label>
+            <label htmlFor="lastName">{t.profile.lastName}</label>
             <input
               id="lastName"
               name="last_name"
@@ -120,7 +106,7 @@ const PersonalData = () => {
 
         <div className="flex">
           <div className="flex flex-col mr-2">
-            <label htmlFor="phoneNumber">Phone Number</label>
+            <label htmlFor="phoneNumber">{t.profile.phoneNumber}</label>
             <input
               id="phoneNumber"
               name="phone"
@@ -132,7 +118,7 @@ const PersonalData = () => {
           </div>
 
           <div className="flex flex-col mr-2">
-            <label htmlFor="birthday">Birthday</label>
+            <label htmlFor="birthday">{t.profile.birthday}</label>
             <input
               id="birthday"
               name="birthday"
@@ -146,108 +132,91 @@ const PersonalData = () => {
 
         <div className="flex">
           <div className="flex flex-col mr-2">
-            <label htmlFor="phoneNumber">Gender</label>
-            {/*изменить когда на select бекенде будет string*/}
-            {/*<select>*/}
-            {/*  <option value="male">Male</option>*/}
-            {/*  <option value="female">Female</option>*/}
-            {/*</select>*/}
+            <label htmlFor="gender">{t.profile.gender}</label>
             <input
               id="gender"
-              name={'gender'}
+              name="gender"
               type="text"
-              // value={form.gender}
               onChange={handleChange}
               className="w-[413px] border border-[#222] rounded-lg p-2 my-2"
             />
           </div>
 
           <div className="flex flex-col mr-2">
-            <label htmlFor="birthday">City</label>
+            <label htmlFor="city">{t.profile.city}</label>
             <input
               id="city"
-              name={'city'}
+              name="city"
               type="text"
               className="w-[413px] border border-[#222] rounded-lg p-2 my-2"
             />
           </div>
         </div>
 
-        <p className="text-[20px] font-normal my-4 py-[15px]">Sizes</p>
+        <p className="text-[20px] font-normal my-4 py-[15px]">{t.profile.sizes}</p>
 
         <div className="flex">
           <div className="flex flex-col mr-2">
-            <label htmlFor="clothing_size">Clothing</label>
-            {/*изменить когда на select бекенде будет string*/}
-            {/*<select>*/}
-            {/*  <option>S</option>*/}
-            {/*  <option>M</option>*/}
-            {/*  <option>L</option>*/}
-            {/*  <option>XL</option>*/}
-            {/*</select>*/}
+            <label htmlFor="clothing_size">{t.profile.clothing}</label>
             <input
               id="clothing"
               type="text"
-              name={'clothing_size'}
-              // value={form.clothing_size}
+              name="clothing_size"
               onChange={handleChange}
               className="w-[413px] border border-[#222] rounded-lg p-2 my-2"
             />
           </div>
 
           <div className="flex flex-col mr-2">
-            <label htmlFor="shoe_size">Shoe size (EU)</label>
+            <label htmlFor="shoe_size">{t.profile.shoeSize}</label>
             <input
               id="shoe_size"
-              name={'shoe_size'}
+              name="shoe_size"
               type="text"
-              // value={form.shoe_size}
               onChange={handleChange}
               className="w-[413px] border border-[#222] rounded-lg p-2 my-2"
             />
           </div>
         </div>
 
-        <p className="text-[20px] font-normal my-4">Account Details</p>
+        <p className="text-[20px] font-normal my-4">{t.profile.accountDetails}</p>
 
         <div className="flex">
           <div className="flex flex-col mr-2">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email">{t.profile.email}</label>
             <input
               id="email"
               type="email"
-              name={'email'}
-              // value={form.email}
+              name="email"
               onChange={handleChange}
               className="w-[413px] border border-[#222] rounded-lg p-2 my-2"
             />
           </div>
 
           <div className="flex flex-col mr-2">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">{t.profile.password}</label>
             <input className="w-[413px] border border-[#222] rounded-lg p-2 my-2" />
           </div>
         </div>
         <div className="flex justify-center items-center my-10">
           <button
             className="border border-[#222] bg-[#222]  text-white p-4 rounded-lg"
-            type={'submit'}
+            type="submit"
+            disabled={isUpdating}
           >
-            Save changes
+            {isUpdating ? t.common.saving : t.profile.saveChanges}
           </button>
         </div>
         <div className="flex flex-row flex-1 border border-[#CF000059] p-3 rounded-lg my-15 justify-between">
           <div className="">
-            <p className="text-[16px] text-[#C0392B] ">Delete account</p>
-            <p className="text-[14px] text-[#9A9A97] max-w-[72%]">
-              Permanent action — all your data will be removed and cannot be recovered.
-            </p>
+            <p className="text-[16px] text-[#C0392B] ">{t.profile.deleteAccountTitle}</p>
+            <p className="text-[14px] text-[#9A9A97] max-w-[72%]">{t.profile.deleteAccountWarning}</p>
           </div>
           <button
             className="border border-[#DA000066] px-5 py-3 text-[#C0392B] text-[14px] rounded-lg self-center"
             type="button"
           >
-            Delete account
+            {t.profile.deleteAccountTitle}
           </button>
         </div>
       </form>

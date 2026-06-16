@@ -1,0 +1,70 @@
+@use '@/styles/variables' as *;
+
+.form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.field {
+  position: relative;
+  width: 100%;
+  padding-bottom: 0;
+  border-bottom: 1px solid $color-white;
+}
+
+.input {
+  width: 100%;
+  padding: 0 40px 16px 0;
+  border: 0;
+  background: transparent;
+  font-size: 14px;
+  line-height: 1.5;
+  color: $color-white;
+  outline: none;
+
+  &::placeholder {
+    color: rgb(255 255 255 / 50%);
+  }
+}
+
+.submit {
+  position: absolute;
+  right: 0;
+  bottom: 4px;
+  display: flex;
+  width: 32px;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: $color-white;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background: rgb(255 255 255 / 10%);
+  }
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+}
+
+.message {
+  margin: 0 0 16px;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.messageError {
+  color: #ef4444;
+}
+
+.messageSuccess {
+  color: #22c55e;
+}

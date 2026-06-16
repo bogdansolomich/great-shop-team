@@ -10,51 +10,9 @@ import {
   HiOutlineArrowRightOnRectangle,
 } from 'react-icons/hi2';
 
-type AccountTab = 'profile' | 'favorites' | 'orders' | 'addresses' | 'password' | 'logout';
+import { useTranslation } from '@/i18n/useTranslation';
 
-const tabs: {
-  id: AccountTab;
-  label: string;
-  href: string;
-  icon: React.ReactNode;
-}[] = [
-  {
-    id: 'profile',
-    label: 'Profile',
-    href: '/profile',
-    icon: <HiOutlineUser className="h-6 w-6" />,
-  },
-  {
-    id: 'favorites',
-    label: 'Favorites',
-    href: '/favorites',
-    icon: <HiOutlineHeart className="h-6 w-6" />,
-  },
-  {
-    id: 'orders',
-    label: 'My orders',
-    href: '/orders',
-    icon: <HiOutlineShoppingBag className="h-6 w-6" />,
-  },
-  {
-    id: 'addresses',
-    label: 'Addresses',
-    href: '/addresses',
-    icon: <HiOutlineMapPin className="h-6 w-6" />,
-  },
-  {
-    id: 'password',
-    label: 'Change password',
-    href: '/change-password',
-    icon: <HiOutlineKey className="h-6 w-6" />,
-  },
-  {
-    id: 'logout',
-    label: 'Log out',
-    href: '/login',
-    icon: <HiOutlineArrowRightOnRectangle className="h-6 w-6" />,
-  },
-];
+type AccountTab = 'profile' | 'favorites' | 'orders' | 'addresses' | 'password' | 'logout';
 
 type AccountHeaderProps = {
   activeTab: AccountTab;
@@ -62,11 +20,57 @@ type AccountHeaderProps = {
 };
 
 export default function AccountHeader({ activeTab, userName = 'John Smith' }: AccountHeaderProps) {
+  const { t } = useTranslation();
+
+  const tabs: {
+    id: AccountTab;
+    label: string;
+    href: string;
+    icon: React.ReactNode;
+  }[] = [
+    {
+      id: 'profile',
+      label: t.account.profile,
+      href: '/profile',
+      icon: <HiOutlineUser className="h-6 w-6" />,
+    },
+    {
+      id: 'favorites',
+      label: t.account.favorites,
+      href: '/favorites',
+      icon: <HiOutlineHeart className="h-6 w-6" />,
+    },
+    {
+      id: 'orders',
+      label: t.account.myOrders,
+      href: '/orders',
+      icon: <HiOutlineShoppingBag className="h-6 w-6" />,
+    },
+    {
+      id: 'addresses',
+      label: t.account.addresses,
+      href: '/addresses',
+      icon: <HiOutlineMapPin className="h-6 w-6" />,
+    },
+    {
+      id: 'password',
+      label: t.account.changePassword,
+      href: '/change-password',
+      icon: <HiOutlineKey className="h-6 w-6" />,
+    },
+    {
+      id: 'logout',
+      label: t.account.logOut,
+      href: '/login',
+      icon: <HiOutlineArrowRightOnRectangle className="h-6 w-6" />,
+    },
+  ];
+
   return (
     <header className="border-y border-black">
       <div className="flex min-h-[15vh] items-center gap-3 py-4">
         <div className="mr-[3%] shrink-0">
-          <p className="text-base">Hello</p>
+          <p className="text-base">{t.account.hello}</p>
           <p className="text-[32px] font-bold leading-tight">{userName}</p>
         </div>
 
