@@ -90,7 +90,7 @@ export default function Footer() {
             href: '/facebook',
             icon: '/icons/Facebook.svg',
           },
-          { label: t.footer.columns.social.tiktok, href: '/tiktok', icon: '/icons/tiktok.svg' },
+          { label: t.footer.columns.social.tiktok, href: '/tiktok', icon: '/icons/TikTok.svg' },
         ],
       },
     ],
