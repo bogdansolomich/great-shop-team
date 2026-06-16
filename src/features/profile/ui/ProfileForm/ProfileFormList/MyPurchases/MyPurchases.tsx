@@ -2,9 +2,9 @@
 
 import { useTranslation } from '@/i18n/useTranslation';
 
-const Correspondence = () => {
+const MyPurchases = () => {
   const { t } = useTranslation();
-  return <div>{t.profile.correspondence}</div>;
+  return <div>{t.profile.myPurchases}</div>;
 };
 
-export default Correspondence;
+export default MyPurchases;
