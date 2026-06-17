@@ -1,15 +1,39 @@
 'use client';
 
 import Image from 'next/image';
+import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 
 import ProductShowcase from '@/widgets/ProductShowcase/ProductShowcase';
-import productCard from '@/data/productCard.json';
 import { useTranslation } from '@/i18n/useTranslation';
+import { useGetProductCardQuery } from '@/store/endpoints/productsEndpoints';
 
 import styles from './Product.module.scss';
 
 export default function Product() {
   const { t } = useTranslation();
+  const { data: productCard, isLoading, isError, error } = useGetProductCardQuery();
+
+  if (isLoading) {
+    return <div>{t.common.loading}</div>;
+  }
+
+  if (isError || !productCard) {
+    const queryError = error as FetchBaseQueryError | undefined;
+    const errorStatus =
+      queryError && 'originalStatus' in queryError
+        ? queryError.originalStatus
+        : queryError && 'status' in queryError
+          ? queryError.status
+          : null;
+    const errorMessage =
+      errorStatus === 404
+        ? 'Product API endpoint /api/products/product-card/ was not found on the server.'
+        : errorStatus
+          ? `${t.common.error}: ${String(errorStatus)}`
+          : t.common.error;
+
+    return <div>{errorMessage}</div>;
+  }
 
   return (
     <div>

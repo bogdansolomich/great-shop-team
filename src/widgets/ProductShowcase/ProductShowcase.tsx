@@ -1,12 +1,10 @@
 'use client';
-import { useTranslation } from '@/i18n/useTranslation';
 import styles from '../ProductShowcase/ProductShowcase.module.scss';
 import Image from 'next/image';
 import StarRating from '@/widgets/StarRating/StarRating';
-import Link from 'next/link';
 import { useState } from 'react';
 
-interface ProductShowcase {
+interface ProductShowcaseProps {
   brand: string;
   title: string;
   description: string[];
@@ -20,23 +18,11 @@ interface ProductShowcase {
 
   images: {
     main: {
-      front: {
-        src: string;
-        alt: string;
-      };
-      back: {
-        src: string;
-        alt: string;
-      };
+      front: { src: string; alt: string };
+      back: { src: string; alt: string };
     };
-    gallery: {
-      src: string;
-      alt: string;
-    }[];
-    colors: {
-      src: string;
-      alt: string;
-    }[];
+    gallery: { src: string; alt: string }[];
+    colors: { src: string; alt: string }[];
   };
 
   link: {
@@ -44,6 +30,14 @@ interface ProductShowcase {
     label: string;
   };
 }
+
+// Список пунктів для меню та детальної інформації
+const INFO_TABS = [
+  { id: 'materials', label: 'Materials and design details' },
+  { id: 'measurements', label: 'Measurements' },
+  { id: 'packaging', label: 'Packaging' },
+  { id: 'shipping', label: 'Shipping and returns' },
+];
 
 export default function ProductShowcase({
   brand,
@@ -54,11 +48,24 @@ export default function ProductShowcase({
   rating,
   images,
   size,
-  link,
-}: ProductShowcase) {
-  const { t } = useTranslation();
+}: ProductShowcaseProps) {
   const [currentSize, setCurrentSize] = useState<number>();
   const [currentColor, setCurrentColor] = useState<number>();
+
+  // Стейт для керування боковою панеллю
+  const [activeTab, setActiveTab] = useState<string | null>(null);
+
+  const handleOpenSidebar = (tabId: string) => {
+    setActiveTab(tabId);
+    // Блокуємо скрол сторінки, коли шторка відкрита
+    document.body.style.overflow = 'hidden';
+  };
+
+  const handleCloseSidebar = () => {
+    setActiveTab(null);
+    // Повертаємо скрол сторінки
+    document.body.style.overflow = '';
+  };
 
   return (
     <div className={styles.container}>
@@ -99,10 +106,7 @@ export default function ProductShowcase({
             </ul>
           ))}
         </div>
-        <ul style={{ marginTop: 10 }}>
-          {t.product.productCode}
-          {code}
-        </ul>
+        <ul style={{ marginTop: 10 }}>Product-code:{code}</ul>
         <div className={styles.stars}>
           <StarRating count={rating} />
         </div>
@@ -117,7 +121,7 @@ export default function ProductShowcase({
             </button>
           ))}
         </div>
-        {t.product.color}
+        Color
         <div className={styles.containerColor}>
           {images.colors.map((item, key) => (
             <Image
@@ -132,16 +136,57 @@ export default function ProductShowcase({
           ))}
         </div>
         <div className={styles.actionsButtons}>
-          <button className={styles.actionsButtonsBodyBuy}>{t.product.buyNow}</button>
-          <button className={styles.actionsButtonsBodyAdd}>{t.product.addToCart}</button>
+          <button className={styles.actionsButtonsBodyBuy}>Buy now</button>
+          <button className={styles.actionsButtonsBodyAdd}>Add to cart</button>
         </div>
+        {/* Посилання, які тепер відкривають шторку */}
         <div className={styles.cuurentsLink}>
-          <Link href={'/'}>{t.product.materials}</Link>
-          <Link href={'/'}>{t.product.measurements}</Link>
-          <Link href={'/'}>{t.product.packaging}</Link>
-          <Link href={'/'}>{t.product.shippingReturns}</Link>
+          {INFO_TABS.map((tab) => (
+            <div key={tab.id} className={styles.linkItem} onClick={() => handleOpenSidebar(tab.id)}>
+              {tab.label} <span>{'>'}</span>
+            </div>
+          ))}
         </div>
       </div>
+
+      {/* ОВЕРЛЕЙ (БЛЮР) ТА БОКОВА ПАНЕЛЬ */}
+      {activeTab && (
+        <>
+          {/* Клік по блюру закриває вікно */}
+          <div className={styles.overlay} onClick={handleCloseSidebar} />
+
+          <div className={styles.sidebar}>
+            <div className={styles.sidebarHeader}>
+              <h3>{title}</h3>
+              {/* Клік по хрестику закриває вікно */}
+              <button className={styles.closeButton} onClick={handleCloseSidebar}>
+                ✕
+              </button>
+            </div>
+
+            <div className={styles.sidebarContent}>
+              {/* Тут рендериться контент залежно від обраного пункту */}
+              {INFO_TABS.map((tab) => (
+                <div key={tab.id} className={styles.accordionItem}>
+                  <div className={styles.accordionHeader}>
+                    {tab.label}
+                    <span>{activeTab === tab.id ? '✕' : '⌵'}</span>
+                  </div>
+                  {activeTab === tab.id && (
+                    <div className={styles.accordionBody}>
+                      {/* Тимчасовий текст, сюди можна передавати реальні дані про товар */}
+                      <p>
+                        Detailed information about {tab.label.toLowerCase()} goes here. Crafted from
+                        premium materials designed for comfort and durability.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
