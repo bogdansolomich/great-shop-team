@@ -4,8 +4,8 @@
 .card {
   display: flex;
   flex-direction: column;
-  width: $landing-product-card-width;
-  max-width: 100%;
+  width: 100%;
+  max-width: $landing-product-card-width;
 }
 
 .imageWrap {
@@ -25,7 +25,9 @@
   gap: 8px;
   width: fit-content;
   margin-inline: auto;
-  height: math.percentage(math.div($landing-product-image-height, $landing-product-card-image-area-height));
+  height: math.percentage(
+    math.div($landing-product-image-height, $landing-product-card-image-area-height)
+  );
 }
 
 .imageInner {

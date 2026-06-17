@@ -34,12 +34,23 @@
 .header {
   box-sizing: border-box;
   width: 100%;
-  display: grid;
-  grid-template-columns: 176px 1fr 176px;
+  
+  /* Переключаем на flex */
+  display: flex;
+  justify-content: space-between; 
   align-items: center;
+  
   padding: 20px 0;
   font-family: $font-family-heading;
   @include layout-gutter;
+
+  // Если нужно, чтобы боковые части сохраняли ширину близкую к 176px:
+  & > div:first-child, // Блок с языками
+  & > .actions {       // Блок с иконками
+    /* flex-basis задает желаемую ширину, но позволяет сжиматься на мелких экранах */
+    flex-basis: 176px; 
+    flex-shrink: 1; 
+  }
 }
 
 .actions {
