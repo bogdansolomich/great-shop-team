@@ -155,7 +155,8 @@ const en = {
     },
     contacts: {
       title: 'Contacts',
-      description: 'Need help? Contact details and support hours will be published on this page soon.',
+      description:
+        'Need help? Contact details and support hours will be published on this page soon.',
     },
     shipping: {
       title: 'Shipping',
@@ -177,7 +178,8 @@ const en = {
     },
     privacy: {
       title: 'Privacy Policy',
-      description: 'How we collect, use, and protect your personal data will be outlined here soon.',
+      description:
+        'How we collect, use, and protect your personal data will be outlined here soon.',
     },
     terms: {
       title: 'Terms & Conditions',
@@ -319,8 +321,7 @@ const en = {
       goShopping: 'Do to shopping?',
     },
     hints: {
-      emailVerifiedLogin:
-        'Email verified. Sign in with the password you used during registration.',
+      emailVerifiedLogin: 'Email verified. Sign in with the password you used during registration.',
       signInToContinue: 'Sign in with your email and password to continue.',
       passwordResetSuccess: 'Password successfully reset! Please log in with your new password.',
     },
@@ -334,12 +335,12 @@ const en = {
     },
   },
   profile: {
-    myReviews: 'My reviews',
-    settings: 'Settings',
-    correspondence: 'Correspondence',
-    deleteAccount: 'Delete Account',
+    return: 'Return',
+    myPromocodes: 'My Promocodes',
+    myPurchases: 'My Purchases',
+    myBonuses: 'My Bonuses',
     personalData: 'Personal Data',
-    support: 'Support',
+    changePassword: 'Change Password',
     orderFormList: 'OrderFormList',
     personalDataTitle: 'Personal Data',
     firstName: 'First name',
@@ -380,6 +381,15 @@ const en = {
     measurements: 'Measurements >',
     packaging: 'Packaging>',
     shippingReturns: 'Shipping and returns>',
+  },
+  changePassword: {
+    currentPassword : 'Current password',
+    EnterCurrentPassword : 'Enter current password',
+    NewPassword:'New password',
+    MinCharacters:'Min. 8 characters',
+    ConfirmNewPassword:'Confirm new password',
+    RepeatNewPassword:'Repeat new password',
+    SaveChanges:'Save changes',
   },
 };
 

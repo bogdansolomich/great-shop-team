@@ -2,9 +2,9 @@
 
 import { useTranslation } from '@/i18n/useTranslation';
 
-const Settings = () => {
+const Return = () => {
   const { t } = useTranslation();
-  return <div>{t.profile.settings}</div>;
+  return <div>{t.profile.return}</div>;
 };
 
-export default Settings;
+export default Return;
