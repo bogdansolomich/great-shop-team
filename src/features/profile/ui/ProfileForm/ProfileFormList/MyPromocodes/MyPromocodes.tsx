@@ -2,9 +2,9 @@
 
 import { useTranslation } from '@/i18n/useTranslation';
 
-const Support = () => {
+const MyPromocodes = () => {
   const { t } = useTranslation();
-  return <div>{t.profile.support}</div>;
+  return <div>{t.profile.myPromocodes}</div>;
 };
 
-export default Support;
+export default MyPromocodes;

@@ -52,14 +52,16 @@
 }
 
 .sectionContent {
-  width: calc(#{$landing-product-card-width} * 3 + 20px * 2);
-  max-width: 100%;
+  // Вместо жесткого calc() даем полную ширину с ограничением
+  width: 100%;
+  max-width: calc(#{$landing-product-card-width} * 3 + 20px * 2); // 1279px
   margin-inline: auto;
 }
 
 .productGrid {
   display: grid;
-  grid-template-columns: repeat(3, $landing-product-card-width);
+  // Меняем фиксированные 413px на адаптивные фракции 1fr
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 20px;
 }
 
@@ -69,26 +71,30 @@
   margin-top: 80px;
 }
 
+/* Медиа-запросы становятся намного проще и не будут ломать верстку в промежуточных разрешениях */
 @media (max-width: $layout-desktop) {
   .sectionContent {
-    width: calc(#{$landing-product-card-width} * 2 + 20px);
+    // Контейнер сам сожмется до максимума для 2 колонок
+    max-width: calc(#{$landing-product-card-width} * 2 + 20px);
   }
 
   .productGrid {
-    grid-template-columns: repeat(2, $landing-product-card-width);
+    // Перестраиваем на 2 колонки, они сами займут доступное место
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (max-width: $layout-tablet) {
   .sectionContentBanners {
-    width: $landing-category-banner-width;
+    width: 100%;
+    max-width: $landing-category-banner-width;
   }
 
   .sectionContent {
-    width: $landing-product-card-width;
+    max-width: $landing-product-card-width;
   }
 
   .productGrid {
-    grid-template-columns: $landing-product-card-width;
+    grid-template-columns: minmax(0, 1fr);
   }
 }

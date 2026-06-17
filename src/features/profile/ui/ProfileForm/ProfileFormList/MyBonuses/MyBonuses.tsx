@@ -2,9 +2,9 @@
 
 import { useTranslation } from '@/i18n/useTranslation';
 
-const DeleteAccount = () => {
+const MyBonuses = () => {
   const { t } = useTranslation();
-  return <div>{t.profile.deleteAccount}</div>;
+  return <div>{t.profile.myBonuses}</div>;
 };
 
-export default DeleteAccount;
+export default MyBonuses;

@@ -157,7 +157,8 @@ const uk: Dictionary = {
     },
     contacts: {
       title: 'Контакти',
-      description: 'Потрібна допомога? Контактні дані та години підтримки будуть опубліковані на цій сторінці незабаром.',
+      description:
+        'Потрібна допомога? Контактні дані та години підтримки будуть опубліковані на цій сторінці незабаром.',
     },
     shipping: {
       title: 'Доставка',
@@ -175,7 +176,8 @@ const uk: Dictionary = {
     },
     'size-guide': {
       title: 'Таблиця розмірів',
-      description: 'Таблиці вимірів та рекомендації щодо посадки будуть додані на цю сторінку незабаром.',
+      description:
+        'Таблиці вимірів та рекомендації щодо посадки будуть додані на цю сторінку незабаром.',
     },
     privacy: {
       title: 'Політика конфіденційності',
@@ -184,7 +186,8 @@ const uk: Dictionary = {
     },
     terms: {
       title: 'Умови використання',
-      description: 'Умови користування сайтом та послугами WEARLY будуть опубліковані тут незабаром.',
+      description:
+        'Умови користування сайтом та послугами WEARLY будуть опубліковані тут незабаром.',
     },
     cookies: {
       title: 'Cookies',
@@ -236,13 +239,13 @@ const uk: Dictionary = {
   },
   validation: {
     firstNameRequired: "Ім'я обов'язкове.",
-    lastNameRequired: 'Прізвище обов\'язкове.',
-    emailRequired: 'Email обов\'язковий.',
+    lastNameRequired: "Прізвище обов'язкове.",
+    emailRequired: "Email обов'язковий.",
     emailInvalid: 'Введіть коректну email-адресу.',
-    passwordRequired: 'Пароль обов\'язковий.',
+    passwordRequired: "Пароль обов'язковий.",
     passwordInvalid:
       'Пароль має містити щонайменше 8 символів, одну велику літеру та один спецсимвол.',
-    confirmPasswordRequired: 'Підтвердження пароля обов\'язкове.',
+    confirmPasswordRequired: "Підтвердження пароля обов'язкове.",
     passwordsMustMatch: 'Паролі мають збігатися.',
     passwordsDoNotMatch: 'Паролі не збігаються.',
     acceptTerms: 'Потрібно прийняти Умови використання та Політику конфіденційності.',
@@ -270,7 +273,7 @@ const uk: Dictionary = {
     login: {
       welcome: 'Вітаємо! 👋',
       subtitle: 'Увійдіть у свій обліковий запис',
-      rememberMe: 'Запам\'ятати мене',
+      rememberMe: "Запам'ятати мене",
       forgotPassword: 'Забули пароль?',
       submit: 'Увійти',
       createAccount: 'Створити обліковий запис?',
@@ -288,7 +291,7 @@ const uk: Dictionary = {
       subtitle: 'Введіть email — ми надішлемо код для скидання пароля.',
       imageAlt: 'Забули пароль',
       submit: 'Надіслати код',
-      rememberPassword: 'Пам\'ятаєте пароль?',
+      rememberPassword: "Пам'ятаєте пароль?",
     },
     resetPassword: {
       title: 'Новий пароль',
@@ -328,8 +331,7 @@ const uk: Dictionary = {
       passwordResetSuccess: 'Пароль успішно змінено! Увійдіть з новим паролем.',
     },
     errors: {
-      signInFailed:
-        'Не вдалося увійти. Перевірте email і пароль або спочатку підтвердіть email.',
+      signInFailed: 'Не вдалося увійти. Перевірте email і пароль або спочатку підтвердіть email.',
       incorrectCredentials: 'Невірний email або пароль. Спробуйте ще раз.',
       resetCodeFailed: 'Не вдалося надіслати код. Перевірте email і спробуйте ще раз.',
       registrationFailed: 'Помилка реєстрації. Перевірте дані та спробуйте ще раз.',
@@ -337,12 +339,12 @@ const uk: Dictionary = {
     },
   },
   profile: {
-    myReviews: 'Мої відгуки',
-    settings: 'Налаштування',
-    correspondence: 'Листування',
-    deleteAccount: 'Видалити обліковий запис',
+    return: 'Повернення',
+    myPromocodes: 'Мої промокоди',
+    myPurchases: 'Мої покупки',
+    myBonuses: 'Мої бонуси',
     personalData: 'Особисті дані',
-    support: 'Підтримка',
+    changePassword: 'Змінити пароль',
     orderFormList: 'Список замовлень',
     personalDataTitle: 'Особисті дані',
     firstName: "Ім'я",
@@ -383,6 +385,15 @@ const uk: Dictionary = {
     measurements: 'Виміри >',
     packaging: 'Упаковка>',
     shippingReturns: 'Доставка та повернення>',
+  },
+  changePassword: {
+    currentPassword: 'Поточний пароль',
+    EnterCurrentPassword: 'Введіть поточний пароль',
+    NewPassword: 'Новий пароль',
+    MinCharacters: 'Мін. 8 символів',
+    ConfirmNewPassword: 'Підтвердіть новий пароль',
+    RepeatNewPassword: 'Повторіть новий пароль',
+    SaveChanges: 'Зберегти зміни',
   },
 };
 
