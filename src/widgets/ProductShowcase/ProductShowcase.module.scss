@@ -15,9 +15,6 @@
   align-items: center;
 }
 
-.image {
-}
-
 .imagesGalery {
   flex: 1;
   display: flex;
@@ -74,8 +71,6 @@
 .currentColor {
   border-bottom: solid 1px #131118;
 }
-.currentColorItem {
-}
 
 .actionsButtons {
   display: flex;
@@ -99,4 +94,106 @@
   display: flex;
   flex-direction: column;
   gap: 4%;
+}
+
+/* Додаткові стилі для клікабельних лінків */
+.linkItem {
+  display: flex;
+  justify-content: space-between;
+  max-width: 50%; /* або стільки, скільки потрібно */
+  cursor: pointer;
+  padding: 8px 0;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+
+  &:hover {
+    border-bottom-color: #131118;
+  }
+}
+
+/* Ефект блюру на всю сторінку (перекриває хедер/футер) */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.15); /* легке затемнення */
+  backdrop-filter: blur(8px); /* саме розмиття заднього фону */
+  z-index: 9998; /* високий пріоритет, щоб бути над усім */
+}
+
+/* Бокова панель справа */
+.sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 450px; /* ширина панелі як на макеті */
+  max-width: 100vw;
+  height: 100vh;
+  background-color: #ffffff;
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.1);
+  z-index: 9999; /* вище ніж overlay */
+  display: flex;
+  flex-direction: column;
+  padding: 40px;
+  box-sizing: border-box;
+  animation: slideIn 0.3s ease-out;
+}
+
+.sidebarHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+
+  h3 {
+    font-size: 1.25rem;
+    font-weight: 500;
+  }
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 5px;
+  color: #131118;
+}
+
+.sidebarContent {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Стилі акордеону всередині панелі */
+.accordionItem {
+  border-bottom: 1px solid #e5e5e5;
+  padding: 20px 0;
+}
+
+.accordionHeader {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 500;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.accordionBody {
+  margin-top: 15px;
+  font-size: 0.9rem;
+  color: #666666;
+  line-height: 1.5;
+}
+
+/* Анімація появи шторки справа наліво */
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
 }

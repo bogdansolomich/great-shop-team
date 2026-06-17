@@ -121,3 +121,45 @@ export interface CartItem {
 export interface WishlistItem {
   productId: number;
 }
+
+export interface ProductImage {
+  src: string;
+  alt: string;
+}
+
+export interface ProductPrice {
+  current: number;
+  currency: string;
+}
+
+export interface ProductLink {
+  href: string;
+  label: string;
+}
+
+export interface RelatedProductCard {
+  image: ProductImage;
+  title: string;
+  price: string;
+}
+
+export interface ProductCardData {
+  id: number;
+  brand: string;
+  title: string;
+  description: string[];
+  price: ProductPrice;
+  code: string;
+  rating: number;
+  size: string[];
+  images: {
+    main: {
+      front: ProductImage;
+      back: ProductImage;
+    };
+    gallery: ProductImage[];
+    colors: ProductImage[];
+  };
+  link: ProductLink;
+  botonImages: RelatedProductCard[];
+}
