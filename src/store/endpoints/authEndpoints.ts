@@ -25,7 +25,7 @@ export const authEndpoints = api.injectEndpoints({
       query: (body) => ({ url: '/api/users/register/', method: 'POST', body }),
     }),
 
-    // Поточний користувач (для отримання даних після логіну або при відкритті сайту, якщо токен вже є) 
+    // Поточний користувач (для отримання даних після логіну або при відкритті сайту, якщо токен вже є)
     getCurrentUser: builder.query<User, void>({
       query: () => '/api/users/current-user/',
       providesTags: ['User'], // Тегуємо цей запит
@@ -51,7 +51,7 @@ export const authEndpoints = api.injectEndpoints({
     }),
 
     // Подтверждение скидання пароля
-    passwordResetConfirm: builder.mutation<void, PasswordResetConfirmInput>({ 
+    passwordResetConfirm: builder.mutation<void, PasswordResetConfirmInput>({
       query: (body) => ({ url: '/api/users/password-reset-confirm/', method: 'POST', body }),
     }),
 
@@ -74,6 +74,6 @@ export const {
   useActivateUserPatchMutation,
   useChangePasswordMutation,
   useResetPasswordMutation,
-  usePasswordResetConfirmMutation, 
+  usePasswordResetConfirmMutation,
   useResendActivationCodeMutation,
 } = authEndpoints;

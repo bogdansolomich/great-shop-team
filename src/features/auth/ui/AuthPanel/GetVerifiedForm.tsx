@@ -8,7 +8,7 @@ import { normalizeEmail } from '@/features/auth/lib/normalizeEmail';
 import { useTranslation } from '@/i18n/useTranslation';
 import { useResendActivationCodeMutation } from '@/store/endpoints/authEndpoints';
 
-import styles from './AuthPanel.module.scss';
+import { authPanel } from '@/features/auth/ui/authClasses';
 
 type GetVerifiedFormProps = {
   onBack?: () => void;
@@ -39,14 +39,19 @@ export default function GetVerifiedForm({ onBack, onGetCode, onLogin }: GetVerif
   };
 
   return (
-    <div className={styles.root}>
+    <div className={authPanel.root}>
       {onBack && (
-        <button type="button" className={styles.back} onClick={onBack} aria-label={t.common.back}>
+        <button
+          type="button"
+          className={authPanel.back}
+          onClick={onBack}
+          aria-label={t.common.back}
+        >
           ‹
         </button>
       )}
 
-      <div className={styles.illustration}>
+      <div className={authPanel.illustration}>
         <Image
           src="/images/float.jpg"
           alt={t.auth.getVerified.imageAlt}
@@ -56,10 +61,10 @@ export default function GetVerifiedForm({ onBack, onGetCode, onLogin }: GetVerif
         />
       </div>
 
-      <h1 className={styles.title}>{t.auth.getVerified.title}</h1>
-      <p className={styles.subtitleLinkEmail}>{t.auth.getVerified.subtitle}</p>
+      <h1 className={authPanel.title}>{t.auth.getVerified.title}</h1>
+      <p className={authPanel.subtitleLinkEmail}>{t.auth.getVerified.subtitle}</p>
 
-      <form className={styles.form} onSubmit={handleSubmit}>
+      <form className={authPanel.form} onSubmit={handleSubmit}>
         <AuthInput
           id="verify-email"
           name="email"
@@ -74,14 +79,14 @@ export default function GetVerifiedForm({ onBack, onGetCode, onLogin }: GetVerif
           error={error}
         />
 
-        <button type="submit" className={styles.submitBtn} disabled={isLoading}>
+        <button type="submit" className={authPanel.submitBtn} disabled={isLoading}>
           {isLoading ? t.common.sending : t.auth.getVerified.submit}
         </button>
       </form>
 
-      <p className={styles.footerLink}>
+      <p className={authPanel.footerLink}>
         {t.auth.getVerified.alreadyHaveAccount}{' '}
-        <button type="button" className={styles.linkButton} onClick={onLogin}>
+        <button type="button" className={authPanel.linkButton} onClick={onLogin}>
           {t.auth.login.submit}
         </button>
       </p>

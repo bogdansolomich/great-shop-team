@@ -5,8 +5,6 @@ import Link from 'next/link';
 
 import { useTranslation } from '@/i18n/useTranslation';
 
-import styles from './ClothingProductCard.module.scss';
-
 type ClothingProductCardProps = {
   image: { src: string; alt: string };
   title: string;
@@ -17,20 +15,18 @@ export default function ClothingProductCard({ image, title, price }: ClothingPro
   const { t } = useTranslation();
 
   return (
-    <article className={styles.card}>
-      <div className={styles.imageWrap}>
-        <div className={styles.imageRow}>
-          <div className={styles.imageInner}>
-            <Image
-              src={image.src}
-              alt={image.alt}
-              fill
-              sizes="258px"
-              className={styles.image}
-            />
+    <article className="flex w-full max-w-[413px] flex-col">
+      <div className="mb-4 flex aspect-413/493 w-full items-center justify-center bg-white shadow-[0_4px_24px_rgb(19_17_24/8%)]">
+        <div className="mx-auto flex h-[78.5%] w-fit items-stretch gap-2">
+          <div className="relative aspect-258/387 h-full shrink-0 overflow-hidden">
+            <Image src={image.src} alt={image.alt} fill sizes="258px" className="object-cover" />
           </div>
-          <div className={styles.actions}>
-            <button type="button" className={styles.wishlist} aria-label={t.landing.addToWishlist}>
+          <div className="flex shrink-0 flex-col items-center justify-between py-4">
+            <button
+              type="button"
+              className="cursor-pointer border-none bg-transparent p-1 text-dark"
+              aria-label={t.landing.addToWishlist}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -46,7 +42,11 @@ export default function ClothingProductCard({ image, title, price }: ClothingPro
                 />
               </svg>
             </button>
-            <button type="button" className={styles.addButton} aria-label={t.landing.addToCart}>
+            <button
+              type="button"
+              className="flex h-12 w-12 shrink-0 cursor-pointer items-center justify-center rounded-full border-none bg-black text-white"
+              aria-label={t.landing.addToCart}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -61,14 +61,17 @@ export default function ClothingProductCard({ image, title, price }: ClothingPro
           </div>
         </div>
       </div>
-      <div className={styles.info}>
-        <div className={styles.meta}>
-          <h3 className={styles.title}>{title}</h3>
-          <Link href="/catalog" className={styles.showMore}>
+      <div className="mx-auto flex w-full max-w-[314px] items-start justify-between gap-3">
+        <div className="flex min-w-0 flex-col gap-2">
+          <h3 className="m-0 font-(family-name:--font-poppins) text-base font-normal">{title}</h3>
+          <Link
+            href="/catalog"
+            className="text-base font-light text-dark underline underline-offset-4"
+          >
             {t.landing.showMore}
           </Link>
         </div>
-        <span className={styles.price}>{price}</span>
+        <span className="text-base font-medium whitespace-nowrap">{price}</span>
       </div>
     </article>
   );

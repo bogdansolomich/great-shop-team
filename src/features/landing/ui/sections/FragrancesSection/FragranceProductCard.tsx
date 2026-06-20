@@ -5,8 +5,6 @@ import { useState } from 'react';
 
 import { useTranslation } from '@/i18n/useTranslation';
 
-import styles from './FragranceProductCard.module.scss';
-
 type FragranceProductCardProps = {
   image: { src: string; alt: string };
   title: string;
@@ -24,20 +22,18 @@ export default function FragranceProductCard({
   const [selectedSize, setSelectedSize] = useState(sizes[0] ?? '');
 
   return (
-    <article className={styles.card}>
-      <div className={styles.imageWrap}>
-        <div className={styles.imageRow}>
-          <div className={styles.imageInner}>
-            <Image
-              src={image.src}
-              alt={image.alt}
-              fill
-              sizes="258px"
-              className={styles.image}
-            />
+    <article className="flex w-full max-w-[413px] flex-col">
+      <div className="mb-4 flex aspect-413/493 w-full items-center justify-center bg-white shadow-[0_4px_24px_rgb(19_17_24/8%)]">
+        <div className="mx-auto flex h-[78.5%] w-fit items-stretch gap-2">
+          <div className="relative aspect-258/387 h-full shrink-0 overflow-hidden">
+            <Image src={image.src} alt={image.alt} fill sizes="258px" className="object-cover" />
           </div>
-          <div className={styles.actions}>
-            <button type="button" className={styles.wishlist} aria-label={t.landing.addToWishlist}>
+          <div className="flex shrink-0 flex-col items-center justify-between py-4">
+            <button
+              type="button"
+              className="cursor-pointer border-none bg-transparent p-1 text-dark"
+              aria-label={t.landing.addToWishlist}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -53,7 +49,11 @@ export default function FragranceProductCard({
                 />
               </svg>
             </button>
-            <button type="button" className={styles.addButton} aria-label={t.landing.addToCart}>
+            <button
+              type="button"
+              className="flex h-12 w-12 shrink-0 cursor-pointer items-center justify-center rounded-full border-none bg-black text-white"
+              aria-label={t.landing.addToCart}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -68,17 +68,27 @@ export default function FragranceProductCard({
           </div>
         </div>
       </div>
-      <div className={styles.info}>
-        <h3 className={styles.title}>{title}</h3>
-        <span className={styles.price}>{price}</span>
+      <div className="mx-auto mb-3 flex w-full max-w-[314px] items-start justify-between gap-3">
+        <h3 className="m-0 min-w-0 font-(family-name:--font-poppins) text-base font-normal">
+          {title}
+        </h3>
+        <span className="text-base font-medium whitespace-nowrap">{price}</span>
       </div>
       {sizes.length > 0 && (
-        <div className={styles.sizes} role="group" aria-label={t.landing.selectSize}>
+        <div
+          className="mx-auto flex w-full max-w-[314px] flex-wrap gap-2"
+          role="group"
+          aria-label={t.landing.selectSize}
+        >
           {sizes.map((size) => (
             <button
               key={size}
               type="button"
-              className={`${styles.size} ${selectedSize === size ? styles.active : ''}`}
+              className={`cursor-pointer rounded-[10px] border px-3 py-1.5 text-sm font-light text-dark ${
+                selectedSize === size
+                  ? 'border-black bg-black text-white'
+                  : 'border-gray bg-transparent'
+              }`}
               onClick={() => setSelectedSize(size)}
               aria-pressed={selectedSize === size}
             >

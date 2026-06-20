@@ -1,8 +1,7 @@
 'use client';
-import styles from '../ProductShowcase/ProductShowcase.module.scss';
 import Image from 'next/image';
 import StarRating from '@/widgets/StarRating/StarRating';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface ProductShowcaseProps {
   brand: string;
@@ -31,7 +30,6 @@ interface ProductShowcaseProps {
   };
 }
 
-// Список пунктів для меню та детальної інформації
 const INFO_TABS = [
   { id: 'materials', label: 'Materials and design details' },
   { id: 'measurements', label: 'Measurements' },
@@ -51,27 +49,33 @@ export default function ProductShowcase({
 }: ProductShowcaseProps) {
   const [currentSize, setCurrentSize] = useState<number>();
   const [currentColor, setCurrentColor] = useState<number>();
-
-  // Стейт для керування боковою панеллю
   const [activeTab, setActiveTab] = useState<string | null>(null);
 
   const handleOpenSidebar = (tabId: string) => {
     setActiveTab(tabId);
-    // Блокуємо скрол сторінки, коли шторка відкрита
-    document.body.style.overflow = 'hidden';
   };
 
   const handleCloseSidebar = () => {
     setActiveTab(null);
-    // Повертаємо скрол сторінки
-    document.body.style.overflow = '';
   };
 
+  useEffect(() => {
+    if (!activeTab) {
+      return undefined;
+    }
+
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [activeTab]);
+
   return (
-    <div className={styles.container}>
-      <div className={styles.left}>
-        <div className={styles.images}>
-          <div className={styles.image}>
+    <div className="mb-[10%] flex">
+      <div className="flex flex-1 flex-col">
+        <div className="flex flex-1 items-center">
+          <div>
             <Image
               src={images.main.front.src}
               alt={images.main.front.alt}
@@ -79,21 +83,21 @@ export default function ProductShowcase({
               height={531}
             />
           </div>
-          <div className={styles.image}>
+          <div>
             <Image src={images.main.back.src} alt={images.main.back.alt} width={310} height={531} />
           </div>
         </div>
 
-        <div className={styles.images}>
+        <div className="flex flex-1 items-center">
           {images.gallery.map((item, key) => (
             <Image key={key} src={item.src} alt={item.alt} width={145} height={208} />
           ))}
         </div>
       </div>
 
-      <div className={styles.info}>
+      <div className="ml-[13%] flex flex-1 flex-col">
         <h2>{brand}</h2>
-        <div className={styles.title}>
+        <div className="flex justify-start gap-[50%]">
           <h1>{title}</h1>
           <div>
             {price.current} {price.currency}
@@ -101,28 +105,30 @@ export default function ProductShowcase({
         </div>
         <div>
           {description.map((item, key) => (
-            <ul className={styles.descriptonText} key={key}>
+            <ul className="max-w-[50%]" key={key}>
               {item}
             </ul>
           ))}
         </div>
         <ul style={{ marginTop: 10 }}>Product-code:{code}</ul>
-        <div className={styles.stars}>
+        <div className="my-[3%]">
           <StarRating count={rating} />
         </div>
-        <div className={styles.buttonsSize}>
+        <div className="my-[3%] flex flex-row gap-[1%]">
           {size.map((item, key) => (
             <button
               key={key}
               onClick={() => setCurrentSize(key)}
-              className={key === currentSize ? styles.currentButtonSizeItem : styles.buttonSizeItem}
+              className={`w-[10%] rounded-lg border border-[#666666] p-[2%] ${
+                key === currentSize ? 'bg-dark text-[#fafafa]' : ''
+              }`}
             >
               {item}
             </button>
           ))}
         </div>
         Color
-        <div className={styles.containerColor}>
+        <div className="flex flex-row">
           {images.colors.map((item, key) => (
             <Image
               key={key}
@@ -131,50 +137,56 @@ export default function ProductShowcase({
               width={152}
               height={168}
               onClick={() => setCurrentColor(key)}
-              className={key === currentColor ? styles.currentColor : styles.currentColorItem}
+              className={key === currentColor ? 'border-b border-dark' : ''}
             />
           ))}
         </div>
-        <div className={styles.actionsButtons}>
-          <button className={styles.actionsButtonsBodyBuy}>Buy now</button>
-          <button className={styles.actionsButtonsBodyAdd}>Add to cart</button>
+        <div className="my-[3%] flex flex-row gap-[3%]">
+          <button className="border border-[#666666] bg-dark p-[2%_10%] text-[#fafafa]">
+            Buy now
+          </button>
+          <button className="border border-[#666666] p-[2%_10%]">Add to cart</button>
         </div>
-        {/* Посилання, які тепер відкривають шторку */}
-        <div className={styles.cuurentsLink}>
+        <div className="flex flex-col gap-[4%]">
           {INFO_TABS.map((tab) => (
-            <div key={tab.id} className={styles.linkItem} onClick={() => handleOpenSidebar(tab.id)}>
+            <div
+              key={tab.id}
+              className="flex max-w-[50%] cursor-pointer justify-between border-b border-transparent py-2 transition-[border-color] duration-200 hover:border-dark"
+              onClick={() => handleOpenSidebar(tab.id)}
+            >
               {tab.label} <span>{'>'}</span>
             </div>
           ))}
         </div>
       </div>
 
-      {/* ОВЕРЛЕЙ (БЛЮР) ТА БОКОВА ПАНЕЛЬ */}
       {activeTab && (
         <>
-          {/* Клік по блюру закриває вікно */}
-          <div className={styles.overlay} onClick={handleCloseSidebar} />
+          <div
+            className="fixed top-0 left-0 z-9998 h-screen w-screen bg-black/15 backdrop-blur-lg"
+            onClick={handleCloseSidebar}
+          />
 
-          <div className={styles.sidebar}>
-            <div className={styles.sidebarHeader}>
-              <h3>{title}</h3>
-              {/* Клік по хрестику закриває вікно */}
-              <button className={styles.closeButton} onClick={handleCloseSidebar}>
+          <div className="animate-slide-in-right fixed top-0 right-0 z-9999 box-border flex h-screen w-[450px] max-w-screen flex-col bg-white p-10 shadow-[-4px_0_24px_rgb(0_0_0/10%)]">
+            <div className="mb-10 flex items-center justify-between">
+              <h3 className="text-xl font-medium">{title}</h3>
+              <button
+                className="cursor-pointer border-none bg-transparent p-[5px] text-2xl text-dark"
+                onClick={handleCloseSidebar}
+              >
                 ✕
               </button>
             </div>
 
-            <div className={styles.sidebarContent}>
-              {/* Тут рендериться контент залежно від обраного пункту */}
+            <div className="flex flex-col">
               {INFO_TABS.map((tab) => (
-                <div key={tab.id} className={styles.accordionItem}>
-                  <div className={styles.accordionHeader}>
+                <div key={tab.id} className="border-b border-[#e5e5e5] py-5">
+                  <div className="flex cursor-pointer justify-between text-base font-medium">
                     {tab.label}
                     <span>{activeTab === tab.id ? '✕' : '⌵'}</span>
                   </div>
                   {activeTab === tab.id && (
-                    <div className={styles.accordionBody}>
-                      {/* Тимчасовий текст, сюди можна передавати реальні дані про товар */}
+                    <div className="mt-[15px] text-sm leading-normal text-[#666666]">
                       <p>
                         Detailed information about {tab.label.toLowerCase()} goes here. Crafted from
                         premium materials designed for comfort and durability.

@@ -93,9 +93,13 @@ const normalizeRelatedProducts = (
     const title = asString(product.title) || asString(product.name);
 
     return {
-      image: toProductImage(product.image ?? product.preview_image ?? product.photo, title || 'Product', {
-        preferLocal: options?.preferLocal,
-      }),
+      image: toProductImage(
+        product.image ?? product.preview_image ?? product.photo,
+        title || 'Product',
+        {
+          preferLocal: options?.preferLocal,
+        },
+      ),
       title,
       price: formatRelatedPrice(product.price),
     };
@@ -126,8 +130,10 @@ const normalizeProduct = (
     title,
     description: normalizeDescription(product.description),
     price: {
-      current:
-        asNumber(priceData.current, asNumber(product.current_price, asNumber(product.price_value, 0))),
+      current: asNumber(
+        priceData.current,
+        asNumber(product.current_price, asNumber(product.price_value, 0)),
+      ),
       currency,
     },
     code: asString(product.code) || asString(product.sku) || asString(product.article),
@@ -160,7 +166,10 @@ const normalizeProduct = (
       label: asString(asRecord(product.link).label, 'Shop now'),
     },
     botonImages: normalizeRelatedProducts(
-      product.botonImages ?? product.bottomImages ?? product.relatedProducts ?? product.related_products,
+      product.botonImages ??
+        product.bottomImages ??
+        product.relatedProducts ??
+        product.related_products,
       { preferLocal: options?.preferLocalImages },
     ),
   };

@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useAutoLogin } from '@/features/auth/hooks/useAutoLogin';
 import { normalizeEmail } from '@/features/auth/lib/normalizeEmail';
@@ -13,48 +13,43 @@ import WelcomeAbroadPanel from '@/features/auth/ui/AuthPanel/WelcomeAbroadPanel'
 import LoginForm from '@/features/auth/ui/LoginForm/LoginForm';
 import RegisterForm from '@/features/auth/ui/RegisterForm/RegisterForm';
 
-export type AuthView =
-  | 'login'
-  | 'register'
-  | 'verify'
-  | 'get-code'
-  | 'reset-password-confirm'
-  | 'welcome';
+import type { AuthView } from '@/features/auth/lib/authViews';
+
+export type { AuthView };
+
+type LoginHint = {
+  text: string;
+  type: 'success' | 'error';
+};
 
 type AuthFlowProps = {
   view: AuthView;
   verifyEmail: string;
+  loginEmail: string;
+  loginHint: LoginHint;
   onViewChange: (view: AuthView) => void;
   onVerifyEmailChange: (email: string) => void;
+  onLoginEmailChange: (email: string) => void;
+  onLoginHintChange: (hint: LoginHint) => void;
   onLoginSuccess?: () => void;
   onWelcomeComplete?: () => void;
-  onCreateAccount?: () => void;
-  onLogin?: () => void;
-  onForgotPassword?: () => void;
-  onVerifyBack?: () => void;
 };
 
 export default function AuthFlow({
   view,
   verifyEmail,
+  loginEmail,
+  loginHint,
   onViewChange,
   onVerifyEmailChange,
+  onLoginEmailChange,
+  onLoginHintChange,
   onLoginSuccess,
   onWelcomeComplete,
-  onCreateAccount,
-  onLogin,
-  onForgotPassword,
-  onVerifyBack,
 }: AuthFlowProps) {
   const { t } = useTranslation();
   const { isAuthenticated } = useAuth();
   const autoLogin = useAutoLogin();
-  const [loginEmail, setLoginEmail] = useState('');
-
-  const [loginHint, setLoginHint] = useState<{ text: string; type: 'success' | 'error' }>({
-    text: '',
-    type: 'error',
-  });
 
   const tryAutoLogin = useCallback(async () => {
     const pending = peekPendingAuth();
@@ -72,7 +67,7 @@ export default function AuthFlow({
     const loggedIn = await tryAutoLogin();
 
     if (loggedIn) {
-      setLoginHint({
+      onLoginHintChange({
         text: t.auth.hints.emailVerifiedLogin,
         type: 'success',
       });
@@ -81,21 +76,28 @@ export default function AuthFlow({
     }
 
     const pending = peekPendingAuth();
-    setLoginEmail(pending?.email ?? normalizeEmail(verifyEmail));
-    setLoginHint({
+    onLoginEmailChange(pending?.email ?? normalizeEmail(verifyEmail));
+    onLoginHintChange({
       text: t.auth.hints.emailVerifiedLogin,
       type: 'success',
     });
     onViewChange('login');
-  }, [tryAutoLogin, onViewChange, verifyEmail, t.auth.hints.emailVerifiedLogin]);
+  }, [
+    tryAutoLogin,
+    onViewChange,
+    onLoginEmailChange,
+    onLoginHintChange,
+    verifyEmail,
+    t.auth.hints.emailVerifiedLogin,
+  ]);
 
   const handleGetStarted = useCallback(async () => {
     if (!isAuthenticated) {
       const loggedIn = await tryAutoLogin();
       if (!loggedIn) {
         const pending = peekPendingAuth();
-        setLoginEmail(pending?.email ?? normalizeEmail(verifyEmail));
-        setLoginHint({
+        onLoginEmailChange(pending?.email ?? normalizeEmail(verifyEmail));
+        onLoginHintChange({
           text: t.auth.hints.signInToContinue,
           type: 'error',
         });
@@ -104,7 +106,16 @@ export default function AuthFlow({
       }
     }
     onWelcomeComplete?.();
-  }, [isAuthenticated, tryAutoLogin, onViewChange, onWelcomeComplete, verifyEmail, t.auth.hints.signInToContinue]);
+  }, [
+    isAuthenticated,
+    tryAutoLogin,
+    onViewChange,
+    onLoginEmailChange,
+    onLoginHintChange,
+    onWelcomeComplete,
+    verifyEmail,
+    t.auth.hints.signInToContinue,
+  ]);
 
   if (view === 'login') {
     return (
@@ -112,8 +123,8 @@ export default function AuthFlow({
         initialEmail={loginEmail}
         hintMessage={loginHint.text}
         hintType={loginHint.type}
-        onCreateAccount={onCreateAccount ?? (() => onViewChange('register'))}
-        onForgotPassword={onForgotPassword ?? (() => onViewChange('get-code'))}
+        onCreateAccount={() => onViewChange('register')}
+        onForgotPassword={() => onViewChange('get-code')}
         onSuccess={onLoginSuccess}
       />
     );
@@ -122,7 +133,7 @@ export default function AuthFlow({
   if (view === 'register') {
     return (
       <RegisterForm
-        onLogin={onLogin ?? (() => onViewChange('login'))}
+        onLogin={() => onViewChange('login')}
         onRegistered={(email) => {
           onVerifyEmailChange(email);
           onViewChange('verify');
@@ -135,14 +146,14 @@ export default function AuthFlow({
     return (
       <ForgotPasswordForm
         onBack={() => {
-          setLoginHint({ text: '', type: 'error' });
+          onLoginHintChange({ text: '', type: 'error' });
           onViewChange('login');
         }}
         onCodeSent={(email) => {
           onVerifyEmailChange(email);
           onViewChange('reset-password-confirm');
         }}
-        onLogin={onLogin ?? (() => onViewChange('login'))}
+        onLogin={() => onViewChange('login')}
       />
     );
   }
@@ -153,8 +164,8 @@ export default function AuthFlow({
         email={verifyEmail}
         onBack={() => onViewChange('get-code')}
         onSuccess={() => {
-          setLoginEmail(normalizeEmail(verifyEmail));
-          setLoginHint({
+          onLoginEmailChange(normalizeEmail(verifyEmail));
+          onLoginHintChange({
             text: t.auth.hints.passwordResetSuccess,
             type: 'success',
           });
@@ -168,7 +179,7 @@ export default function AuthFlow({
     return (
       <VerifyEmailForm
         email={verifyEmail}
-        onBack={onVerifyBack ?? (() => onViewChange('register'))}
+        onBack={() => onViewChange('register')}
         onVerified={handleVerified}
       />
     );

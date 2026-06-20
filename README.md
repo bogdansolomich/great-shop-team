@@ -81,15 +81,15 @@ src/
 
 ## Where to put new code
 
-| Task | Location |
-|------|----------|
-| New page / route | `src/app/<route>/page.tsx` |
-| Feature UI | `src/features/<feature>/ui/` |
-| Feature helpers (no React) | `src/features/<feature>/lib/` |
-| Feature hooks | `src/features/<feature>/hooks/` |
-| Reusable layout block | `src/widgets/<name>/` |
-| Shared global state | `src/store/slices/<name>.ts` |
-| Backend API call | `src/store/endpoints/<name>Endpoints.ts` |
+| Task                       | Location                                 |
+| -------------------------- | ---------------------------------------- |
+| New page / route           | `src/app/<route>/page.tsx`               |
+| Feature UI                 | `src/features/<feature>/ui/`             |
+| Feature helpers (no React) | `src/features/<feature>/lib/`            |
+| Feature hooks              | `src/features/<feature>/hooks/`          |
+| Reusable layout block      | `src/widgets/<name>/`                    |
+| Shared global state        | `src/store/slices/<name>.ts`             |
+| Backend API call           | `src/store/endpoints/<name>Endpoints.ts` |
 
 ### Feature folder convention
 
@@ -116,14 +116,14 @@ Auth screens are split by **role**, not by accident.
 
 ### Folder roles
 
-| Path | What lives here | Examples |
-|------|-----------------|----------|
-| `ui/LoginForm/`, `ui/RegisterForm/` | Full auth forms (email, password, social buttons). Own layout SCSS. | `LoginForm`, `RegisterForm` |
-| `ui/AuthPanel/` | Short step panels for verification flow. Shared `AuthPanel.module.scss`. | `VerifyEmailForm`, `GetVerifiedForm`, `WelcomeAbroadPanel` |
-| `ui/AuthShell/` | 60/40 layout wrapper (blur + white panel) for pages and overlay | `AuthShell` |
-| `ui/AuthFlow/` | Switches between login → register → verify → welcome inside overlay | `AuthFlow` |
-| `ui/AuthInput/` | Reusable styled input for all auth forms | `AuthInput` |
-| `ui/AuthBootstrap.tsx` | Restores session from `localStorage` on app load | — |
+| Path                                | What lives here                                                          | Examples                                                   |
+| ----------------------------------- | ------------------------------------------------------------------------ | ---------------------------------------------------------- |
+| `ui/LoginForm/`, `ui/RegisterForm/` | Full auth forms (email, password, social buttons). Own layout SCSS.      | `LoginForm`, `RegisterForm`                                |
+| `ui/AuthPanel/`                     | Short step panels for verification flow. Shared `AuthPanel.module.scss`. | `VerifyEmailForm`, `GetVerifiedForm`, `WelcomeAbroadPanel` |
+| `ui/AuthShell/`                     | 60/40 layout wrapper (blur + white panel) for pages and overlay          | `AuthShell`                                                |
+| `ui/AuthFlow/`                      | Switches between login → register → verify → welcome inside overlay      | `AuthFlow`                                                 |
+| `ui/AuthInput/`                     | Reusable styled input for all auth forms                                 | `AuthInput`                                                |
+| `ui/AuthBootstrap.tsx`              | Restores session from `localStorage` on app load                         | —                                                          |
 
 **Rule of thumb:** if it is a full sign-in / sign-up screen → `LoginForm/` or `RegisterForm/`. If it is a small step in email verification → `AuthPanel/`.
 
@@ -162,14 +162,14 @@ Login outside this flow goes through `LoginForm` directly.
 
 Tokens are managed in a few fixed places. **Do not** write `localStorage.setItem('accessToken', …)` elsewhere — extend one of these instead:
 
-| File | Responsibility |
-|------|----------------|
-| `LoginForm.tsx` | On successful login: save `accessToken`, `refreshToken`, `userEmail` → `localStorage`; `setToken` + `setAuthEmail` → Redux |
-| `hooks/useAutoLogin.ts` | Auto-login after email activation (same storage + Redux updates) |
-| `hooks/useAuth.ts` → `logoutUser()` | Clears tokens, `userEmail`, Redux, RTK Query cache |
-| `ui/AuthBootstrap.tsx` | On app load: reads `accessToken` + `userEmail` from `localStorage` into Redux; fetches current user |
-| `store/api.ts` | `prepareHeaders` reads `accessToken` from `localStorage` for API requests |
-| `hooks/useSessionEmail.ts` | UI helper: email + session state for header initials (reads Redux + `localStorage`) |
+| File                                | Responsibility                                                                                                             |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `LoginForm.tsx`                     | On successful login: save `accessToken`, `refreshToken`, `userEmail` → `localStorage`; `setToken` + `setAuthEmail` → Redux |
+| `hooks/useAutoLogin.ts`             | Auto-login after email activation (same storage + Redux updates)                                                           |
+| `hooks/useAuth.ts` → `logoutUser()` | Clears tokens, `userEmail`, Redux, RTK Query cache                                                                         |
+| `ui/AuthBootstrap.tsx`              | On app load: reads `accessToken` + `userEmail` from `localStorage` into Redux; fetches current user                        |
+| `store/api.ts`                      | `prepareHeaders` reads `accessToken` from `localStorage` for API requests                                                  |
+| `hooks/useSessionEmail.ts`          | UI helper: email + session state for header initials (reads Redux + `localStorage`)                                        |
 
 **Storage keys:** `accessToken`, `refreshToken`, `userEmail` (all in `localStorage`).  
 Pending credentials during register→verify live in `sessionStorage` via `lib/pendingAuth.ts` only.

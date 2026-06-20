@@ -1,9 +1,7 @@
 'use client';
 
 import { useTranslation } from '@/i18n/useTranslation';
-import { useEffect, useState } from 'react';
-import { useAuth } from '@/features/auth/hooks/useAuth';
-import { usePatchProfileMutation } from '@/store/endpoints/profilesEndpoints';
+import { useState } from 'react';
 import { useChangePasswordMutation } from '@/store/endpoints/authEndpoints';
 
 interface FormChangePassword {
@@ -15,8 +13,6 @@ const inputStyle = 'rounded-lg border border-[#222] py-2 px-2 rounded-lg max-w-3
 const ChangePassword = () => {
   const { t } = useTranslation();
 
-  const { user } = useAuth();
-
   const [form, setForm] = useState<FormChangePassword>({
     old_password: '',
     new_password: '',
@@ -24,24 +20,21 @@ const ChangePassword = () => {
   });
   const [changePassword, { isLoading }] = useChangePasswordMutation();
 
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       await changePassword(form).unwrap();
-
     } catch (err) {
       console.error(err);
     }
-
-  }
+  };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setForm((prev) => ({
       ...prev,
       [name]: value,
     }));
-  }
+  };
 
   return (
     <form onSubmit={handleSubmit}>

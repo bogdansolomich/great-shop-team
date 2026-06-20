@@ -11,7 +11,7 @@ export const validatePassword = (value: string): boolean => {
 export const validateField = (
   name: string,
   value: string,
-  formData?: Record<string, any>,
+  formData?: Record<string, string>,
 ): string => {
   switch (name) {
     case 'firstName':
@@ -38,7 +38,7 @@ export const validateField = (
 };
 
 export const validateForm = (
-  formData: Record<string, any>,
+  formData: Record<string, string>,
   acceptTerms = false,
 ): Record<string, string> => {
   const errors: Record<string, string> = {};
@@ -53,13 +53,6 @@ export const validateForm = (
     errors.acceptTerms = 'You must accept the Terms & Conditions and Privacy Policy.';
 
   return errors;
-};
-
-export default {
-  validateEmail,
-  validatePassword,
-  validateField,
-  validateForm,
 };
 
 export const validateRegisterForm = (

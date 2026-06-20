@@ -6,7 +6,7 @@ import AuthInput from '@/features/auth/ui/AuthInput/AuthInput';
 import { formatMessage, useTranslation } from '@/i18n/useTranslation';
 import { usePasswordResetConfirmMutation } from '@/store/endpoints/authEndpoints';
 
-import styles from './AuthPanel.module.scss';
+import { authForm, authPanel } from '@/features/auth/ui/authClasses';
 
 type PasswordResetConfirmFormProps = {
   email: string;
@@ -70,8 +70,7 @@ export default function PasswordResetConfirmForm({
     e.preventDefault();
 
     const currentCode = digits.join('');
-    const currentCodeError =
-      currentCode.length < CODE_LENGTH ? t.validation.enterFullCode : '';
+    const currentCodeError = currentCode.length < CODE_LENGTH ? t.validation.enterFullCode : '';
     const passwordError = validators.validateField('password', password);
     const confirmPasswordError =
       password !== confirmPassword ? t.validation.passwordsDoNotMatch : '';
@@ -103,27 +102,32 @@ export default function PasswordResetConfirmForm({
   };
 
   return (
-    <div className={styles.root}>
+    <div className={authPanel.root}>
       {onBack && (
-        <button type="button" className={styles.back} onClick={onBack} aria-label={t.common.back}>
+        <button
+          type="button"
+          className={authPanel.back}
+          onClick={onBack}
+          aria-label={t.common.back}
+        >
           ‹
         </button>
       )}
 
-      <h1 className={styles.title}>{t.auth.resetPassword.title}</h1>
-      <p className={styles.subtitleLinkEmail}>
+      <h1 className={authPanel.title}>{t.auth.resetPassword.title}</h1>
+      <p className={authPanel.subtitleLinkEmail}>
         {formatMessage(t.auth.resetPassword.subtitle, { email })}
       </p>
 
-      <form className={styles.form} onSubmit={handleSubmit}>
-        {errors.global && <div className={styles.globalError}>{errors.global}</div>}
+      <form className={authPanel.form} onSubmit={handleSubmit}>
+        {errors.global && <div className={authPanel.errorText}>{errors.global}</div>}
 
-        <div className={styles.formField} style={{ marginBottom: '20px' }}>
-          <label className={styles.subtitle} style={{ display: 'block', marginBottom: '8px' }}>
+        <div className="mb-5">
+          <label className={`${authForm.fieldLabel} mb-2 block`}>
             {t.auth.labels.verificationCode}
           </label>
 
-          <div className={styles.codeRow}>
+          <div className={authPanel.codeRow}>
             {digits.map((digit, index) => (
               <input
                 key={index}
@@ -134,7 +138,7 @@ export default function PasswordResetConfirmForm({
                 inputMode="numeric"
                 maxLength={1}
                 value={digit}
-                className={styles.codeInput}
+                className={authPanel.codeInput}
                 onChange={(e) => handleCodeChange(index, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(index, e)}
                 onPaste={handlePaste}
@@ -142,14 +146,7 @@ export default function PasswordResetConfirmForm({
               />
             ))}
           </div>
-          {codeError && (
-            <p
-              className={styles.errorText}
-              style={{ marginTop: '4px', color: '#ff4d4f', fontSize: '14px' }}
-            >
-              {codeError}
-            </p>
-          )}
+          {codeError && <p className={`${authPanel.errorText} mt-1`}>{codeError}</p>}
         </div>
 
         <AuthInput
@@ -182,7 +179,7 @@ export default function PasswordResetConfirmForm({
           togglePassword
         />
 
-        <button type="submit" className={styles.submitBtn} disabled={isLoading}>
+        <button type="submit" className={authPanel.submitBtn} disabled={isLoading}>
           {isLoading ? t.common.saving : t.auth.resetPassword.submit}
         </button>
       </form>

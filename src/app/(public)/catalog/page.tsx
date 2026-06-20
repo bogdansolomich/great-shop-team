@@ -1,5 +1,5 @@
-import CatalogPage from '@/features/catalog/ui/CatalogPage/CatalogPage';
+import { redirect } from 'next/navigation';
 
-export default function Catalog() {
-  return <CatalogPage />;
+export default function CatalogIndexPage() {
+  redirect('/catalog/women');
 }
