@@ -1,8 +1,20 @@
+'use client';
+
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+
+import { getHeaderActionClass, isActivePath } from '@/widgets/Header/headerActionClasses';
 
 export default function ShoppingBag() {
+  const pathname = usePathname();
+  const isActive = isActivePath(pathname, '/cart');
+
   return (
-    <Link href="/cart" className="navLink">
+    <Link
+      href="/cart"
+      className={getHeaderActionClass(isActive)}
+      aria-current={isActive ? 'page' : undefined}
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"

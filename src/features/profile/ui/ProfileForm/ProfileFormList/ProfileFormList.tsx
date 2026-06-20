@@ -10,8 +10,6 @@ import ChangePassword from '@/features/profile/ui/ProfileForm/ProfileFormList/Ch
 import MyBonuses from '@/features/profile/ui/ProfileForm/ProfileFormList/MyBonuses/MyBonuses';
 import { useTranslation } from '@/i18n/useTranslation';
 
-import styles from '../ProfileFormList/ProfileFormList.module.scss';
-
 type Tab =
   | 'return'
   | 'myPromocodes'

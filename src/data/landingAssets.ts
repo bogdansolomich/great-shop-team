@@ -5,9 +5,21 @@ export const landingClothingItems = [
 ] as const;
 
 export const landingFragranceItems = [
-  { id: 'tobaccoVanille', image: { src: '/images/Landing/TobaccoVanille.png' }, sizes: ['10 ml', '50 ml', '100 ml'] },
-  { id: 'lostCherry', image: { src: '/images/Landing/LostCherry.png' }, sizes: ['10 ml', '50 ml', '100 ml'] },
-  { id: 'vanillaSex', image: { src: '/images/Landing/VanillaSex.png' }, sizes: ['10 ml', '50 ml', '100 ml'] },
+  {
+    id: 'tobaccoVanille',
+    image: { src: '/images/Landing/TobaccoVanille.png' },
+    sizes: ['10 ml', '50 ml', '100 ml'],
+  },
+  {
+    id: 'lostCherry',
+    image: { src: '/images/Landing/LostCherry.png' },
+    sizes: ['10 ml', '50 ml', '100 ml'],
+  },
+  {
+    id: 'vanillaSex',
+    image: { src: '/images/Landing/VanillaSex.png' },
+    sizes: ['10 ml', '50 ml', '100 ml'],
+  },
 ] as const;
 
 export const landingCategoryItems = [

@@ -1,15 +1,16 @@
 import { defineConfig, globalIgnores } from 'eslint/config';
 import nextVitals from 'eslint-config-next/core-web-vitals';
 import nextTs from 'eslint-config-next/typescript';
+import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
+  eslintPluginPrettierRecommended,
   {
-    extends: ['plugin:prettier/recommended'],
-    plugins: ['prettier'],
+    files: ['src/widgets/Logo/Logo.tsx', 'src/widgets/Footer/Footer.tsx'],
     rules: {
-      'prettier/prettier': 'error',
+      '@next/next/no-img-element': 'off',
     },
   },
   // Override default ignores of eslint-config-next.

@@ -1,36 +1,21 @@
-'use client';
+import { redirect } from 'next/navigation';
 
-import { Suspense } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { buildAuthRoute } from '@/features/auth/lib/authRoutes';
 
-import AuthShell from '@/features/auth/ui/AuthShell/AuthShell';
-import LoginForm from '@/features/auth/ui/LoginForm/LoginForm';
-import { useTranslation } from '@/i18n/useTranslation';
+type PageProps = {
+  searchParams: Promise<{
+    email?: string;
+    verified?: string;
+  }>;
+};
 
-function LoginPageContent() {
-  const { t } = useTranslation();
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const initialEmail = searchParams.get('email') ?? '';
-  const verified = searchParams.get('verified') === '1';
+export default async function LoginPage({ searchParams }: PageProps) {
+  const params = await searchParams;
 
-  return (
-    <AuthShell mode="page" onBackdropClick={() => router.push('/')}>
-      <LoginForm
-        initialEmail={initialEmail}
-        hintMessage={verified ? t.auth.hints.emailVerifiedLogin : ''}
-        onCreateAccount={() => router.push('/registration')}
-        onForgotPassword={() => router.push('/get-code')}
-        onSuccess={() => router.push('/profile')}
-      />
-    </AuthShell>
-  );
-}
-
-export default function LoginPage() {
-  return (
-    <Suspense fallback={null}>
-      <LoginPageContent />
-    </Suspense>
+  redirect(
+    buildAuthRoute('login', {
+      email: params.email,
+      verified: params.verified === '1',
+    }),
   );
 }

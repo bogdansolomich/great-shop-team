@@ -1,9 +1,8 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
 
-export const AUTH_OVERLAY_CLOSE_EVENT = 'auth-overlay-close';
+import { AUTH_OVERLAY_CLOSE_EVENT } from '@/features/auth/lib/authOverlayEvents';
 
 export default function Logo() {
   return (
@@ -13,7 +12,13 @@ export default function Logo() {
       aria-label="WEARLY — на главную"
       onClick={() => window.dispatchEvent(new CustomEvent(AUTH_OVERLAY_CLOSE_EVENT))}
     >
-      <Image src="/icons/Logo.svg" alt="WEARLY" width={132} height={30} priority />
+      <img
+        src="/icons/Logo.svg"
+        alt="WEARLY"
+        width={132}
+        height={30}
+        className="block h-auto w-[132px]"
+      />
     </Link>
   );
 }

@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 
 import AuthInput from '../AuthInput/AuthInput';
@@ -15,16 +14,15 @@ import { useRegisterUserMutation } from '@/store/endpoints/authEndpoints';
 import googleLogo from '../../../../../public/icons/GoogleLogo.svg';
 import facebookLogo from '../../../../../public/icons/FacebookLogo.svg';
 import appleLogo from '../../../../../public/icons/AppleLogo.svg';
-import styles from './Register.module.scss';
+import { registerForm } from '@/features/auth/ui/authClasses';
 
 type RegisterFormProps = {
-  onLogin?: () => void;
-  onRegistered?: (email: string) => void;
+  onLogin: () => void;
+  onRegistered: (email: string) => void;
 };
 
 export default function RegisterForm({ onLogin, onRegistered }: RegisterFormProps) {
   const { t, validators } = useTranslation();
-  const router = useRouter();
   const [isChecked, setIsChecked] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -42,14 +40,8 @@ export default function RegisterForm({ onLogin, onRegistered }: RegisterFormProp
     if (!isSuccess) return;
 
     savePendingAuth(formData.email, formData.password);
-
-    if (onRegistered) {
-      onRegistered(formData.email);
-      return;
-    }
-
-    router.push(`/verify?email=${encodeURIComponent(formData.email)}`);
-  }, [isSuccess, onRegistered, formData.email, formData.password, router]);
+    onRegistered(formData.email);
+  }, [isSuccess, onRegistered, formData.email, formData.password]);
 
   const normalizeErrorData = (data: unknown): string[] => {
     if (typeof data === 'string') {
@@ -125,13 +117,13 @@ export default function RegisterForm({ onLogin, onRegistered }: RegisterFormProp
   };
 
   return (
-    <div className={styles.panel}>
-      <div className={styles.right}>
-        <h1 className={styles.title}>{t.auth.register.title}</h1>
-        <h2 className={styles.subtitle}>{t.auth.register.subtitle}</h2>
+    <div className={registerForm.panel}>
+      <div className={registerForm.content}>
+        <h1 className={registerForm.title}>{t.auth.register.title}</h1>
+        <h2 className={registerForm.subtitle}>{t.auth.register.subtitle}</h2>
 
-        <form onSubmit={handleSubmit} className={styles.form}>
-          <div className={styles.inputContainer}>
+        <form onSubmit={handleSubmit} className={registerForm.form}>
+          <div className={registerForm.inputContainer}>
             <AuthInput
               id="email"
               name="email"
@@ -143,7 +135,7 @@ export default function RegisterForm({ onLogin, onRegistered }: RegisterFormProp
               error={fieldErrors.email}
             />
           </div>
-          <div className={styles.inputContainer}>
+          <div className={registerForm.inputContainer}>
             <AuthInput
               id="password"
               name="password"
@@ -156,7 +148,7 @@ export default function RegisterForm({ onLogin, onRegistered }: RegisterFormProp
               togglePassword
             />
           </div>
-          <div className={styles.inputContainer}>
+          <div className={registerForm.inputContainer}>
             <AuthInput
               id="confirmPassword"
               name="confirmPassword"
@@ -170,15 +162,15 @@ export default function RegisterForm({ onLogin, onRegistered }: RegisterFormProp
             />
           </div>
           {errorMessages.length > 0 && (
-            <div className={styles.errorMessage}>
+            <div className={registerForm.errorMessage}>
               {errorMessages.map((message, index) => (
                 <p key={index}>{message}</p>
               ))}
             </div>
           )}
-          <div className={`${styles.checkboxContainer} inline-flex flex-col gap-2`}>
+          <div className="mt-2 inline-flex max-w-full flex-col gap-2 box-border [&_label]:max-w-full [&_label]:break-words">
             <div className="flex items-start gap-3">
-              <label className="flex items-center cursor-pointer relative">
+              <label className="relative flex cursor-pointer items-center">
                 <input
                   type="checkbox"
                   checked={isChecked}
@@ -186,11 +178,11 @@ export default function RegisterForm({ onLogin, onRegistered }: RegisterFormProp
                     setIsChecked(e.target.checked);
                     setFieldErrors((prev) => ({ ...prev, acceptTerms: '' }));
                   }}
-                  className="peer h-5 w-5 cursor-pointer transition-all appearance-none rounded shadow hover:shadow-md border border-slate-300 checked:bg-slate-800 checked:border-slate-800"
+                  className={registerForm.checkbox}
                   id="terms"
                 />
 
-                <span className="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+                <span className={registerForm.checkboxIcon}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-3.5 w-3.5"
@@ -208,11 +200,11 @@ export default function RegisterForm({ onLogin, onRegistered }: RegisterFormProp
                 </span>
               </label>
 
-              <label htmlFor="terms" className="text-sm cursor-pointer select-none">
+              <label htmlFor="terms" className="text-sm cursor-pointer select-none text-dark">
                 {t.auth.register.agreeTerms}{' '}
-                <a href="/terms" className="font-semibold hover:text-gray-600 transition-colors">
+                <Link href="/terms" className="font-semibold hover:text-gray-600 transition-colors">
                   {t.auth.register.termsLink}
-                </a>
+                </Link>
               </label>
             </div>
             {fieldErrors.acceptTerms && (
@@ -223,38 +215,30 @@ export default function RegisterForm({ onLogin, onRegistered }: RegisterFormProp
           <button
             type="submit"
             disabled={!isChecked || isLoading}
-            className={`${styles.submitBtn} transition-all duration-300 ease-in-out ${
-              !isChecked || isLoading ? 'opacity-50 cursor-not-allowed' : ''
-            }`}
+            className={registerForm.submitBtn}
           >
             {isLoading ? t.common.loading : t.auth.register.submit}
           </button>
 
-          <div className="flex justify-center items-center gap-[24px]">
-            <button type="button" className="flex items-center justify-center w-10 h-10">
-              <Image src={googleLogo} alt="Google" className="w-6 h-6" />
+          <div className={registerForm.socialRow}>
+            <button type="button" className={registerForm.socialBtn}>
+              <Image src={googleLogo} alt="Google" className={registerForm.socialIcon} />
             </button>
 
-            <button type="button" className="flex items-center justify-center w-10 h-10">
-              <Image src={facebookLogo} alt="Facebook" className="w-6 h-6" />
+            <button type="button" className={registerForm.socialBtn}>
+              <Image src={facebookLogo} alt="Facebook" className={registerForm.socialIcon} />
             </button>
 
-            <button type="button" className="flex items-center justify-center w-10 h-10">
-              <Image src={appleLogo} alt="Apple" className="w-6 h-6" />
+            <button type="button" className={registerForm.socialBtn}>
+              <Image src={appleLogo} alt="Apple" className={registerForm.socialIcon} />
             </button>
           </div>
         </form>
-        <div className={styles.loginVariant}>
+        <div className={registerForm.loginVariant}>
           {t.auth.register.alreadyHaveAccount}{' '}
-          {onLogin ? (
-            <button type="button" className={styles.loginLink} onClick={onLogin}>
-              {t.auth.login.submit}
-            </button>
-          ) : (
-            <Link href="/login" className={styles.loginLink}>
-              {t.auth.login.submit}
-            </Link>
-          )}
+          <button type="button" className={registerForm.loginLink} onClick={onLogin}>
+            {t.auth.login.submit}
+          </button>
         </div>
       </div>
     </div>

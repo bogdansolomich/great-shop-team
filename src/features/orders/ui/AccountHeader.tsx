@@ -12,7 +12,7 @@ import {
 
 import { useTranslation } from '@/i18n/useTranslation';
 
-type AccountTab = 'profile' | 'favorites' | 'orders' | 'addresses' | 'password' | 'logout';
+type AccountTab = 'profile' | 'wishlist' | 'orders' | 'addresses' | 'password' | 'logout';
 
 type AccountHeaderProps = {
   activeTab: AccountTab;
@@ -35,9 +35,9 @@ export default function AccountHeader({ activeTab, userName = 'John Smith' }: Ac
       icon: <HiOutlineUser className="h-6 w-6" />,
     },
     {
-      id: 'favorites',
-      label: t.account.favorites,
-      href: '/favorites',
+      id: 'wishlist',
+      label: t.account.wishlist,
+      href: '/wishlist',
       icon: <HiOutlineHeart className="h-6 w-6" />,
     },
     {

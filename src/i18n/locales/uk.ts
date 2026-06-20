@@ -2,12 +2,12 @@ import type { Dictionary } from './en';
 
 const uk: Dictionary = {
   nav: {
-    newArrivals: 'новинки',
-    women: 'жінкам',
-    men: 'чоловікам',
+    catalog: 'Каталог',
+    sales: 'Знижки',
   },
   catalog: {
     title: 'Каталог',
+    categoryNavAriaLabel: 'Категорії каталогу',
     sort: 'сортування',
     filter: 'фільтр',
     stylesFound: 'Знайдено {count} моделей',
@@ -15,6 +15,35 @@ const uk: Dictionary = {
     viewedProducts: 'Ви переглянули {viewed} з {total} товарів',
     loadMore: 'Завантажити ще',
     addToCart: 'Додати в кошик',
+    bannerAriaLabel: 'Банер каталогу',
+    bannerImageAlt: 'Банер каталогу',
+    bannerPlaceholder: 'Заглушка банера',
+    categories: {
+      men: {
+        navLabel: 'Чоловікам',
+        title: 'Чоловічий каталог',
+        bannerImageAlt: 'Банер чоловічого каталогу',
+        bannerTitle: 'Ваш міський стиль',
+        bannerDescription:
+          'Базові речі для руху та впевненості щодня. Чисті лінії, преміальні тканини та силуети, що рухаються разом із вами — від вулиці до студії.',
+      },
+      women: {
+        navLabel: 'Жінкам',
+        title: 'Жіночий каталог',
+        bannerImageAlt: 'Банер жіночого каталогу',
+        bannerTitle: 'Стиль, що рухається з вами',
+        bannerDescription:
+          'Добірні базові речі та виразні шари для сучасного ритму. Відкрийте фасони, текстури та відтінки, які виглядають effortlessly від ранку до вечора.',
+      },
+      accessories: {
+        navLabel: 'Аксесуари',
+        title: 'Аксесуари',
+        bannerImageAlt: 'Банер каталогу аксесуарів',
+        bannerTitle: 'Відкрийте суть розкоші',
+        bannerDescription:
+          'Аромати, що говорять емоціями, а не словами. Кожен аромат — це подорож, створена з рідкісних інгредієнтів і вічної майстерності, щоб пробудити почуття та розповісти вашу історію без жодного слова.',
+      },
+    },
   },
   landing: {
     recentlyReleased: 'Новинки',
@@ -143,6 +172,11 @@ const uk: Dictionary = {
       description: 'Кошик порожній. Додайте товари з каталогу.',
       cta: 'До каталогу',
     },
+    sales: {
+      title: 'Sales',
+      description: 'Тут незабаром з’являться товари зі знижками.',
+      cta: 'Перейти до каталогу',
+    },
   },
   infoPages: {
     about: {
@@ -211,7 +245,7 @@ const uk: Dictionary = {
     profile: 'Профіль',
     account: 'Обліковий запис',
     hello: 'Вітаємо',
-    favorites: 'Обране',
+    wishlist: 'Обране',
     myOrders: 'Мої замовлення',
     addresses: 'Адреси',
     changePassword: 'Змінити пароль',
@@ -271,7 +305,7 @@ const uk: Dictionary = {
       passwordDots: '••••••••',
     },
     login: {
-      welcome: 'Вітаємо! 👋',
+      welcome: 'Вітаємо!',
       subtitle: 'Увійдіть у свій обліковий запис',
       rememberMe: "Запам'ятати мене",
       forgotPassword: 'Забули пароль?',

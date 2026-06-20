@@ -1,7 +1,7 @@
 'use client';
 
 import { skipToken } from '@reduxjs/toolkit/query';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useTranslation } from '@/i18n/useTranslation';
@@ -17,40 +17,31 @@ interface ProfileForm {
   phone: string;
 }
 
-const PersonalData = () => {
+type ProfileData = {
+  first_name?: string | null;
+  last_name?: string | null;
+  birthday?: string | null;
+  phone?: string | null;
+};
+
+function profileToForm(profile: ProfileData): ProfileForm {
+  return {
+    first_name: profile.first_name ?? '',
+    last_name: profile.last_name ?? '',
+    birthday: profile.birthday ?? '',
+    phone: profile.phone ?? '',
+  };
+}
+
+function PersonalDataForm({ profile, userId }: { profile: ProfileData; userId: number }) {
   const { t } = useTranslation();
-  const { user } = useAuth();
-
-  const userId = user?.id;
-  const { data: profile, isLoading, isError } = useGetProfileByIdQuery(userId ?? skipToken);
-
   const [patchProfile, { isLoading: isUpdating }] = usePatchProfileMutation();
-
-  const [form, setForm] = useState<ProfileForm>({
-    first_name: '',
-    last_name: '',
-    birthday: '',
-    phone: '',
-  });
-
-  useEffect(() => {
-    if (profile) {
-      setForm({
-        first_name: profile.first_name ?? '',
-        last_name: profile.last_name ?? '',
-        birthday: profile.birthday ?? '',
-        phone: profile.phone ?? '',
-      });
-    }
-  }, [profile]);
+  const [form, setForm] = useState<ProfileForm>(() => profileToForm(profile));
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
-      if (!userId) {
-        return;
-      }
       await patchProfile({
         profile_id: userId,
         body: form,
@@ -68,10 +59,6 @@ const PersonalData = () => {
       [name]: value,
     }));
   };
-
-  if (isLoading) return <div>{t.common.loading}</div>;
-  if (isError) return <div>{t.common.error}</div>;
-  if (!profile) return null;
 
   return (
     <>
@@ -210,7 +197,9 @@ const PersonalData = () => {
         <div className="flex flex-row flex-1 border border-[#CF000059] p-3 rounded-lg my-15 justify-between">
           <div className="">
             <p className="text-[16px] text-[#C0392B] ">{t.profile.deleteAccountTitle}</p>
-            <p className="text-[14px] text-[#9A9A97] max-w-[72%]">{t.profile.deleteAccountWarning}</p>
+            <p className="text-[14px] text-[#9A9A97] max-w-[72%]">
+              {t.profile.deleteAccountWarning}
+            </p>
           </div>
           <button
             className="border border-[#DA000066] px-5 py-3 text-[#C0392B] text-[14px] rounded-lg self-center"
@@ -222,6 +211,20 @@ const PersonalData = () => {
       </form>
     </>
   );
+}
+
+const PersonalData = () => {
+  const { t } = useTranslation();
+  const { user } = useAuth();
+
+  const userId = user?.id;
+  const { data: profile, isLoading, isError } = useGetProfileByIdQuery(userId ?? skipToken);
+
+  if (isLoading) return <div>{t.common.loading}</div>;
+  if (isError) return <div>{t.common.error}</div>;
+  if (!profile || !userId) return null;
+
+  return <PersonalDataForm key={userId} profile={profile} userId={userId} />;
 };
 
 export default PersonalData;

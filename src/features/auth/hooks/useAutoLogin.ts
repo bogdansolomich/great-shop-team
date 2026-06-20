@@ -6,10 +6,7 @@ import { useDispatch } from 'react-redux';
 import { clearPendingAuth } from '@/features/auth/lib/pendingAuth';
 import { normalizeEmail } from '@/features/auth/lib/normalizeEmail';
 import { saveUserEmail } from '@/features/auth/lib/userInitials';
-import {
-  useLazyGetCurrentUserQuery,
-  useLoginMutation,
-} from '@/store/endpoints/authEndpoints';
+import { useLazyGetCurrentUserQuery, useLoginMutation } from '@/store/endpoints/authEndpoints';
 import { setAuthEmail, setToken } from '@/store/slices/userSlice';
 
 const LOGIN_RETRY_DELAY_MS = 800;
