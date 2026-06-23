@@ -100,11 +100,18 @@
 .linkItem {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   max-width: 50%; /* або стільки, скільки потрібно */
   cursor: pointer;
   padding: 8px 0;
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
   border-bottom: 1px solid transparent;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s ease;
 
   &:hover {
     border-bottom-color: #131118;
@@ -119,8 +126,22 @@
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.15); /* легке затемнення */
-  backdrop-filter: blur(8px); /* саме розмиття заднього фону */
   z-index: 9998; /* високий пріоритет, щоб бути над усім */
+  opacity: 0;
+  backdrop-filter: blur(0);
+  transition:
+    opacity 0.3s ease,
+    backdrop-filter 0.3s ease;
+}
+
+.overlayVisible {
+  opacity: 1;
+  backdrop-filter: blur(8px); /* саме розмиття заднього фону */
+}
+
+.overlayHidden {
+  opacity: 0;
+  backdrop-filter: blur(0);
 }
 
 /* Бокова панель справа */
@@ -138,7 +159,16 @@
   flex-direction: column;
   padding: 40px;
   box-sizing: border-box;
-  animation: slideIn 0.3s ease-out;
+  transform: translateX(100%);
+  transition: transform 0.3s ease-out;
+}
+
+.sidebarVisible {
+  transform: translateX(0);
+}
+
+.sidebarHidden {
+  transform: translateX(100%);
 }
 
 .sidebarHeader {
@@ -176,24 +206,81 @@
 .accordionHeader {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   font-weight: 500;
   font-size: 1rem;
   cursor: pointer;
+  width: 100%;
+  padding: 0;
+  background: transparent;
+  border: none;
+  color: #131118;
+  font-family: inherit;
+  text-align: left;
+}
+
+.accordionIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  min-width: 20px;
+  transition:
+    transform 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.25s ease;
+}
+
+.accordionChevron {
+  width: 10px;
+  height: 10px;
+  border-right: 1.5px solid #131118;
+  border-bottom: 1.5px solid #131118;
+  transform: rotate(45deg) translateY(-1px);
+  transform-origin: center;
+  transition: transform 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.accordionContent {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-rows 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.3s ease;
+}
+
+.accordionItemOpen {
+  .accordionContent {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
 }
 
 .accordionBody {
-  margin-top: 15px;
+  overflow: hidden;
+  margin-top: 0;
   font-size: 0.9rem;
   color: #666666;
   line-height: 1.5;
+  transform: translateY(-8px);
+  transition:
+    transform 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+    margin-top 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+
+  p {
+    margin: 0;
+  }
 }
 
-/* Анімація появи шторки справа наліво */
-@keyframes slideIn {
-  from {
-    transform: translateX(100%);
-  }
-  to {
-    transform: translateX(0);
-  }
+.accordionItemOpen .accordionBody {
+  margin-top: 15px;
+  transform: translateY(0);
+}
+
+.accordionItemOpen .accordionIcon {
+  transform: translateY(1px);
+}
+
+.accordionItemOpen .accordionChevron {
+  transform: rotate(-135deg) translateX(-1px);
 }
