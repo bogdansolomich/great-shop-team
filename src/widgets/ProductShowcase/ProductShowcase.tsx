@@ -2,7 +2,7 @@
 import styles from '../ProductShowcase/ProductShowcase.module.scss';
 import Image from 'next/image';
 import StarRating from '@/widgets/StarRating/StarRating';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface ProductShowcaseProps {
   brand: string;
@@ -39,6 +39,8 @@ const INFO_TABS = [
   { id: 'shipping', label: 'Shipping and returns' },
 ];
 
+const SIDEBAR_ANIMATION_DURATION_MS = 300;
+
 export default function ProductShowcase({
   brand,
   title,
@@ -52,20 +54,54 @@ export default function ProductShowcase({
   const [currentSize, setCurrentSize] = useState<number>();
   const [currentColor, setCurrentColor] = useState<number>();
 
-  // Стейт для керування боковою панеллю
+  const [isSidebarRendered, setIsSidebarRendered] = useState(false);
+  const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const [activeTab, setActiveTab] = useState<string | null>(null);
 
   const handleOpenSidebar = (tabId: string) => {
     setActiveTab(tabId);
-    // Блокуємо скрол сторінки, коли шторка відкрита
-    document.body.style.overflow = 'hidden';
+
+    if (isSidebarRendered) {
+      setIsSidebarVisible(true);
+      return;
+    }
+
+    setIsSidebarRendered(true);
+    window.requestAnimationFrame(() => {
+      setIsSidebarVisible(true);
+    });
   };
 
   const handleCloseSidebar = () => {
-    setActiveTab(null);
-    // Повертаємо скрол сторінки
-    document.body.style.overflow = '';
+    setIsSidebarVisible(false);
   };
+
+  const handleToggleTab = (tabId: string) => {
+    setActiveTab((prev) => (prev === tabId ? null : tabId));
+  };
+
+  useEffect(() => {
+    document.body.style.overflow = isSidebarRendered ? 'hidden' : '';
+
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isSidebarRendered]);
+
+  useEffect(() => {
+    if (!isSidebarRendered || isSidebarVisible) {
+      return;
+    }
+
+    const closeTimeout = window.setTimeout(() => {
+      setIsSidebarRendered(false);
+      setActiveTab(null);
+    }, SIDEBAR_ANIMATION_DURATION_MS);
+
+    return () => {
+      window.clearTimeout(closeTimeout);
+    };
+  }, [isSidebarRendered, isSidebarVisible]);
 
   return (
     <div className={styles.container}>
@@ -142,20 +178,30 @@ export default function ProductShowcase({
         {/* Посилання, які тепер відкривають шторку */}
         <div className={styles.cuurentsLink}>
           {INFO_TABS.map((tab) => (
-            <div key={tab.id} className={styles.linkItem} onClick={() => handleOpenSidebar(tab.id)}>
+            <button
+              key={tab.id}
+              type='button'
+              className={styles.linkItem}
+              onClick={() => handleOpenSidebar(tab.id)}
+            >
               {tab.label} <span>{'>'}</span>
-            </div>
+            </button>
           ))}
         </div>
       </div>
 
       {/* ОВЕРЛЕЙ (БЛЮР) ТА БОКОВА ПАНЕЛЬ */}
-      {activeTab && (
+      {isSidebarRendered && (
         <>
           {/* Клік по блюру закриває вікно */}
-          <div className={styles.overlay} onClick={handleCloseSidebar} />
+          <div
+            className={`${styles.overlay} ${isSidebarVisible ? styles.overlayVisible : styles.overlayHidden}`}
+            onClick={handleCloseSidebar}
+          />
 
-          <div className={styles.sidebar}>
+          <div
+            className={`${styles.sidebar} ${isSidebarVisible ? styles.sidebarVisible : styles.sidebarHidden}`}
+          >
             <div className={styles.sidebarHeader}>
               <h3>{title}</h3>
               {/* Клік по хрестику закриває вікно */}
@@ -167,20 +213,29 @@ export default function ProductShowcase({
             <div className={styles.sidebarContent}>
               {/* Тут рендериться контент залежно від обраного пункту */}
               {INFO_TABS.map((tab) => (
-                <div key={tab.id} className={styles.accordionItem}>
-                  <div className={styles.accordionHeader}>
+                <div
+                  key={tab.id}
+                  className={`${styles.accordionItem} ${activeTab === tab.id ? styles.accordionItemOpen : ''}`}
+                >
+                  <button
+                    type='button'
+                    className={styles.accordionHeader}
+                    onClick={() => handleToggleTab(tab.id)}
+                    aria-expanded={activeTab === tab.id}
+                  >
                     {tab.label}
-                    <span>{activeTab === tab.id ? '✕' : '⌵'}</span>
-                  </div>
-                  {activeTab === tab.id && (
+                    <span className={styles.accordionIcon} aria-hidden='true'>
+                      <span className={styles.accordionChevron} />
+                    </span>
+                  </button>
+                  <div className={styles.accordionContent} aria-hidden={activeTab !== tab.id}>
                     <div className={styles.accordionBody}>
-                      {/* Тимчасовий текст, сюди можна передавати реальні дані про товар */}
                       <p>
                         Detailed information about {tab.label.toLowerCase()} goes here. Crafted from
                         premium materials designed for comfort and durability.
                       </p>
                     </div>
-                  )}
+                  </div>
                 </div>
               ))}
             </div>
