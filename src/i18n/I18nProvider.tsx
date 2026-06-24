@@ -4,9 +4,9 @@ import {
   createContext,
   useCallback,
   useContext,
-  useEffect,
   useMemo,
   useState,
+  useSyncExternalStore,
   type ReactNode,
 } from 'react';
 
@@ -46,24 +46,60 @@ function persistLocale(locale: Locale) {
   document.documentElement.lang = locale;
 }
 
+type LocaleStore = {
+  subscribe: (listener: () => void) => () => void;
+  getSnapshot: () => Locale;
+  getServerSnapshot: () => Locale;
+  setLocale: (locale: Locale) => void;
+};
+
+function createLocaleStore(serverLocale: Locale): LocaleStore {
+  let locale = serverLocale;
+  const listeners = new Set<() => void>();
+
+  return {
+    subscribe(listener) {
+      listeners.add(listener);
+      return () => listeners.delete(listener);
+    },
+    getSnapshot() {
+      if (typeof window !== 'undefined') {
+        locale = readStoredLocale();
+      }
+      return locale;
+    },
+    getServerSnapshot() {
+      return serverLocale;
+    },
+    setLocale(next) {
+      locale = next;
+      persistLocale(next);
+      listeners.forEach((listener) => listener());
+    },
+  };
+}
+
 type I18nProviderProps = {
   children: ReactNode;
   initialLocale?: Locale;
 };
 
 export function I18nProvider({ children, initialLocale }: I18nProviderProps) {
-  const [locale, setLocaleState] = useState<Locale>(initialLocale ?? defaultLocale);
+  const serverLocale = initialLocale ?? defaultLocale;
+  const [localeStore] = useState(() => createLocaleStore(serverLocale));
 
-  useEffect(() => {
-    const stored = readStoredLocale();
-    setLocaleState(stored);
-    document.documentElement.lang = stored;
-  }, []);
+  const locale = useSyncExternalStore(
+    localeStore.subscribe,
+    localeStore.getSnapshot,
+    localeStore.getServerSnapshot,
+  );
 
-  const setLocale = useCallback((next: Locale) => {
-    setLocaleState(next);
-    persistLocale(next);
-  }, []);
+  const setLocale = useCallback(
+    (next: Locale) => {
+      localeStore.setLocale(next);
+    },
+    [localeStore],
+  );
 
   const value = useMemo<I18nContextValue>(
     () => ({

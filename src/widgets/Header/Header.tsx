@@ -8,50 +8,55 @@ import Navigation from '@/widgets/Navigation/Navigation';
 import MyAccount from '@/widgets/MyAccount/MyAccount';
 import WishList from '@/widgets/WishList/WishList';
 import ShoppingBag from '@/widgets/ShoppingBag/ShoppingBag';
-
-import styles from '../Header/Header.module.scss';
+import { hasBannerHeader } from '@/widgets/Header/headerBannerRoutes';
 
 const scrollThreshold = 24;
 
 export default function Header() {
   const pathname = usePathname();
-  const isLanding = pathname === '/';
-  const [isScrolled, setIsScrolled] = useState(false);
+  const bannerHeader = hasBannerHeader(pathname);
+  const [scrollY, setScrollY] = useState(0);
 
   useEffect(() => {
-    if (!isLanding) {
-      setIsScrolled(false);
+    if (!bannerHeader) {
       return undefined;
     }
 
     const onScroll = () => {
-      setIsScrolled(window.scrollY > scrollThreshold);
+      setScrollY(window.scrollY);
     };
 
-    onScroll();
+    const frame = requestAnimationFrame(onScroll);
     window.addEventListener('scroll', onScroll, { passive: true });
 
-    return () => window.removeEventListener('scroll', onScroll);
-  }, [isLanding]);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', onScroll);
+    };
+  }, [bannerHeader, pathname]);
 
-  const isTransparent = isLanding && !isScrolled;
+  const isTransparent = bannerHeader && scrollY <= scrollThreshold;
 
   return (
     <header
-      className={`${styles.headerRoot} ${isTransparent ? styles.transparent : ''} ${isScrolled ? styles.scrolled : ''}`}
+      className={`fixed top-0 right-0 left-0 z-100 w-full transition-[background-color,color,box-shadow] duration-300 ease-in-out ${
+        isTransparent
+          ? 'bg-transparent text-white [&_img]:brightness-0 [&_img]:invert'
+          : 'bg-white text-dark shadow-[inset_0_-6px_20px_-8px_rgb(0_0_0/9%)]'
+      }`}
     >
-      <div className={styles.header}>
-        <div className={styles.language}>
+      <div className="layout-gutter box-border flex w-full items-center justify-between py-5 font-(family-name:--font-unbounded) [&>.actions]:shrink [&>div:first-child]:shrink '[&>div:first-child]:basis-44' '[&>.actions]:basis-44'">
+        <div>
           <LanguageSwitcher />
         </div>
 
-        <div className={styles.navigation}>
+        <div>
           <Navigation />
         </div>
 
-        <div className={styles.actions}>
+        <div className="actions flex justify-between">
           <Suspense fallback={null}>
-            <MyAccount />
+            <MyAccount isHeaderTransparent={isTransparent} />
           </Suspense>
           <WishList />
           <ShoppingBag />

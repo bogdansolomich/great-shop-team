@@ -5,8 +5,6 @@ import { useState } from 'react';
 import { validateEmail } from '@/features/auth/lib/validation';
 import { useTranslation } from '@/i18n/useTranslation';
 
-import styles from './NewsletterForm.module.scss';
-
 export default function NewsletterForm() {
   const { t } = useTranslation();
   const [email, setEmail] = useState('');
@@ -31,14 +29,14 @@ export default function NewsletterForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} noValidate className={styles.form}>
-       {message ? (
-        <p className={`${styles.message} ${isError ? styles.messageError : styles.messageSuccess}`}>
+    <form onSubmit={handleSubmit} noValidate className="flex w-full flex-col gap-0">
+      {message ? (
+        <p className={`mb-4 text-xs leading-snug ${isError ? 'text-red-500' : 'text-success'}`}>
           {message}
         </p>
       ) : null}
-      
-      <div className={styles.field}>
+
+      <div className="relative w-full border-b border-white pb-0">
         <input
           type="email"
           value={email}
@@ -51,11 +49,15 @@ export default function NewsletterForm() {
           }}
           placeholder="you@email.com"
           autoComplete="email"
-          className={styles.input}
+          className="w-full border-0 bg-transparent pr-10 pb-4 text-sm leading-normal text-white outline-none placeholder:text-white/50"
         />
 
         {showSubmit ? (
-          <button type="submit" aria-label={t.footer.subscribeAria} className={styles.submit}>
+          <button
+            type="submit"
+            aria-label={t.footer.subscribeAria}
+            className="absolute right-0 bottom-1 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent text-white transition-colors duration-200 hover:bg-white/10"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -64,7 +66,7 @@ export default function NewsletterForm() {
               strokeWidth={2}
               strokeLinecap="round"
               strokeLinejoin="round"
-              className={styles.icon}
+              className="h-5 w-5"
               aria-hidden
             >
               <path d="M5 12h14" />
@@ -73,8 +75,6 @@ export default function NewsletterForm() {
           </button>
         ) : null}
       </div>
-
-     
     </form>
   );
 }

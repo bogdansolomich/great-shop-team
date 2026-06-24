@@ -1,11 +1,11 @@
 const en = {
   nav: {
-    newArrivals: 'new arrivals',
-    women: 'women',
-    men: 'men',
+    catalog: 'Catalog',
+    sales: 'Sales',
   },
   catalog: {
     title: 'Catalog',
+    categoryNavAriaLabel: 'Catalog categories',
     sort: 'sort',
     filter: 'filter',
     stylesFound: '{count} styles found',
@@ -13,6 +13,36 @@ const en = {
     viewedProducts: "You've viewed {viewed} of {total} products",
     loadMore: 'Load More',
     addToCart: 'Add to cart',
+    outOfStock: 'Out of stock',
+    bannerAriaLabel: 'Catalog banner',
+    bannerImageAlt: 'Catalog banner',
+    bannerPlaceholder: 'Banner placeholder',
+    categories: {
+      men: {
+        navLabel: 'Men',
+        title: "Men's catalog",
+        bannerImageAlt: "Men's catalog banner",
+        bannerTitle: 'Define Your Urban Edge',
+        bannerDescription:
+          'Essential pieces built for movement and everyday confidence. Clean lines, premium fabrics, and silhouettes made to move with you from street to studio.',
+      },
+      women: {
+        navLabel: 'Women',
+        title: "Women's catalog",
+        bannerImageAlt: "Women's catalog banner",
+        bannerTitle: 'Style That Moves With You',
+        bannerDescription:
+          'Curated essentials and statement layers designed for modern rhythm. Discover fits, textures, and tones that feel effortless from morning to night.',
+      },
+      accessories: {
+        navLabel: 'Accessories',
+        title: 'Accessories',
+        bannerImageAlt: 'Accessories catalog banner',
+        bannerTitle: 'Discover the Essence of Luxury',
+        bannerDescription:
+          'Fragrances that speak in emotion, not words. Each fragrance is a journey — crafted with rare ingredients and timeless artistry — created to awaken your senses and tell your story without saying a single word.',
+      },
+    },
   },
   landing: {
     recentlyReleased: 'Recently released',
@@ -141,6 +171,11 @@ const en = {
       description: 'Your cart is empty. Add something you like from the catalog.',
       cta: 'Go to catalog',
     },
+    sales: {
+      title: 'Sales',
+      description: 'Sale items will appear here soon.',
+      cta: 'Browse catalog',
+    },
   },
   infoPages: {
     about: {
@@ -155,7 +190,8 @@ const en = {
     },
     contacts: {
       title: 'Contacts',
-      description: 'Need help? Contact details and support hours will be published on this page soon.',
+      description:
+        'Need help? Contact details and support hours will be published on this page soon.',
     },
     shipping: {
       title: 'Shipping',
@@ -177,7 +213,8 @@ const en = {
     },
     privacy: {
       title: 'Privacy Policy',
-      description: 'How we collect, use, and protect your personal data will be outlined here soon.',
+      description:
+        'How we collect, use, and protect your personal data will be outlined here soon.',
     },
     terms: {
       title: 'Terms & Conditions',
@@ -205,7 +242,7 @@ const en = {
     profile: 'Profile',
     account: 'Account',
     hello: 'Hello',
-    favorites: 'Favorites',
+    wishlist: 'Wishlist',
     myOrders: 'My orders',
     addresses: 'Addresses',
     changePassword: 'Change password',
@@ -265,7 +302,7 @@ const en = {
       passwordDots: '••••••••',
     },
     login: {
-      welcome: 'Welcome! 👋',
+      welcome: 'Welcome!',
       subtitle: 'Please login here',
       rememberMe: 'Remember Me',
       forgotPassword: 'Forgot Password?',
@@ -319,8 +356,7 @@ const en = {
       goShopping: 'Do to shopping?',
     },
     hints: {
-      emailVerifiedLogin:
-        'Email verified. Sign in with the password you used during registration.',
+      emailVerifiedLogin: 'Email verified. Sign in with the password you used during registration.',
       signInToContinue: 'Sign in with your email and password to continue.',
       passwordResetSuccess: 'Password successfully reset! Please log in with your new password.',
     },
@@ -334,12 +370,12 @@ const en = {
     },
   },
   profile: {
-    myReviews: 'My reviews',
-    settings: 'Settings',
-    correspondence: 'Correspondence',
-    deleteAccount: 'Delete Account',
+    return: 'Return',
+    myPromocodes: 'My Promocodes',
+    myPurchases: 'My Purchases',
+    myBonuses: 'My Bonuses',
     personalData: 'Personal Data',
-    support: 'Support',
+    changePassword: 'Change Password',
     orderFormList: 'OrderFormList',
     personalDataTitle: 'Personal Data',
     firstName: 'First name',
@@ -380,6 +416,15 @@ const en = {
     measurements: 'Measurements >',
     packaging: 'Packaging>',
     shippingReturns: 'Shipping and returns>',
+  },
+  changePassword: {
+    currentPassword: 'Current password',
+    EnterCurrentPassword: 'Enter current password',
+    NewPassword: 'New password',
+    MinCharacters: 'Min. 8 characters',
+    ConfirmNewPassword: 'Confirm new password',
+    RepeatNewPassword: 'Repeat new password',
+    SaveChanges: 'Save changes',
   },
 };
 

@@ -1,8 +1,23 @@
+'use client';
+
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+
+import { useTranslation } from '@/i18n/useTranslation';
+import { getHeaderActionClass, isActivePath } from '@/widgets/Header/headerActionClasses';
 
 export default function WishList() {
+  const { t } = useTranslation();
+  const pathname = usePathname();
+  const isActive = isActivePath(pathname, '/wishlist');
+
   return (
-    <Link href="/wishlist" className="navLink">
+    <Link
+      href="/wishlist"
+      className={getHeaderActionClass(isActive)}
+      aria-current={isActive ? 'page' : undefined}
+      aria-label={t.account.wishlist}
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"

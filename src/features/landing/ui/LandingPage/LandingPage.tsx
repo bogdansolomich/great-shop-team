@@ -5,11 +5,9 @@ import LifestyleSection from '../sections/LifestyleSection/LifestyleSection';
 import PromoSection from '../sections/PromoSection/PromoSection';
 import RecentlyReleasedSection from '../sections/RecentlyReleasedSection/RecentlyReleasedSection';
 
-import styles from './LandingPage.module.scss';
-
 export default function LandingPage() {
   return (
-    <div className={styles.page}>
+    <div className="mb-30">
       <HeroSection />
       <RecentlyReleasedSection />
       <CategoryBannersSection />

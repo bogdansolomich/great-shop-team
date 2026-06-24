@@ -11,7 +11,7 @@ import {
   useResendActivationCodeMutation,
 } from '@/store/endpoints/authEndpoints';
 
-import styles from './AuthPanel.module.scss';
+import { authForm, authPanel } from '@/features/auth/ui/authClasses';
 
 const VERIFY_ILLUSTRATION_SRC: string | null = null;
 
@@ -118,20 +118,25 @@ export default function VerifyEmailForm({ email, onBack, onVerified }: VerifyEma
   };
 
   return (
-    <div className={styles.root}>
+    <div className={authPanel.root}>
       {onBack && (
-        <button type="button" className={styles.back} onClick={onBack} aria-label={t.common.back}>
+        <button
+          type="button"
+          className={authPanel.back}
+          onClick={onBack}
+          aria-label={t.common.back}
+        >
           ‹
         </button>
       )}
 
-      <h1 className={styles.title}>{t.auth.verify.title}</h1>
-      <p className={styles.subtitleLinkEmail}>
+      <h1 className={authPanel.title}>{t.auth.verify.title}</h1>
+      <p className={authPanel.subtitleLinkEmail}>
         {formatMessage(t.auth.verify.subtitle, { email })}
       </p>
 
       {VERIFY_ILLUSTRATION_SRC && (
-        <div className={styles.illustration}>
+        <div className={authPanel.illustration}>
           <Image
             src={VERIFY_ILLUSTRATION_SRC}
             alt=""
@@ -143,12 +148,10 @@ export default function VerifyEmailForm({ email, onBack, onVerified }: VerifyEma
         </div>
       )}
 
-      <form className={styles.form} onSubmit={handleSubmit}>
-        <label className={styles.subtitle} style={{ marginBottom: 0 }}>
-          {t.auth.labels.enterCode}
-        </label>
+      <form className={authPanel.form} onSubmit={handleSubmit}>
+        <label className={authForm.fieldLabel}>{t.auth.labels.enterCode}</label>
 
-        <div className={styles.codeRow}>
+        <div className={authPanel.codeRow}>
           {digits.map((digit, index) => (
             <input
               key={index}
@@ -159,7 +162,7 @@ export default function VerifyEmailForm({ email, onBack, onVerified }: VerifyEma
               inputMode="numeric"
               maxLength={1}
               value={digit}
-              className={styles.codeInput}
+              className={authPanel.codeInput}
               onChange={(e) => handleChange(index, e.target.value)}
               onKeyDown={(e) => handleKeyDown(index, e)}
               onPaste={handlePaste}
@@ -168,30 +171,30 @@ export default function VerifyEmailForm({ email, onBack, onVerified }: VerifyEma
           ))}
         </div>
 
-        {errorMessage && <p className={styles.errorText}>{errorMessage}</p>}
-        {resendMessage && <p className={styles.successText}>{resendMessage}</p>}
+        {errorMessage && <p className={authPanel.errorText}>{errorMessage}</p>}
+        {resendMessage && <p className={authPanel.successText}>{resendMessage}</p>}
 
         <button
           type="submit"
-          className={styles.submitBtn}
+          className={authPanel.submitBtn}
           disabled={digits.some((d) => !d) || isLoading}
         >
           {isLoading ? t.common.verifying : t.auth.verify.submit}
         </button>
       </form>
 
-      <p className={styles.footerLink}>
+      <p className={authPanel.footerLink}>
         {t.auth.verify.didntSeeEmail}{' '}
         <button
           type="button"
-          className={styles.linkButton}
+          className={authPanel.linkButton}
           onClick={handleResend}
           disabled={isResending || resendCooldown > 0}
         >
           {isResending ? (
             t.common.sending
           ) : resendCooldown > 0 ? (
-            <span className={styles.resendTimer}>
+            <span className={authPanel.resendTimer}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"

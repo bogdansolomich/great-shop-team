@@ -27,15 +27,18 @@ export const infoPages: Record<InfoPageSlug, InfoPageContent> = {
   },
   careers: {
     title: 'Careers',
-    description: 'We are growing our team. Open positions and application details will appear here soon.',
+    description:
+      'We are growing our team. Open positions and application details will appear here soon.',
   },
   contacts: {
     title: 'Contacts',
-    description: 'Need help? Contact details and support hours will be published on this page soon.',
+    description:
+      'Need help? Contact details and support hours will be published on this page soon.',
   },
   shipping: {
     title: 'Shipping',
-    description: 'Information about delivery options, timelines, and tracking will be available here soon.',
+    description:
+      'Information about delivery options, timelines, and tracking will be available here soon.',
   },
   returns: {
     title: 'Returns',
@@ -43,7 +46,8 @@ export const infoPages: Record<InfoPageSlug, InfoPageContent> = {
   },
   faq: {
     title: 'FAQ',
-    description: 'Answers to frequently asked questions about orders, payments, and account will appear here soon.',
+    description:
+      'Answers to frequently asked questions about orders, payments, and account will appear here soon.',
   },
   'size-guide': {
     title: 'Size Guide',
@@ -59,7 +63,8 @@ export const infoPages: Record<InfoPageSlug, InfoPageContent> = {
   },
   cookies: {
     title: 'Cookies',
-    description: 'Details about cookies and similar technologies used on this site will appear here soon.',
+    description:
+      'Details about cookies and similar technologies used on this site will appear here soon.',
   },
   instagram: {
     title: 'Instagram',

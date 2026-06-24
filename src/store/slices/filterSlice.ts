@@ -34,7 +34,7 @@ export const filterSlice = createSlice({
     },
     resetFilters() {
       return initialState; // Повертаємо початковий стан
-    }
+    },
   },
 });
 

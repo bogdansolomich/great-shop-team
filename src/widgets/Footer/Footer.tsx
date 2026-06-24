@@ -7,8 +7,6 @@ import { useMemo, type ReactNode } from 'react';
 import { useTranslation } from '@/i18n/useTranslation';
 import NewsletterForm from '@/widgets/Footer/NewsletterForm';
 
-import styles from './Footer.module.scss';
-
 type FooterLinkItem = {
   label: string;
   href: string;
@@ -20,6 +18,9 @@ type FooterColumn = {
   links: FooterLinkItem[];
 };
 
+const linkClass =
+  'cursor-pointer text-base leading-normal font-normal text-white no-underline transition-opacity duration-200 hover:opacity-75';
+
 function FooterLink({
   href,
   className,
@@ -29,7 +30,7 @@ function FooterLink({
   className?: string;
   children: ReactNode;
 }) {
-  const classes = className ?? styles.link;
+  const classes = className ?? linkClass;
   const isExternal = href.startsWith('http');
 
   if (isExternal) {
@@ -98,16 +99,18 @@ export default function Footer() {
   );
 
   const links = (
-    <div className={styles.linksColumn}>
+    <div className="grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-4">
       {footerColumns.map((column) => (
-        <div key={column.title} className={styles.column}>
-          <h2 className={styles.columnTitle}>{column.title}</h2>
-          <ul className={styles.linkList}>
+        <div key={column.title} className="flex flex-col gap-4">
+          <h2 className="m-0 font-(family-name:--font-unbounded) text-xl leading-tight font-bold text-white">
+            {column.title}
+          </h2>
+          <ul className="m-0 flex list-none flex-col gap-3 p-0">
             {column.links.map((link) => (
               <li key={link.label}>
                 <FooterLink
                   href={link.href}
-                  className={link.icon ? `${styles.link} ${styles.linkWithIcon}` : styles.link}
+                  className={link.icon ? `${linkClass} inline-flex items-center gap-2` : linkClass}
                 >
                   {link.icon ? (
                     <>
@@ -127,30 +130,45 @@ export default function Footer() {
   );
 
   return (
-    <footer className={styles.footer}>
-      <div className={styles.inner}>
-        <div className={styles.top}>
-          <div className={styles.leftCol}>
-            <Link href="/" className={styles.logo} aria-label="WEARLY — home">
-              <Image src="/icons/WEARLY.svg" alt="WEARLY Logo" width={270} height={50} priority />
+    <footer className="bg-[#121212] py-12 pb-10 font-(family-name:--font-poppins) text-white">
+      <div className="layout-gutter mx-auto box-border w-full max-w-[1440px]">
+        <div className="flex flex-col gap-8 lg:grid lg:grid-cols-[420px_minmax(0,1fr)] lg:grid-rows-[1fr_auto_auto] lg:items-stretch lg:gap-x-24 lg:gap-y-0">
+          <div className="order-1 flex flex-col gap-4 lg:col-start-1 lg:row-start-1 lg:min-h-full lg:gap-0">
+            <Link href="/" className="mb-0 inline-flex lg:mb-20" aria-label="WEARLY — home">
+              <img
+                src="/icons/WEARLY.svg"
+                alt="WEARLY Logo"
+                width={270}
+                height={50}
+                className="block h-auto w-[270px]"
+              />
             </Link>
-            <h2 className={styles.newsletterTitle}>{t.footer.newsletterTitle}</h2>
-            <div className={styles.stretch} aria-hidden />
+            <h2 className="m-0 hidden font-(family-name:--font-unbounded) text-2xl leading-tight font-bold tracking-tight whitespace-nowrap lg:block">
+              {t.footer.newsletterTitle}
+            </h2>
+            <div className="hidden min-h-6 flex-1 lg:block" aria-hidden />
           </div>
 
-          <div className={styles.rightCol}>
+          <div className="order-2 lg:col-start-2 lg:row-start-1 lg:flex lg:min-h-full lg:flex-col lg:pl-8">
             {links}
-            <div className={styles.stretch} aria-hidden />
+            <div className="hidden min-h-6 flex-1 lg:block" aria-hidden />
           </div>
 
-          <div className={styles.baselineRow}>
-            <NewsletterForm />
-            <div className={styles.divider} aria-hidden />
+          <div className="order-3 flex flex-col gap-4 lg:col-span-2 lg:row-start-2 lg:grid lg:grid-cols-[420px_minmax(0,1fr)] lg:items-end lg:gap-x-24 lg:gap-y-0">
+            <div className="flex flex-col gap-4 lg:gap-0">
+              <h2 className="m-0 font-(family-name:--font-unbounded) text-2xl leading-tight font-bold tracking-tight lg:hidden">
+                {t.footer.newsletterTitle}
+              </h2>
+              <NewsletterForm />
+            </div>
+            <div className="hidden h-0 w-full border-b border-white lg:block lg:pl-8" aria-hidden />
           </div>
 
-          <div className={styles.bottomRow}>
-            <p className={styles.copyright}>{t.footer.copyright}</p>
-            <div className={styles.payments}>
+          <div className="order-4 flex flex-col gap-6 lg:col-span-2 lg:row-start-3 lg:mt-4 lg:grid lg:grid-cols-[420px_minmax(0,1fr)] lg:items-center lg:gap-x-24">
+            <p className="m-0 text-base leading-normal font-normal text-white">
+              {t.footer.copyright}
+            </p>
+            <div className="flex items-center justify-start gap-3 lg:pl-8">
               <Image src="/icons/applepay.svg" alt="Apple Pay" width={40} height={40} />
               <Image src="/icons/master-card.svg" alt="Mastercard" width={40} height={40} />
               <Image src="/icons/visa-1.svg" alt="Visa" width={40} height={40} />

@@ -10,7 +10,7 @@ import {
   REGISTER,
   REHYDRATE,
 } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
+import persistStorage from '@/store/persistStorage';
 import { api } from '@/store/api';
 import userReducer from '@/store/slices/userSlice';
 import cartReducer from '@/store/slices/cartSlice';
@@ -25,7 +25,7 @@ const rootReducer = combineReducers({
 
 const persistConfig = {
   key: 'root',
-  storage,
+  storage: persistStorage,
   whitelist: ['cart', 'wishlist'],
 };
 

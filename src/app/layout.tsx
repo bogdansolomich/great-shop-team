@@ -1,18 +1,19 @@
 import type { Metadata } from 'next';
 import { Poppins, Unbounded } from 'next/font/google';
 
-import '@/styles/global.scss';
+import '@/styles/global.css';
 
 export const metadata: Metadata = {
   title: {
     default: 'WEARLY',
-    template: '%s | WEARLY',
+    template: 'WEARLY',
   },
   description: 'WEARLY — online clothing store',
 };
 
 import Header from '@/widgets/Header/Header';
 import Footer from '@/widgets/Footer/Footer';
+import MainContent from '@/widgets/MainContent/MainContent';
 import Providers from './providers';
 
 const poppins = Poppins({
@@ -33,16 +34,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${poppins.variable} ${unbounded.variable} ${poppins.className}`}
-    >
+    <html lang="en" className={`${poppins.variable} ${unbounded.variable} ${poppins.className}`}>
       <body>
         <Providers>
           <Header />
-          <div className="siteContent">
-            <div className="container">
-              <main>{children}</main>
+          <div className="site-content">
+            <div className="layout-container">
+              <MainContent>{children}</MainContent>
             </div>
             <Footer />
           </div>

@@ -2,9 +2,8 @@
 
 import { ChangeEvent, useState } from 'react';
 
+import { authForm } from '@/features/auth/ui/authClasses';
 import { useTranslation } from '@/i18n/useTranslation';
-
-import styles from './AuthInput.module.scss';
 
 type InputType = 'text' | 'email' | 'password' | 'tel' | 'number' | 'search' | 'url';
 
@@ -39,11 +38,15 @@ export default function AuthInput({
     type === 'password' && togglePassword ? (showPassword ? 'text' : 'password') : type;
 
   return (
-    <div className={styles.field}>
-      <label htmlFor={id} className={styles.label}>
+    <div className="flex flex-col gap-2">
+      <label htmlFor={id} className={authForm.fieldLabel}>
         {label}
       </label>
-      <div className={`${styles.inputWrapper} ${error ? styles.inputWrapperError : ''}`}>
+      <div
+        className={`relative rounded-[10px] border bg-white ${
+          error ? 'border-error' : 'border-dark'
+        }`}
+      >
         <input
           id={id}
           name={name}
@@ -51,7 +54,7 @@ export default function AuthInput({
           placeholder={placeholder}
           value={value}
           onChange={onChange}
-          className={styles.inputField}
+          className="box-border w-full rounded-[10px] border-none bg-transparent px-4 py-4 pr-12 text-sm text-dark outline-none focus:shadow-none focus-visible:shadow-none placeholder:text-gray"
           aria-invalid={Boolean(error)}
           aria-describedby={error ? `${id}-error` : undefined}
         />
@@ -59,7 +62,7 @@ export default function AuthInput({
           <button
             type="button"
             onClick={() => setShowPassword((current) => !current)}
-            className={styles.toggleButton}
+            className="absolute top-1/2 right-3 flex -translate-y-1/2 cursor-pointer items-center justify-center border-none bg-transparent text-gray"
             aria-label={showPassword ? t.common.hidePassword : t.common.showPassword}
           >
             {showPassword ? (
@@ -90,9 +93,9 @@ export default function AuthInput({
           </button>
         )}
       </div>
-      {hint && <p className={styles.hint}>{hint}</p>}
+      {hint && <p className="text-sm leading-5 text-gray">{hint}</p>}
       {error && (
-        <p id={`${id}-error`} className={styles.errorText}>
+        <p id={`${id}-error`} className="text-sm leading-5 text-error">
           {error}
         </p>
       )}

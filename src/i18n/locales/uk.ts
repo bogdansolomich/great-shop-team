@@ -2,12 +2,12 @@ import type { Dictionary } from './en';
 
 const uk: Dictionary = {
   nav: {
-    newArrivals: 'новинки',
-    women: 'жінкам',
-    men: 'чоловікам',
+    catalog: 'Каталог',
+    sales: 'Знижки',
   },
   catalog: {
     title: 'Каталог',
+    categoryNavAriaLabel: 'Категорії каталогу',
     sort: 'сортування',
     filter: 'фільтр',
     stylesFound: 'Знайдено {count} моделей',
@@ -15,6 +15,36 @@ const uk: Dictionary = {
     viewedProducts: 'Ви переглянули {viewed} з {total} товарів',
     loadMore: 'Завантажити ще',
     addToCart: 'Додати в кошик',
+    outOfStock: 'Немає в наявності',
+    bannerAriaLabel: 'Банер каталогу',
+    bannerImageAlt: 'Банер каталогу',
+    bannerPlaceholder: 'Заглушка банера',
+    categories: {
+      men: {
+        navLabel: 'Чоловікам',
+        title: 'Чоловічий каталог',
+        bannerImageAlt: 'Банер чоловічого каталогу',
+        bannerTitle: 'Ваш міський стиль',
+        bannerDescription:
+          'Базові речі для руху та впевненості щодня. Чисті лінії, преміальні тканини та силуети, що рухаються разом із вами — від вулиці до студії.',
+      },
+      women: {
+        navLabel: 'Жінкам',
+        title: 'Жіночий каталог',
+        bannerImageAlt: 'Банер жіночого каталогу',
+        bannerTitle: 'Стиль, що рухається з вами',
+        bannerDescription:
+          'Добірні базові речі та виразні шари для сучасного ритму. Відкрийте фасони, текстури та відтінки, які виглядають effortlessly від ранку до вечора.',
+      },
+      accessories: {
+        navLabel: 'Аксесуари',
+        title: 'Аксесуари',
+        bannerImageAlt: 'Банер каталогу аксесуарів',
+        bannerTitle: 'Відкрийте суть розкоші',
+        bannerDescription:
+          'Аромати, що говорять емоціями, а не словами. Кожен аромат — це подорож, створена з рідкісних інгредієнтів і вічної майстерності, щоб пробудити почуття та розповісти вашу історію без жодного слова.',
+      },
+    },
   },
   landing: {
     recentlyReleased: 'Новинки',
@@ -143,6 +173,11 @@ const uk: Dictionary = {
       description: 'Кошик порожній. Додайте товари з каталогу.',
       cta: 'До каталогу',
     },
+    sales: {
+      title: 'Знижки',
+      description: 'Тут незабаром з’являться товари зі знижками.',
+      cta: 'Перейти до каталогу',
+    },
   },
   infoPages: {
     about: {
@@ -157,7 +192,8 @@ const uk: Dictionary = {
     },
     contacts: {
       title: 'Контакти',
-      description: 'Потрібна допомога? Контактні дані та години підтримки будуть опубліковані на цій сторінці незабаром.',
+      description:
+        'Потрібна допомога? Контактні дані та години підтримки будуть опубліковані на цій сторінці незабаром.',
     },
     shipping: {
       title: 'Доставка',
@@ -175,7 +211,8 @@ const uk: Dictionary = {
     },
     'size-guide': {
       title: 'Таблиця розмірів',
-      description: 'Таблиці вимірів та рекомендації щодо посадки будуть додані на цю сторінку незабаром.',
+      description:
+        'Таблиці вимірів та рекомендації щодо посадки будуть додані на цю сторінку незабаром.',
     },
     privacy: {
       title: 'Політика конфіденційності',
@@ -184,7 +221,8 @@ const uk: Dictionary = {
     },
     terms: {
       title: 'Умови використання',
-      description: 'Умови користування сайтом та послугами WEARLY будуть опубліковані тут незабаром.',
+      description:
+        'Умови користування сайтом та послугами WEARLY будуть опубліковані тут незабаром.',
     },
     cookies: {
       title: 'Cookies',
@@ -208,7 +246,7 @@ const uk: Dictionary = {
     profile: 'Профіль',
     account: 'Обліковий запис',
     hello: 'Вітаємо',
-    favorites: 'Обране',
+    wishlist: 'Обране',
     myOrders: 'Мої замовлення',
     addresses: 'Адреси',
     changePassword: 'Змінити пароль',
@@ -236,13 +274,13 @@ const uk: Dictionary = {
   },
   validation: {
     firstNameRequired: "Ім'я обов'язкове.",
-    lastNameRequired: 'Прізвище обов\'язкове.',
-    emailRequired: 'Email обов\'язковий.',
+    lastNameRequired: "Прізвище обов'язкове.",
+    emailRequired: "Email обов'язковий.",
     emailInvalid: 'Введіть коректну email-адресу.',
-    passwordRequired: 'Пароль обов\'язковий.',
+    passwordRequired: "Пароль обов'язковий.",
     passwordInvalid:
       'Пароль має містити щонайменше 8 символів, одну велику літеру та один спецсимвол.',
-    confirmPasswordRequired: 'Підтвердження пароля обов\'язкове.',
+    confirmPasswordRequired: "Підтвердження пароля обов'язкове.",
     passwordsMustMatch: 'Паролі мають збігатися.',
     passwordsDoNotMatch: 'Паролі не збігаються.',
     acceptTerms: 'Потрібно прийняти Умови використання та Політику конфіденційності.',
@@ -268,9 +306,9 @@ const uk: Dictionary = {
       passwordDots: '••••••••',
     },
     login: {
-      welcome: 'Вітаємо! 👋',
+      welcome: 'Вітаємо!',
       subtitle: 'Увійдіть у свій обліковий запис',
-      rememberMe: 'Запам\'ятати мене',
+      rememberMe: "Запам'ятати мене",
       forgotPassword: 'Забули пароль?',
       submit: 'Увійти',
       createAccount: 'Створити обліковий запис?',
@@ -288,7 +326,7 @@ const uk: Dictionary = {
       subtitle: 'Введіть email — ми надішлемо код для скидання пароля.',
       imageAlt: 'Забули пароль',
       submit: 'Надіслати код',
-      rememberPassword: 'Пам\'ятаєте пароль?',
+      rememberPassword: "Пам'ятаєте пароль?",
     },
     resetPassword: {
       title: 'Новий пароль',
@@ -328,8 +366,7 @@ const uk: Dictionary = {
       passwordResetSuccess: 'Пароль успішно змінено! Увійдіть з новим паролем.',
     },
     errors: {
-      signInFailed:
-        'Не вдалося увійти. Перевірте email і пароль або спочатку підтвердіть email.',
+      signInFailed: 'Не вдалося увійти. Перевірте email і пароль або спочатку підтвердіть email.',
       incorrectCredentials: 'Невірний email або пароль. Спробуйте ще раз.',
       resetCodeFailed: 'Не вдалося надіслати код. Перевірте email і спробуйте ще раз.',
       registrationFailed: 'Помилка реєстрації. Перевірте дані та спробуйте ще раз.',
@@ -337,12 +374,12 @@ const uk: Dictionary = {
     },
   },
   profile: {
-    myReviews: 'Мої відгуки',
-    settings: 'Налаштування',
-    correspondence: 'Листування',
-    deleteAccount: 'Видалити обліковий запис',
+    return: 'Повернення',
+    myPromocodes: 'Мої промокоди',
+    myPurchases: 'Мої покупки',
+    myBonuses: 'Мої бонуси',
     personalData: 'Особисті дані',
-    support: 'Підтримка',
+    changePassword: 'Змінити пароль',
     orderFormList: 'Список замовлень',
     personalDataTitle: 'Особисті дані',
     firstName: "Ім'я",
@@ -383,6 +420,15 @@ const uk: Dictionary = {
     measurements: 'Виміри >',
     packaging: 'Упаковка>',
     shippingReturns: 'Доставка та повернення>',
+  },
+  changePassword: {
+    currentPassword: 'Поточний пароль',
+    EnterCurrentPassword: 'Введіть поточний пароль',
+    NewPassword: 'Новий пароль',
+    MinCharacters: 'Мін. 8 символів',
+    ConfirmNewPassword: 'Підтвердіть новий пароль',
+    RepeatNewPassword: 'Повторіть новий пароль',
+    SaveChanges: 'Зберегти зміни',
   },
 };
 
