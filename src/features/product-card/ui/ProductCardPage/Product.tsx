@@ -1,17 +1,25 @@
 'use client';
 
-import Image from 'next/image';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
-
 import ProductShowcase from '@/widgets/ProductShowcase/ProductShowcase';
 import { useTranslation } from '@/i18n/useTranslation';
 import { useGetProductCardQuery } from '@/store/endpoints/productsEndpoints';
+import { useParams } from 'next/navigation';
 
-import styles from './Product.module.scss';
+import ClothingProductCard from '@/features/catalog/ui/CatalogProductCard/CatalogProductCard';
+
+// Хелпер для динамического определения категории по префиксу ID
+const getCategoryFromId = (itemId: string): string => {
+  if (itemId.startsWith('m-')) return 'men';
+  if (itemId.startsWith('w-')) return 'women';
+  return 'accessories';
+};
 
 export default function Product() {
   const { t } = useTranslation();
-  const { data: productCard, isLoading, isError, error } = useGetProductCardQuery();
+  const params = useParams();
+  const id = params.id as string;
+  const { data: productCard, isLoading, isError, error } = useGetProductCardQuery(id);
 
   if (isLoading) {
     return <div>{t.common.loading}</div>;
@@ -48,19 +56,34 @@ export default function Product() {
         images={productCard.images}
         link={productCard.link}
       />
-      <div className={styles.catalog}>
-        <h2 className={styles.catalogTitle}>{t.product.youMayAlsoLike}</h2>
-        <div className={styles.catalogList}>
-          {productCard.botonImages.map((item, key) => (
-            <div key={key} className={styles.catalogProduct}>
-              <Image src={item.image.src} alt={item.image.alt} width={413} height={387} />
-              <button className={styles.btnAdd}>{t.product.like}</button>
-              <div className={styles.titleInfoImage}>
-                <ul>{item.title}</ul>
-                <ul>{item.price}</ul>
-              </div>
-            </div>
-          ))}
+
+      {/* Переписано на Tailwind */}
+      <div className="m-[2%]">
+        <h2 className="m-[2%] text-[36px] font-normal">{t.product.youMayAlsoLike}</h2>
+
+        <div className="relative flex gap-[2%]">
+          {productCard.botonImages?.slice(0, 3).map((item, key) => {
+            const currentCategory = getCategoryFromId(item.id);
+            const calculatedHref = `/catalog/${currentCategory}/${item.id}`;
+
+            const productData = {
+              ...item,
+              href: calculatedHref,
+              slug: item.id,
+              subcategory: '',
+              type: '',
+              inStock: true,
+            };
+
+            return (
+              <ClothingProductCard
+                key={key}
+                product={productData}
+                onAddToCart={(size) => console.log('Add to cart:', item.id, size)}
+                onAddToWishlist={() => console.log('Add to wishlist:', item.id)}
+              />
+            );
+          })}
         </div>
       </div>
     </div>

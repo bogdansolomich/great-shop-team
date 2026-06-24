@@ -42,7 +42,7 @@ export function useLandingData() {
         image: { src: '/images/Landing/SweetObsession.png', alt: t.landing.promo.imageAlt },
         title: t.landing.promo.title,
         description: t.landing.promo.description,
-        cta: { href: '/catalog', label: t.landing.promo.cta },
+        cta: { href: '/catalog/accessories', label: t.landing.promo.cta },
       },
       fragrances: landingFragranceItems.map((item) => {
         const copy = t.landing.fragrances[item.id];

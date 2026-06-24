@@ -6,7 +6,7 @@ import '@/styles/global.css';
 export const metadata: Metadata = {
   title: {
     default: 'WEARLY',
-    template: '%s | WEARLY',
+    template: 'WEARLY',
   },
   description: 'WEARLY — online clothing store',
 };

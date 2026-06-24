@@ -1,11 +1,20 @@
 import type { CatalogCategory } from '@/features/catalog/model/catalogCategory';
+import type { ProductColorOption } from '@/entities/product/model/types';
 
 export type CatalogProduct = {
-  category: CatalogCategory;
+  id: string;
+  title: string;
+  price: string;
   image: {
     src: string;
     alt: string;
   };
-  title: string;
-  price: string;
+  href: string;
+  slug?: string;
+  category?: CatalogCategory;
+  subcategory?: string;
+  type?: string;
+  inStock?: boolean;
+  sizes?: string[];
+  colors?: ProductColorOption[];
 };

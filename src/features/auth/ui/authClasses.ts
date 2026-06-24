@@ -23,7 +23,7 @@ export const authForm = {
   checkbox:
     'peer h-5 w-5 shrink-0 cursor-pointer appearance-none rounded-md border border-slate-300 bg-white transition-all checked:border-dark checked:bg-dark',
   checkboxIcon:
-    'pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 peer-checked:opacity-100',
+    'pointer-events-none absolute top-1/2 left-1 -translate-y-1/2 text-white opacity-0 peer-checked:opacity-100',
   checkboxLabel: 'text-sm text-dark select-none',
   socialRow: 'flex items-center justify-center gap-6',
   socialBtn: 'flex h-10 w-10 items-center justify-center',

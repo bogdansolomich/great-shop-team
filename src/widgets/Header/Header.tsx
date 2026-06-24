@@ -45,7 +45,7 @@ export default function Header() {
           : 'bg-white text-dark shadow-[inset_0_-6px_20px_-8px_rgb(0_0_0/9%)]'
       }`}
     >
-      <div className="layout-gutter box-border flex w-full items-center justify-between py-5 font-(family-name:--font-unbounded) [&>.actions]:shrink [&>div:first-child]:shrink [&>div:first-child]:basis-[176px] [&>.actions]:basis-[176px]">
+      <div className="layout-gutter box-border flex w-full items-center justify-between py-5 font-(family-name:--font-unbounded) [&>.actions]:shrink [&>div:first-child]:shrink '[&>div:first-child]:basis-44' '[&>.actions]:basis-44'">
         <div>
           <LanguageSwitcher />
         </div>

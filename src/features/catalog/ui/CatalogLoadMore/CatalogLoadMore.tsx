@@ -17,9 +17,11 @@ export default function CatalogLoadMore({ viewed, total, onClick }: CatalogLoadM
       <p className={catalogLoadMore.summary}>
         {formatMessage(t.catalog.viewedProducts, { viewed, total })}
       </p>
-      <button type="button" className={catalogLoadMore.button} onClick={onClick}>
-        {t.catalog.loadMore}
-      </button>
+      {onClick ? (
+        <button type="button" className={catalogLoadMore.button} onClick={onClick}>
+          {t.catalog.loadMore}
+        </button>
+      ) : null}
     </div>
   );
 }

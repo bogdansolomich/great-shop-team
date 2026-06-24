@@ -138,6 +138,7 @@ export interface ProductLink {
 }
 
 export interface RelatedProductCard {
+  id: string;
   image: ProductImage;
   title: string;
   price: string;

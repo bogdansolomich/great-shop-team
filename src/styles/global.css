@@ -151,13 +151,17 @@
   }
 
   .bit-primary-thin {
-    padding: 7px 16px;
+    padding: 10px 16px;
     font-size: var(--text-base);
     font-weight: var(--font-weight-light);
-    line-height: 1;
     color: var(--color-white);
     cursor: pointer;
     background: var(--color-black);
+    border-radius: 10px;
+    width: 170px;
+    height: 48px;
+    text-align: center;
+    text-decoration: none;
   }
 
   .btn-outline {

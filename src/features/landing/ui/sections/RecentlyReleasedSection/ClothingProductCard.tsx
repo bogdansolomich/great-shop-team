@@ -6,17 +6,24 @@ import Link from 'next/link';
 import { useTranslation } from '@/i18n/useTranslation';
 
 type ClothingProductCardProps = {
+  href: string;
   image: { src: string; alt: string };
   title: string;
   price: string;
 };
 
-export default function ClothingProductCard({ image, title, price }: ClothingProductCardProps) {
+export default function ClothingProductCard({
+  href,
+  image,
+  title,
+  price,
+}: ClothingProductCardProps) {
   const { t } = useTranslation();
 
   return (
-    <article className="flex w-full max-w-[413px] flex-col">
-      <div className="mb-4 flex aspect-413/493 w-full items-center justify-center bg-white shadow-[0_4px_24px_rgb(19_17_24/8%)]">
+    <article className="flex w-full max-w-103.25 flex-col">
+      {/* <div className="mb-4 flex aspect-413/493 w-full items-center justify-center bg-white shadow-[0_4px_24px_rgb(19_17_24/8%)]"> */}
+      <div className="relative mb-4 flex aspect-413/493 w-full items-center justify-center bg-[#FAFAFA]">
         <div className="mx-auto flex h-[78.5%] w-fit items-stretch gap-2">
           <div className="relative aspect-258/387 h-full shrink-0 overflow-hidden">
             <Image src={image.src} alt={image.alt} fill sizes="258px" className="object-cover" />
@@ -61,13 +68,10 @@ export default function ClothingProductCard({ image, title, price }: ClothingPro
           </div>
         </div>
       </div>
-      <div className="mx-auto flex w-full max-w-[314px] items-start justify-between gap-3">
+      <div className="mx-auto flex w-full max-w-78.5 items-start justify-between gap-3">
         <div className="flex min-w-0 flex-col gap-2">
           <h3 className="m-0 font-(family-name:--font-poppins) text-base font-normal">{title}</h3>
-          <Link
-            href="/catalog"
-            className="text-base font-light text-dark underline underline-offset-4"
-          >
+          <Link href={href} className="text-base font-light text-dark underline underline-offset-4">
             {t.landing.showMore}
           </Link>
         </div>

@@ -1,11 +1,14 @@
-const BANNER_HEADER_PATHS = ['/', '/catalog'] as const;
+// Явно указываем страницы, где сверху лежит баннер
+const BANNER_HEADER_PATHS = [
+  '/',
+  '/catalog',
+  '/catalog/men',
+  '/catalog/women',
+  '/catalog/accessories',
+] as const;
 
 export function hasBannerHeader(pathname: string) {
   return BANNER_HEADER_PATHS.some((path) => {
-    if (path === '/') {
-      return pathname === '/';
-    }
-
-    return pathname === path || pathname.startsWith(`${path}/`);
+    return pathname === path;
   });
 }

@@ -7,7 +7,7 @@ import RecentlyReleasedSection from '../sections/RecentlyReleasedSection/Recentl
 
 export default function LandingPage() {
   return (
-    <div className="mb-[120px]">
+    <div className="mb-30">
       <HeroSection />
       <RecentlyReleasedSection />
       <CategoryBannersSection />
