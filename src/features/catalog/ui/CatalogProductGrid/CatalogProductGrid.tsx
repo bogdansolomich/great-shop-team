@@ -12,10 +12,10 @@ type CatalogProductGridProps = {
 export default function CatalogProductGrid({ products, onAddToCart }: CatalogProductGridProps) {
   return (
     <div className={catalogGrid.root}>
-      {products.map((product, index) => (
+      {products.map((product) => (
         <CatalogProductCard
-          key={`${product.title}-${index}`}
-          product={product}
+          key={product.id}
+          product={product} // Просто прокидываем объект дальше
           onAddToCart={onAddToCart ? () => onAddToCart(product) : undefined}
         />
       ))}

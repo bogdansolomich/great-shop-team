@@ -1,4 +1,5 @@
 {
+  "id": "m-cloth-002",
   "brand": "Nike",
   "title": "Brown Zip Hoodie",
   "description": [
@@ -54,29 +55,42 @@
     "href": "/product/hoodie-brown",
     "label": "Shop now"
   },
+
   "botonImages": [
     {
+      "id": "m-cloth-001",
+      "category": "men",
       "image": {
-        "src": "/images/product1.jpg",
+        "src": "/images/product1.png",
         "alt": "Product Photo"
       },
       "title": "Essential Cotton Tee",
       "price": "$35"
     },
     {
+      "id": "m-cloth-002",
+      "category": "men",
       "image": {
-        "src": "/images/product2.jpg",
+        "src": "/images/product2.png",
         "alt": "Product Photo"
       },
       "title": "Red Oversized Hoodie",
       "price": "$135"
     },
     {
+      "id": "m-cloth-003",
+      "category": "men",
       "image": {
-        "src": "/images/product3.jpg",
+        "src": "/images/product3.png",
         "alt": "Product Photo"
       },
       "title": "Green Oversized Hoodie",
+      "price": "$135"
+    },
+    {
+      "id": "w-cloth-005",
+      "category": "women",
+      "title": "Women Oversized Hoodie",
       "price": "$135"
     }
   ]

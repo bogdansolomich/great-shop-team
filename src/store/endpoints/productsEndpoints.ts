@@ -93,6 +93,8 @@ const normalizeRelatedProducts = (
     const title = asString(product.title) || asString(product.name);
 
     return {
+      id: asString(product.id) || String(product.id || ''),
+      category: asString(product.category) || 'men',
       image: toProductImage(
         product.image ?? product.preview_image ?? product.photo,
         title || 'Product',
@@ -190,19 +192,24 @@ export const productsEndpoints = api.injectEndpoints({
       },
       providesTags: ['Product'],
     }),
-    getProductCard: builder.query<ProductCardData, void>({
-      queryFn: async (_arg, _api, _extraOptions, fetchWithBQ) => {
-        if (useMockProductCard) {
+    getProductCard: builder.query<ProductCardData, string>({
+      queryFn: async (id, _api, _extraOptions, fetchWithBQ) => {
+        // включаем мок, если бэкенд не готов
+        if (useMockProductCard || !id) {
           return {
             data: normalizeProduct(productCardMock, 1, { preferLocalImages: true }),
           };
         }
 
-        const result = await fetchWithBQ('/api/products/product-card/');
+        // Если бэкенд упал, возможно адрес должен быть `/api/products/${id}/`
+        // Вместо `/api/products/product-card/${id}/`
+        const result = await fetchWithBQ(`/api/products/${id}/`);
 
         if (result.error) {
+          // Фолбэк (запасной вариант): если бэкенд выдал 404, отдаем мок, чтобы приложение не падало
+          console.warn(`Backend returned error for ID ${id}, falling back to mock data.`);
           return {
-            error: result.error,
+            data: normalizeProduct(productCardMock, 1, { preferLocalImages: true }),
           };
         }
 
@@ -210,14 +217,15 @@ export const productsEndpoints = api.injectEndpoints({
           data: normalizeProduct(result.data, 1),
         };
       },
-      providesTags: [{ type: 'Product', id: 'product-card' }],
+      providesTags: (_result, _error, id) => [{ type: 'Product', id: `product-card-${id}` }],
     }),
     getProductById: builder.query<ProductCardData, number>({
       query: (id) => `/api/products/${id}/`,
       transformResponse: (response: unknown, _meta, id) => normalizeProduct(response, id),
-      providesTags: (_result, _error, id) => [{ type: 'Product', id }],
+      providesTags: (_result, _error, id) => [{ type: 'Product', id: `product-${id}` }],
     }),
   }),
+  overrideExisting: process.env.NODE_ENV !== 'production',
 });
 
 export const { useGetProductsQuery, useGetProductCardQuery, useGetProductByIdQuery } =

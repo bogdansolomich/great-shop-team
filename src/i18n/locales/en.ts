@@ -13,6 +13,7 @@ const en = {
     viewedProducts: "You've viewed {viewed} of {total} products",
     loadMore: 'Load More',
     addToCart: 'Add to cart',
+    outOfStock: 'Out of stock',
     bannerAriaLabel: 'Catalog banner',
     bannerImageAlt: 'Catalog banner',
     bannerPlaceholder: 'Banner placeholder',

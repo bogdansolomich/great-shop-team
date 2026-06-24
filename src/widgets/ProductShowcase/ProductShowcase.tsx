@@ -120,7 +120,7 @@ export default function ProductShowcase({
               key={key}
               onClick={() => setCurrentSize(key)}
               className={`w-[10%] rounded-lg border border-[#666666] p-[2%] ${
-                key === currentSize ? 'bg-dark text-[#fafafa]' : ''
+                key === currentSize ? 'bg-dark text-white-fa' : ''
               }`}
             >
               {item}
@@ -142,7 +142,7 @@ export default function ProductShowcase({
           ))}
         </div>
         <div className="my-[3%] flex flex-row gap-[3%]">
-          <button className="border border-[#666666] bg-dark p-[2%_10%] text-[#fafafa]">
+          <button className="border border-[#666666] bg-dark p-[2%_10%] text-white-fa">
             Buy now
           </button>
           <button className="border border-[#666666] p-[2%_10%]">Add to cart</button>
@@ -167,11 +167,11 @@ export default function ProductShowcase({
             onClick={handleCloseSidebar}
           />
 
-          <div className="animate-slide-in-right fixed top-0 right-0 z-9999 box-border flex h-screen w-[450px] max-w-screen flex-col bg-white p-10 shadow-[-4px_0_24px_rgb(0_0_0/10%)]">
+          <div className="animate-slide-in-right fixed top-0 right-0 z-9999 box-border flex h-screen w-112.5 max-w-screen flex-col bg-white p-10 shadow-[-4px_0_24px_rgb(0_0_0/10%)]">
             <div className="mb-10 flex items-center justify-between">
               <h3 className="text-xl font-medium">{title}</h3>
               <button
-                className="cursor-pointer border-none bg-transparent p-[5px] text-2xl text-dark"
+                className="cursor-pointer border-none bg-transparent p-1.25 text-2xl text-dark"
                 onClick={handleCloseSidebar}
               >
                 ✕
@@ -186,7 +186,7 @@ export default function ProductShowcase({
                     <span>{activeTab === tab.id ? '✕' : '⌵'}</span>
                   </div>
                   {activeTab === tab.id && (
-                    <div className="mt-[15px] text-sm leading-normal text-[#666666]">
+                    <div className="mt-3.75 text-sm leading-normal text-[#666666]">
                       <p>
                         Detailed information about {tab.label.toLowerCase()} goes here. Crafted from
                         premium materials designed for comfort and durability.

@@ -15,6 +15,7 @@ const uk: Dictionary = {
     viewedProducts: 'Ви переглянули {viewed} з {total} товарів',
     loadMore: 'Завантажити ще',
     addToCart: 'Додати в кошик',
+    outOfStock: 'Немає в наявності',
     bannerAriaLabel: 'Банер каталогу',
     bannerImageAlt: 'Банер каталогу',
     bannerPlaceholder: 'Заглушка банера',
@@ -173,7 +174,7 @@ const uk: Dictionary = {
       cta: 'До каталогу',
     },
     sales: {
-      title: 'Sales',
+      title: 'Знижки',
       description: 'Тут незабаром з’являться товари зі знижками.',
       cta: 'Перейти до каталогу',
     },

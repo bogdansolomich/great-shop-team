@@ -1,7 +1,7 @@
 'use client';
 
 import type { CatalogCategory } from '@/features/catalog/model/catalogCategory';
-import { useCatalogProducts } from '@/features/catalog/lib/useCatalogProducts';
+import { useCatalogProductsPage } from '@/features/catalog/lib/useCatalogProductsPage';
 import CatalogBanner from '@/features/catalog/ui/CatalogBanner/CatalogBanner';
 import CatalogLoadMore from '@/features/catalog/ui/CatalogLoadMore/CatalogLoadMore';
 import CatalogProductGrid from '@/features/catalog/ui/CatalogProductGrid/CatalogProductGrid';
@@ -13,18 +13,20 @@ type CatalogPageProps = {
 };
 
 export default function CatalogPage({ category }: CatalogPageProps) {
-  const products = useCatalogProducts(category);
+  const { products, total, viewed, hasMore, loadMore } = useCatalogProductsPage(category);
 
   return (
-    <div className="mb-[180px]">
+    <div className="mb-20">
       <CatalogBanner category={category} />
 
       <div id="catalog-products" className={catalogPage.content}>
-        <CatalogToolbar stylesCount={products.length} />
+        <CatalogToolbar stylesCount={total} />
 
         <CatalogProductGrid products={products} />
 
-        <CatalogLoadMore viewed={products.length} total={products.length} />
+        {total > 0 ? (
+          <CatalogLoadMore viewed={viewed} total={total} onClick={hasMore ? loadMore : undefined} />
+        ) : null}
       </div>
     </div>
   );

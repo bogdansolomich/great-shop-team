@@ -16,7 +16,7 @@ export default function FragrancesSection() {
       <div className={landingSection.sectionContent}>
         <div className={landingSection.sectionHeader}>
           <h2 className={`${landingSection.sectionTitle} mb-0`}>{labels.recentlyReleased}</h2>
-          <Link href="/catalog" className="btn-outline btn-outline--dark">
+          <Link href="catalog/accessories" className="btn-outline btn-outline--dark">
             {labels.shopNow}
           </Link>
         </div>

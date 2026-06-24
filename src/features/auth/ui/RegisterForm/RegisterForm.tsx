@@ -168,7 +168,7 @@ export default function RegisterForm({ onLogin, onRegistered }: RegisterFormProp
               ))}
             </div>
           )}
-          <div className="mt-2 inline-flex max-w-full flex-col gap-2 box-border [&_label]:max-w-full [&_label]:break-words">
+          <div className="mt-2 inline-flex max-w-full flex-col gap-2 box-border [&_label]:max-w-full [&_label]:wrap-break-word">
             <div className="flex items-start gap-3">
               <label className="relative flex cursor-pointer items-center">
                 <input
@@ -186,16 +186,12 @@ export default function RegisterForm({ onLogin, onRegistered }: RegisterFormProp
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-3.5 w-3.5"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                    fill="none"
                     stroke="currentColor"
-                    strokeWidth={1}
+                    strokeWidth={3}
                   >
-                    <path
-                      fillRule="evenodd"
-                      clipRule="evenodd"
-                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                   </svg>
                 </span>
               </label>

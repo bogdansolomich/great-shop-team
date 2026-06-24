@@ -24,15 +24,16 @@ export const catalogGrid = {
 } as const;
 
 export const catalogProductCard = {
-  root: 'mb-[100px]',
-  imageWrap: 'relative mb-4 [&_img]:h-auto [&_img]:w-full',
+  root: 'flex w-full max-w-[413px] flex-col',
+  imageWrap: 'relative aspect-258/387 h-full shrink-0 overflow-hidden',
   addToCartBtn:
-    'absolute right-4 bottom-4 flex h-[60px] w-[60px] cursor-pointer items-center justify-center rounded-full border-none bg-black text-white',
+    'absolute right-4 bottom-4 flex h-10 w-10 items-center justify-center rounded-full border-none bg-black text-white transition-colors hover:bg-neutral-800 disabled:cursor-not-allowed disabled:bg-[#C4C4C4] disabled:text-white/70 disabled:hover:bg-[#C4C4C4]',
   meta: 'mb-4 flex justify-between',
+  stockStatus: 'mt-3 min-h-4 text-xs font-light text-gray',
 } as const;
 
 export const catalogLoadMore = {
-  root: 'mt-5 text-center',
-  summary: 'mb-6 font-light',
-  button: 'cursor-pointer border-none bg-black px-4 py-2.5 font-medium text-white',
+  root: 'mt-30 text-center',
+  summary: 'mb-15 font-light',
+  button: 'btn-primary mx-auto',
 } as const;
