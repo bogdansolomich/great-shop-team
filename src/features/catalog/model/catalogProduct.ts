@@ -11,6 +11,7 @@ export type CatalogProduct = {
   };
   href: string;
   slug?: string;
+  description: string;
   category?: CatalogCategory;
   subcategory?: string;
   type?: string;

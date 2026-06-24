@@ -69,7 +69,7 @@ export default function FragranceProductCard({
           </div>
         </div>
       </div>
-      <div className="mx-auto mb-3 flex w-full max-w-[314px] items-start justify-between gap-3">
+      <div className="mx-auto mb-3 flex w-full  items-start justify-between gap-3">
         <h3 className="m-0 min-w-0 font-(family-name:--font-poppins) text-base font-normal">
           {title}
         </h3>
@@ -77,7 +77,7 @@ export default function FragranceProductCard({
       </div>
       {sizes.length > 0 && (
         <div
-          className="mx-auto flex w-full max-w-[314px] flex-wrap gap-2"
+          className="mx-auto flex w-full flex-wrap gap-2"
           role="group"
           aria-label={t.landing.selectSize}
         >

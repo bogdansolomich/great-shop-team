@@ -2,32 +2,77 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-
+import type { CatalogProduct } from '@/features/catalog/model/catalogProduct';
 import { useTranslation } from '@/i18n/useTranslation';
 
 type ClothingProductCardProps = {
-  href: string;
-  image: { src: string; alt: string };
-  title: string;
-  price: string;
+  product: CatalogProduct;
 };
 
-export default function ClothingProductCard({
-  href,
-  image,
-  title,
-  price,
-}: ClothingProductCardProps) {
+const getProductCategoryPath = (product: CatalogProduct): string => {
+  console.log('Product ID для проверки:', product?.id); // Это точно должно появиться в консоли F12
+
+  if (!product) return '#';
+  if (product.href) return product.href;
+
+  const productId = product.id || '';
+
+  // 1. Проверяем по префиксам ID (самый надежный способ для вашей структуры)
+  if (productId.startsWith('m-')) {
+    return `/catalog/men/${productId}`;
+  }
+  if (productId.startsWith('w-')) {
+    return `/catalog/women/${productId}`;
+  }
+
+  // 2. Если префиксов нет, проверяем текстовое поле категории
+  let categoryName = '';
+  if (typeof product.category === 'string') {
+    categoryName = product.category;
+  } else if (product.category && typeof product.category === 'object') {
+    const categoryObj = product.category as unknown as { id?: string; name?: string };
+    categoryName = categoryObj.id || categoryObj.name || '';
+  }
+
+  const normalizedCategory = categoryName.toLowerCase();
+
+  if (normalizedCategory === 'men') {
+    return `/catalog/men/${productId}`;
+  }
+  if (normalizedCategory === 'women') {
+    return `/catalog/women/${productId}`;
+  }
+
+  // 3. Абсолютно все остальные товары (включая парфюм/fragrances) отправляем в папку accessories
+  return `/catalog/accessories/${productId}`;
+};
+
+export default function ClothingProductCard({ product }: ClothingProductCardProps) {
   const { t } = useTranslation();
 
+  // Безопасно вычисляем ссылку
+  const cardHref = getProductCategoryPath(product);
+
+  const imageSrc =
+    product?.image?.src ||
+    (product && 'imageUrl' in product ? (product as { imageUrl: string }).imageUrl : '');
+
+  const imageAlt = product?.image?.alt || product?.title || 'product';
   return (
     <article className="flex w-full max-w-103.25 flex-col">
-      {/* <div className="mb-4 flex aspect-413/493 w-full items-center justify-center bg-white shadow-[0_4px_24px_rgb(19_17_24/8%)]"> */}
       <div className="relative mb-4 flex aspect-413/493 w-full items-center justify-center bg-[#FAFAFA]">
         <div className="mx-auto flex h-[78.5%] w-fit items-stretch gap-2">
-          <div className="relative aspect-258/387 h-full shrink-0 overflow-hidden">
-            <Image src={image.src} alt={image.alt} fill sizes="258px" className="object-cover" />
-          </div>
+          <Link
+            href={cardHref}
+            className="relative aspect-258/387 h-full shrink-0 overflow-hidden sub-link-wrapper"
+          >
+            {imageSrc ? (
+              <Image src={imageSrc} alt={imageAlt} fill sizes="258px" className="object-cover" />
+            ) : (
+              <div className="w-full h-full bg-neutral-200" />
+            )}
+          </Link>
+
           <div className="flex shrink-0 flex-col items-center justify-between py-4">
             <button
               type="button"
@@ -68,14 +113,18 @@ export default function ClothingProductCard({
           </div>
         </div>
       </div>
-      <div className="mx-auto flex w-full max-w-78.5 items-start justify-between gap-3">
+      <div className="mx-auto flex w-full items-start justify-between gap-3">
         <div className="flex min-w-0 flex-col gap-2">
-          <h3 className="m-0 font-(family-name:--font-poppins) text-base font-normal">{title}</h3>
-          <Link href={href} className="text-base font-light text-dark underline underline-offset-4">
+          <Link href={cardHref} className="hover:underline">
+            <h3 className="m-0 font-(family-name:--font-poppins) text-base font-normal">
+              {product?.title || ''}
+            </h3>
+          </Link>
+          <Link href={cardHref} className="btn-outline">
             {t.landing.showMore}
           </Link>
         </div>
-        <span className="text-base font-medium whitespace-nowrap">{price}</span>
+        <span className="text-base font-medium whitespace-nowrap">{product?.price || ''}</span>
       </div>
     </article>
   );
