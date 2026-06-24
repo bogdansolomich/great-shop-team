@@ -5,15 +5,8 @@ import ProductShowcase from '@/widgets/ProductShowcase/ProductShowcase';
 import { useTranslation } from '@/i18n/useTranslation';
 import { useGetProductCardQuery } from '@/store/endpoints/productsEndpoints';
 import { useParams } from 'next/navigation';
-
+import type { CatalogProduct } from '@/features/catalog/model/catalogProduct';
 import ClothingProductCard from '@/features/catalog/ui/CatalogProductCard/CatalogProductCard';
-
-// Хелпер для динамического определения категории по префиксу ID
-const getCategoryFromId = (itemId: string): string => {
-  if (itemId.startsWith('m-')) return 'men';
-  if (itemId.startsWith('w-')) return 'women';
-  return 'accessories';
-};
 
 export default function Product() {
   const { t } = useTranslation();
@@ -57,33 +50,22 @@ export default function Product() {
         link={productCard.link}
       />
 
-      {/* Переписано на Tailwind */}
+      {/* Сетка блока рекомендаций (Tailwind) */}
       <div className="m-[2%]">
         <h2 className="m-[2%] text-[36px] font-normal">{t.product.youMayAlsoLike}</h2>
 
         <div className="relative flex gap-[2%]">
-          {productCard.botonImages?.slice(0, 3).map((item, key) => {
-            const currentCategory = getCategoryFromId(item.id);
-            const calculatedHref = `/catalog/${currentCategory}/${item.id}`;
-
-            const productData = {
-              ...item,
-              href: calculatedHref,
-              slug: item.id,
-              subcategory: '',
-              type: '',
-              inStock: true,
-            };
-
-            return (
-              <ClothingProductCard
-                key={key}
-                product={productData}
-                onAddToCart={(size) => console.log('Add to cart:', item.id, size)}
-                onAddToWishlist={() => console.log('Add to wishlist:', item.id)}
-              />
-            );
-          })}
+          {productCard.botonImages?.slice(0, 3).map((item, key) => (
+            <ClothingProductCard
+              key={key}
+              /* Просто прокидываем item. Умная карточка сама разберется с категориями 
+                и сформирует правильный URL без падений и ошибок компиляции!
+              */
+              product={item as unknown as CatalogProduct}
+              onAddToCart={(size) => console.log('Add to cart:', item.id, size)}
+              onAddToWishlist={() => console.log('Add to wishlist:', item.id)}
+            />
+          ))}
         </div>
       </div>
     </div>

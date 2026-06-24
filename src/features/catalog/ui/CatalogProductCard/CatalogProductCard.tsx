@@ -14,16 +14,13 @@ type CatalogProductCardProps = {
 };
 
 const getProductCategoryPath = (product: CatalogProduct): string => {
-  // 1. Если бэкенд или мок уже дали готовый href, берём его
   if (product.href) return product.href;
 
-  // 2. Безопасно достаем текстовое имя категории
   let categoryName = '';
 
   if (typeof product.category === 'string') {
     categoryName = product.category;
   } else if (product.category && typeof product.category === 'object') {
-    // Кастуем через unknown, чтобы избежать сужения в type 'never'
     const categoryObj = product.category as unknown as { id?: string; name?: string };
     categoryName = categoryObj.id || categoryObj.name || '';
   }
@@ -31,7 +28,6 @@ const getProductCategoryPath = (product: CatalogProduct): string => {
   const normalizedCategory = categoryName.toLowerCase();
   const normalizedSubcategory = (product.subcategory || '').toLowerCase();
 
-  // 3. Распределяем по роутам в зависимости от категории/подкатегории
   if (normalizedSubcategory === 'fragrances' || normalizedCategory === 'fragrances') {
     return `/catalog/fragrances/${product.id}`;
   }
@@ -42,7 +38,6 @@ const getProductCategoryPath = (product: CatalogProduct): string => {
     return `/catalog/women/${product.id}`;
   }
 
-  // Фолбэк по умолчанию (мужские вещи или если ничего не совпало)
   return `/catalog/men/${product.id}`;
 };
 
@@ -53,29 +48,29 @@ export default function CatalogProductCard({
 }: CatalogProductCardProps) {
   const { t } = useTranslation();
 
-  // 💡 ВЫЗЫВАЕМ НАШУ ФУНКЦИЮ ЗДЕСЬ, чтобы гарантировать строку
   const cardHref = getProductCategoryPath(product);
-
   const [selectedSize, setSelectedSize] = useState<string>(product.sizes?.[0] ?? '');
 
   const isFragrance = product.subcategory === 'fragrances';
   const hasSizes = Array.isArray(product.sizes) && product.sizes.length > 0;
-  const canAddToCart = product.inStock;
+  const canAddToCart = product.inStock !== false;
 
   return (
     <article className={catalogProductCard.root}>
       <div className="relative mb-4 flex aspect-413/493 w-full items-center justify-center bg-[#FAFAFA]">
-        <Image
-          src={product.image.src}
-          alt={product.image.alt}
-          fill
-          sizes="(max-width: 768px) 100vw, 258px"
-          className="object-contain mix-blend-multiply"
-        />
+        <Link href={cardHref} className="relative flex h-full w-full items-center justify-center">
+          <Image
+            src={product.image.src}
+            alt={product.image.alt}
+            fill
+            sizes="(max-width: 768px) 100vw, 258px"
+            className="object-contain mix-blend-multiply"
+          />
+        </Link>
 
         <button
           type="button"
-          className="absolute top-4 right-4 cursor-pointer border-none bg-transparent p-1 text-dark hover:scale-110 transition-transform"
+          className="absolute top-4 right-4 cursor-pointer border-none bg-transparent p-1 text-dark transition-transform hover:scale-110"
           onClick={onAddToWishlist}
           aria-label={t.landing.addToWishlist}
         >
@@ -118,7 +113,9 @@ export default function CatalogProductCard({
 
       <div className={catalogProductCard.meta}>
         <div className="flex flex-col gap-1">
-          <h4>{product.title}</h4>
+          <Link href={cardHref} className="hover:underline">
+            <h4>{product.title}</h4>
+          </Link>
         </div>
         <span className="font-medium whitespace-nowrap">{product.price}</span>
       </div>
@@ -148,7 +145,6 @@ export default function CatalogProductCard({
       )}
 
       {!isFragrance ? (
-        /* 👇 ЗАМЕНИЛИ product.href НА НАШ ВЫЧИСЛЕННЫЙ cardHref */
         <Link href={cardHref} className="bit-primary-thin mt-3 inline-block">
           {t.catalog.moreColours}
         </Link>
